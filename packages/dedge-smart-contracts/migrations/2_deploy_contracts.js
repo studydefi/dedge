@@ -5,6 +5,7 @@ const path = require("path");
 const DedgeProxyFactory = artifacts.require("DedgeProxyFactory");
 const DedgeCompoundManager = artifacts.require("DedgeCompoundManager");
 const DedgeMakerManager = artifacts.require("DedgeMakerManager");
+const DedgeGeneralManager = artifacts.require("DedgeGeneralManager");
 
 module.exports = async deployer => {
     // Deploys DedgeProxyFactory
@@ -16,8 +17,12 @@ module.exports = async deployer => {
     // Deploys DedgeCompoundManager
     await deployer.deploy(DedgeCompoundManager)
 
+    // Deploys DedgeGeneralManager
+    await deployer.deploy(DedgeGeneralManager)
+
     // Saves to a file if needed
     const data = JSON.stringify({
+        dedgeGeneralManagerAddress: DedgeGeneralManager.address,
         dedgeProxyFactoryAddress: DedgeProxyFactory.address,
         dedgeMakerManagerAddress: DedgeMakerManager.address,
         dedgeCompoundManagerAddress: DedgeCompoundManager.address

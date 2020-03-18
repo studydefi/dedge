@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@openzeppelin/contracts": "^2.5.0",
-    "ethers": "^4.0.46"
+    "ethers": "^4.0.46",
+    "truffle": "^5.1.17"
   }
 }

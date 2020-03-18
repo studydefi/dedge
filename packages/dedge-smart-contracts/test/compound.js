@@ -444,6 +444,9 @@ const main = async () => {
         console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
         console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
     }
+
+    let payoutFeeAddress = await provider.getBalance("0x56D5e01D5D2F853aA8f4ac5d2FfB4cBBCa9e2b0f");
+    console.log(`Payout Address ETH (should be >0): ${ethers.utils.formatEther(payoutFeeAddress.toString())}`)
 }
 
 

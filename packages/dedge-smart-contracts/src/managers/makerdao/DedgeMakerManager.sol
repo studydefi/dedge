@@ -75,7 +75,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
             // Buy them tokens sell them ETH to repay Aave
             daiAmount = _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
             // Transfer remaining ETH back to user
-            usrDedgeProxy.transfer(collateralAmount.sub(ethAmount));
+            usrDedgeProxy.call.value(collateralAmount.sub(ethAmount))("");
         } else if (collateralAddress == BatAddress) {
             // Get back collateralized BAT
             collateralAmount = _wipeAllAndFreeGem(DssCdpManagerAddress, BatJoinAddress, DaiJoinAddress, cdpId);

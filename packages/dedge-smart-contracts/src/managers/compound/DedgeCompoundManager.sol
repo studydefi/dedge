@@ -29,6 +29,9 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
 
     address constant DaiAddress = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 
+    // TODO: Change this protocol payout fee
+    address payable constant protocolFeePayoutAddress = 0x56D5e01D5D2F853aA8f4ac5d2FfB4cBBCa9e2b0f;
+
     function () external payable {}
 
     constructor() public {}
@@ -275,7 +278,6 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
 
         // Payout fee
         // TODO: Change this address
-        address payable protocolFeePayoutAddress = 0xeaf529280fEF13d3a04F7bF2F72003327FC32Aa2;
-        protocolFeePayoutAddress.transfer(protocolFee);
+        protocolFeePayoutAddress.call.value(protocolFee)("");
     }
 }

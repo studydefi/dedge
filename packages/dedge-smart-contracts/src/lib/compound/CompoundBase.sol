@@ -1,3 +1,6 @@
+/*  Mostly functions from https://compound.finance/developers/ctokens
+    and https://compound.finance/developers/comptroller
+*/
 pragma solidity 0.5.16;
 
 import "../../interfaces/compound/IComptroller.sol";
@@ -75,5 +78,13 @@ contract CompoundBase {
         } else {
             require(ICToken(cToken).repayBorrowBehalf(recipient, amount) == 0, "cmpnd-mgr-ctoken-repaybehalf-failed");
         }
+    }
+
+    function redeem(address cToken, uint redeemTokens) public payable {
+        require(ICToken(cToken).redeem(redeemTokens) == 0, "cmpnd-mgr-ctoken-redeem-failed");
+    }
+
+    function redeemUnderlying(address cToken, uint redeemTokens) public payable {
+        require(ICToken(cToken).redeemUnderlying(redeemTokens) == 0, "cmpnd-mgr-ctoken-redeem-underlying-failed");
     }
 }
