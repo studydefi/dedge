@@ -87,7 +87,7 @@ const main = async () => {
     )
 
     const cUsdcContract = new ethers.Contract(
-        addresses.compound.cZRX,
+        addresses.compound.cUSDC,
         CTokenAbi,
         wallet
     )
@@ -170,19 +170,19 @@ const main = async () => {
     }
     console.log(`Entered into ${marketsEntered.length} market`)
 
-    let batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
-    let daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-    let zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
-    let usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
-    let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
-    
-    let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
-    let batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
-    let zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
-    let usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
-    let ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
+    const logBalances = async () => {
+        let batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
+        let daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
+        let zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
+        let usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
+        let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
+        
+        let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
+        let batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
+        let zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
+        let usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
+        let ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
 
-    const logBalances = () => {
         console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
         console.log(`USDC (Holding): ${ethers.utils.formatUnits(usdcBalanceWei.toString(), 6)}`) // 6 decimals
         console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
@@ -194,9 +194,10 @@ const main = async () => {
         console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
         console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
         console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+        console.log('---------------')
     }
 
-    logBalances()
+    await logBalances()
 
     let daiBalance = ethers.utils.formatEther(daiBalanceWei.toString())
     const daiToBorrow = 95
@@ -281,13 +282,7 @@ const main = async () => {
 
         console.log('Swapped debt from DAI to BAT')
 
-        batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
-        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-
-        daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
-        batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
-
-        logBalances()
+        await logBalances()
     }
 
     // USDC has 6 decimals, cUSDC has 8 decimals
@@ -327,13 +322,7 @@ const main = async () => {
         }
         console.log("Swapped debt")
 
-        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-        usdcBalanceWei = await usdcContract.balanceOf(dedgeProxyAddress)
-
-        daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
-        usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
-
-        logBalances()
+        await logBalances()
     }
 
     let batBorrowStorageInt = parseInt(ethers.utils.formatEther(batBorrowStorage.toString()))
@@ -372,13 +361,7 @@ const main = async () => {
         }
         console.log("Swapped debt")
 
-        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-        zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
-
-        batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
-        zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
-
-        logBalances()
+        await logBalances()
     }
 
     let zrxBorrowStorageInt = parseInt(ethers.utils.formatEther(zrxBorrowStorage.toString()))
@@ -417,13 +400,7 @@ const main = async () => {
         }
         console.log("Swapped debt")
 
-        zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
-        ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
-
-        zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
-        ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
-
-        logBalances()
+        await logBalances()
     }
 
     let ethBorrowStorageFloat = parseFloat(ethers.utils.formatEther(ethBorrowStorage.toString()))
@@ -462,13 +439,7 @@ const main = async () => {
         }
         console.log("Swapped debt")
 
-        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-        ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
-
-        daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
-        ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
-
-        logBalances()
+        await logBalances()
     }
 
     let payoutFeeAddress = await provider.getBalance("0x56D5e01D5D2F853aA8f4ac5d2FfB4cBBCa9e2b0f");
