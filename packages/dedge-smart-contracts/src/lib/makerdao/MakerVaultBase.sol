@@ -364,32 +364,5 @@ contract MakerVaultBase {
         }
         // Exits DAI to the user's wallet as a token
         DaiJoinLike(daiJoin).exit(address(this), wadD);
-    }
-
-    // Public functions
-    function getVaultDebt(
-        address manager,
-        uint cdp
-    )
-        public
-        view
-        returns (uint debt)
-    {
-        address vat = ManagerLike(manager).vat();
-        address urn = ManagerLike(manager).urns(cdp);
-        bytes32 ilk = ManagerLike(manager).ilks(cdp);
-        address owner = ManagerLike(manager).owns(cdp);
-
-        debt = _getWipeAllWad(vat, owner, urn, ilk);
-    }
-
-    function getVaultCollateral(
-        address manager,
-        uint cdp
-    ) public view returns (uint ink) {
-        address vat = ManagerLike(manager).vat();
-        address urn = ManagerLike(manager).urns(cdp);
-        bytes32 ilk = ManagerLike(manager).ilks(cdp);
-        (ink,) = VatLike(vat).urns(ilk, urn);
-    }
+    }    
 }

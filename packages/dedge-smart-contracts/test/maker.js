@@ -14,6 +14,9 @@ const ERC20Abi = require('./abi/ERC20.json')
 const dsProxyAbi = require('./abi/DSProxy.json')
 const dssProxyActionsAbi = require('./abi/DssProxyActions.json')
 
+const uniswapFactoryAbi = require('../build/IUniswapFactory.json').abi
+const uniswapExchangeAbi = require('../build/IUniswapExchange.json').abi
+
 const addresses = {
     maker: {
         proxyRegistry: "0x4678f0a6958e4D2Bc4F1BAF7Bc52E8F3564f3fE4",
@@ -23,8 +26,10 @@ const addresses = {
         ethJoin: "0x2F0b23f53734252Bda2277357e97e1517d6B042A",
         batJoin: "0x3D0B1912B66114d4096F48A8CEe3A56C231772cA",
         daiJoin: "0x9759A6Ac90977b93B58547b4A71c78317f391A28",
+        usdcJoin: "0xA191e578a6736167326d05c119CE0c90849E84B7",
         ilkBatA: "BAT-A",
-        ilkEthA: "ETH-A"
+        ilkEthA: "ETH-A",
+        ilkUsdcA: "USDC-A"
     },
     aave: {
         ethAddress: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
@@ -39,7 +44,8 @@ const addresses = {
     },
     tokens: {
         dai: "0x6b175474e89094c44da98b954eedeac495271d0f",
-        bat: "0x0d8775f648430679a709e98d2b0cb6250d2887ef"
+        bat: "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
+        usdc: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
     },
     uniswap: {
         factory: '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
@@ -77,12 +83,26 @@ const main = async () => {
         wallet
     )
 
+    const batContract = new ethers.Contract(
+        addresses.tokens.bat,
+        ERC20Abi,
+        wallet
+    )
+
+    const usdcContract = new ethers.Contract(
+        addresses.tokens.usdc,
+        ERC20Abi,
+        wallet
+    )
+
+    const uniswapFactoryContract = new ethers.Contract(
+        addresses.uniswap.factory,
+        uniswapFactoryAbi,
+        wallet
+    )
+
     const IDssProxyActions = new ethers.utils.Interface(dssProxyActionsAbi)
     const IDedgeMakerManager = new ethers.utils.Interface(dedgeMakerManagerDef.abi)
-
-    // Setup vault
-    // This permission allows Oasis to interact with your ETH.
-    // This has to be done once for each new collateral type
 
     // If user doesn't have a proxy address
     // then create one for them
@@ -102,55 +122,7 @@ const main = async () => {
         wallet
     )
 
-    // // Open a Vault in MakerDAO
-    let cdpCountRet = await dssCdpManagerContract.count(proxyAddress)
-    let cdpCount = parseInt(cdpCountRet.toString())
-
-    console.log("Creating an ETH-A vault now with 1 ETH Collateral and 20 DAI Debt")
-
-    const openVaultCalldata = IDssProxyActions.functions.openLockETHAndDraw.encode([
-        addresses.maker.dssCdpManager,
-        addresses.maker.jug,
-        addresses.maker.ethJoin,
-        addresses.maker.daiJoin,
-        ethers.utils.formatBytes32String(addresses.maker.ilkEthA),
-        ethers.utils.parseEther("20.0") // Wanna Draw 20 DAI (minimum 20 DAI)
-    ])
-    const openVaultTx = await dsProxyContract.execute(
-        addresses.maker.dssProxyActions,
-        openVaultCalldata,
-        {
-            gasLimit: 4000000,
-            value: ethers.utils.parseEther("1.0")
-        }
-    )
-
-    await openVaultTx.wait()
-
-    cdpCountRet = await dssCdpManagerContract.count(proxyAddress)
-    cdpCount = parseInt(cdpCountRet.toString())
-    
-    console.log(`Found ${cdpCount} Vault, retrieving them...`)
-
-    let cdps = {}
-    let lastCdpRet = await dssCdpManagerContract.last(proxyAddress)
-    let lastCdp = lastCdpRet.toString()
-    let lastCdpIlkRet = await dssCdpManagerContract.ilks(lastCdp)
-    let lastCdpIlk = ethers.utils.parseBytes32String(lastCdpIlkRet)
-
-    cdps[lastCdp] = lastCdpIlk
-
-    for (let i = 1; i < cdpCount; i++) {
-        let linkedListRet = await dssCdpManagerContract.list(lastCdp)
-        lastCdp = linkedListRet.prev.toString()
-        lastCdpIlkRet = await dssCdpManagerContract.ilks(lastCdp)
-        lastCdpIlk = ethers.utils.parseBytes32String(lastCdpIlkRet)
-        cdps[lastCdp] = lastCdpIlk
-    }
-
-    console.log("Found these Vaults:")
-    console.log(cdps)
-
+    // This is our smart wallet address
     let dedgeProxyAddress = await dedgeProxyFactoryContract.proxies(wallet.address)
     if (dedgeProxyAddress === '0x0000000000000000000000000000000000000000') {
         console.log(`No DedgeProxy found for ${wallet.address}, creating one now`)
@@ -165,61 +137,211 @@ const main = async () => {
         wallet
     )
 
-    let daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-    let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
-    
-    if (Object.keys(cdps).length > 0) {
-        const lastCdpId = Object.keys(cdps)[Object.keys(cdps).length - 1]
+    const listOfIlks = [
+        [ addresses.maker.ilkBatA, addresses.maker.batJoin, addresses.tokens.bat ],
+        [ addresses.maker.ilkEthA, addresses.maker.ethJoin, addresses.aave.ethAddress ],
+        // [ addresses.maker.ilkUsdcA, addresses.maker.usdcJoin, addresses.tokens.usdc ],
+    ]
 
-        console.log(`Repaying CDP ${lastCdpId} debt and migrating available ETH into dedgeProxyAddress`)
+    for (let i = 0; i < listOfIlks.length; i++) {
+        const curIlk = listOfIlks[i][0]
+        const curIlkJoinAddress = listOfIlks[i][1]
+        const curTokenAddress = listOfIlks[i][2]
 
-        const collateralWei = await dedgeMakerManagerContract.getVaultCollateral(
-            addresses.maker.dssCdpManager,
-            parseInt(lastCdpId)
-        )
-        const debtWei = await dedgeMakerManagerContract.getVaultDebt(
-            addresses.maker.dssCdpManager,
-            parseInt(lastCdpId)
-        )
+        // Get some tokens from uniswap, if not funding ether
+        if (curIlk !== addresses.maker.ilkEthA) {           
+            // Approve Proxy Address to access funds
+            // ERC 20 token contract
+            console.log(`Approving dsproxy to access funds for ${curIlk}`)
+            const curTokenContract = new ethers.Contract(
+                curTokenAddress,
+                ERC20Abi,
+                wallet
+            )
+            
+            await curTokenContract.approve(
+                proxyAddress,
+                "0xffffffffffffffffffffffffffffffff",
+            )
 
-        const collateral = ethers.utils.formatEther(collateralWei.toString())
-        const debt = ethers.utils.formatEther(debtWei.toString())
+            console.log("Getting the tokens from uniswap")
+            let uniswapExchangeAddress = await uniswapFactoryContract.getExchange(curTokenAddress)
+            let uniswapExchangeContract = new ethers.Contract(
+                uniswapExchangeAddress,
+                uniswapExchangeAbi,
+                wallet
+            )
+            await uniswapExchangeContract.ethToTokenSwapInput(
+                1,
+                1900111539,
+                {
+                    gasLimit: 4000000,
+                    value: ethers.utils.parseEther("3.0")
+                }
+            )
 
-        console.log(`Collateral ${collateral.toString()} ETH`)
-        console.log(`Debt ${debt.toString()} DAI`)
+            const walletToken = await curTokenContract.balanceOf(wallet.address)
+            console.log(`Got ${ethers.utils.formatEther(walletToken.toString())} ${curIlk}`)
+        }
 
-        const importMakerVaultCallbackdata = IDedgeMakerManager
-            .functions
-            .importMakerVault
-            .encode([
-                dedgeProxyAddress,
-                dedgeMakerManagerAddress,
-                addresses.aave.ethAddress,
-                lastCdpId
+
+        // Open a Vault in MakerDAO
+        let cdpCountRet = await dssCdpManagerContract.count(proxyAddress)
+        let cdpCount = parseInt(cdpCountRet.toString())
+
+        console.log(`Creating an ${curIlk} vault now and drawing 20 DAI Debt`)
+
+        // Open vault with ETH Collateral
+        if (curIlk === addresses.maker.ilkEthA) {
+            const openVaultCalldata = IDssProxyActions.functions.openLockETHAndDraw.encode([
+                addresses.maker.dssCdpManager,
+                addresses.maker.jug,
+                curIlkJoinAddress,
+                addresses.maker.daiJoin,
+                ethers.utils.formatBytes32String(addresses.maker.ilkEthA),
+                ethers.utils.parseEther("20.0") // Wanna Draw 20 DAI (minimum 20 DAI)
             ])
+            const openVaultTx = await dsProxyContract.execute(
+                addresses.maker.dssProxyActions,
+                openVaultCalldata,
+                {
+                    gasLimit: 4000000,
+                    value: ethers.utils.parseEther("1.0")
+                }
+            )
+            await openVaultTx.wait()
+        } else {
+            // Open with ERC20 colalteral
+            const wadC = curIlk === addresses.maker.ilkBatA ? 1000 : 100
+            // Open Vault with ERC-20 collateral
+            const openVaultCalldata = IDssProxyActions.functions.openLockGemAndDraw.encode([
+                addresses.maker.dssCdpManager,
+                addresses.maker.jug,
+                curIlkJoinAddress,
+                addresses.maker.daiJoin,
+                ethers.utils.formatBytes32String(curIlk),
+                ethers.utils.parseEther(wadC.toString()),
+                ethers.utils.parseEther("20.0"), // Wanna Draw 20 DAI (minimum 20 DAI)
+                true
+            ])
+            const openVaultTx = await dsProxyContract.execute(
+                addresses.maker.dssProxyActions,
+                openVaultCalldata,
+                {
+                    gasLimit: 4000000,
+                }
+            )
+            await openVaultTx.wait()
+        }
 
-        const tx = await dsProxyContract.execute(
-            dedgeMakerManagerAddress,
-            importMakerVaultCallbackdata,
-            {
-                gasLimit: 4000000
-            }
-        )
+        cdpCountRet = await dssCdpManagerContract.count(proxyAddress)
+        cdpCount = parseInt(cdpCountRet.toString())
+        
+        console.log(`Found ${cdpCount} Vault, retrieving them...`)
 
-        await tx.wait()
+        let cdps = {}
+        let lastCdpRet = await dssCdpManagerContract.last(proxyAddress)
+        let lastCdp = lastCdpRet.toString()
+        let lastCdpIlkRet = await dssCdpManagerContract.ilks(lastCdp)
+        let lastCdpIlk = ethers.utils.parseBytes32String(lastCdpIlkRet)
 
-        console.log('Imported CDP, checking balance...')
+        cdps[lastCdp] = lastCdpIlk
 
-        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-        ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
+        for (let i = 1; i < cdpCount; i++) {
+            let linkedListRet = await dssCdpManagerContract.list(lastCdp)
+            lastCdp = linkedListRet.prev.toString()
+            lastCdpIlkRet = await dssCdpManagerContract.ilks(lastCdp)
+            lastCdpIlk = ethers.utils.parseBytes32String(lastCdpIlkRet)
+            cdps[lastCdp] = lastCdpIlk
+        }
+
+        console.log("Found these Vaults:")
+        console.log(cdps)
+
+        let daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
+        let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
+        
+        if (Object.keys(cdps).length > 0) {
+            const lastCdpId = Object.keys(cdps).reduce((a, b) => parseInt(a) > parseInt(b) ? a : b);
+
+            console.log(`Repaying CDP ${lastCdpId} debt and migrating available ${curIlk} into dedgeProxyAddress`)
+
+            const collateralWei = await dedgeMakerManagerContract.getVaultCollateral(
+                addresses.maker.dssCdpManager,
+                parseInt(lastCdpId)
+            )
+            const debtWei = await dedgeMakerManagerContract.getVaultDebt(
+                addresses.maker.dssCdpManager,
+                parseInt(lastCdpId)
+            )
+
+            const collateral = ethers.utils.formatEther(collateralWei.toString())
+            const debt = ethers.utils.formatEther(debtWei.toString())
+
+            console.log(`Collateral ${collateral.toString()} ${curIlk}`)
+            console.log(`Debt ${debt.toString()} DAI`)
+
+            console.log('Importing CDP....')
+
+            const importMakerVaultCallbackdata = IDedgeMakerManager
+                .functions
+                .importMakerVault
+                .encode([
+                    dedgeProxyAddress,
+                    dedgeMakerManagerAddress,
+                    curTokenAddress,
+                    curIlkJoinAddress,
+                    lastCdpId
+                ])
+
+            const tx = await dsProxyContract.execute(
+                dedgeMakerManagerAddress,
+                importMakerVaultCallbackdata,
+                {
+                    gasLimit: 4000000
+                }
+            )
+
+            await tx.wait()
+
+            console.log('Imported CDP, checking balance...')
+
+            const collateralWei = await dedgeMakerManagerContract.getVaultCollateral(
+                addresses.maker.dssCdpManager,
+                parseInt(lastCdpId)
+            )
+            const debtWei = await dedgeMakerManagerContract.getVaultDebt(
+                addresses.maker.dssCdpManager,
+                parseInt(lastCdpId)
+            )
+
+            const collateral = ethers.utils.formatEther(collateralWei.toString())
+            const debt = ethers.utils.formatEther(debtWei.toString())
+
+            console.log(`Collateral ${collateral.toString()} ${curIlk}`)
+            console.log(`Debt ${debt.toString()} DAI`)
+
+            console.log('----------')
+
+            let walletDaiBalanceWei = await daiContract.balanceOf(wallet.address)
+            let walletBatBalanceWei = await batContract.balanceOf(wallet.address)
+            let walletUsdcBalanceWei = await usdcContract.balanceOf(wallet.address)
+
+            daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
+            usdcBalanceWei = await usdcContract.balanceOf(dedgeProxyAddress)
+            batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
+            ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
+            
+            console.log(`Dai @ Wallet (Holding): ${ethers.utils.formatEther(walletDaiBalanceWei.toString())}`)
+            console.log(`Bat @ Wallet (Holding): ${ethers.utils.formatEther(walletBatBalanceWei.toString())}`)
+            console.log(`USDC @ Wallet (Holding): ${ethers.utils.formatEther(walletUsdcBalanceWei.toString())}`)
+
+            console.log(`Dai @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
+            console.log(`USDC @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(usdcBalanceWei.toString())}`)
+            console.log(`BAT @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
+            console.log(`ETH @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
+        }
     }
-
-    let walletDaiBalanceWei = await daiContract.balanceOf(wallet.address)
-
-    console.log(`Dai @ Wallet (Holding): ${ethers.utils.formatEther(walletDaiBalanceWei.toString())}`)
-
-    console.log(`Dai @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-    console.log(`ETH @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
 }
 
 main()

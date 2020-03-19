@@ -20,12 +20,17 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase {
     address constant AaveLendingPoolAddressProviderAddress = 0x24a42fD28C976A61Df5D00D0599C34c4f90748c8;
     address constant AaveEthAddress = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+
     address constant UniswapFactoryAddress = 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95;
 
     address constant DaiAddress = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
     address constant BatAddress = 0x0D8775F648430679A709E98d2b0Cb6250d2887EF;
+    address constant UsdcAddress = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
 
+    // https://changelog.makerdao.com/
+    // https://changelog.makerdao.com/releases/mainnet/1.0.4/contracts.json
     address constant EthJoinAddress = 0x2F0b23f53734252Bda2277357e97e1517d6B042A;
+    address constant UsdcJoinAddress = 0xA191e578a6736167326d05c119CE0c90849E84B7;
     address constant BatJoinAddress = 0x3D0B1912B66114d4096F48A8CEe3A56C231772cA;
     address constant DaiJoinAddress = 0x9759A6Ac90977b93B58547b4A71c78317f391A28;
     address constant JugAddress = 0x19c0976f590D67707E62397C87829d896Dc0f1F1;
@@ -34,6 +39,33 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
     function () external payable {}
 
     constructor () public {}
+
+    // Helper functions
+    function getVaultDebt(
+        address manager,
+        uint cdp
+    )
+        public
+        view
+        returns (uint debt)
+    {
+        address vat = ManagerLike(manager).vat();
+        address urn = ManagerLike(manager).urns(cdp);
+        bytes32 ilk = ManagerLike(manager).ilks(cdp);
+        address owner = ManagerLike(manager).owns(cdp);
+
+        debt = _getWipeAllWad(vat, owner, urn, ilk);
+    }
+
+    function getVaultCollateral(
+        address manager,
+        uint cdp
+    ) public view returns (uint ink) {
+        address vat = ManagerLike(manager).vat();
+        address urn = ManagerLike(manager).urns(cdp);
+        bytes32 ilk = ManagerLike(manager).ilks(cdp);
+        (ink,) = VatLike(vat).urns(ilk, urn);
+    }
 
     // Callback function called by Aave's lendingPool.flashLoan() function
     function executeOperation(
@@ -47,7 +79,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
         // Pay back owed dai
         uint daiDebt = loanedAmount.add(fee);
 
-        // (account for 2.5% slippage)
+        // (account for 2.5% slippage on avg)
         uint uniswapDaiDebt = daiDebt.mul(1025).div(1000);
 
         // Extract data params
@@ -55,8 +87,10 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
             address payable usrDedgeProxy,
             address makerMigrateManager,
             address collateralAddress,
+            address collateralJoinAddress,
             uint cdpId
         ) = abi.decode(data, (
+            address,
             address,
             address,
             address,
@@ -69,25 +103,26 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
 
         if (collateralAddress == AaveEthAddress) {
             // Get back collateralized ETH
-            collateralAmount = _wipeAllAndFreeETH(DssCdpManagerAddress, EthJoinAddress, DaiJoinAddress, cdpId);
+            collateralAmount = _wipeAllAndFreeETH(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
             // Calculate amount of ETH we need to sell to pay back DAI
             ethAmount = getTokenToEthInputPriceFromUniswap(DaiAddress, uniswapDaiDebt);
             // Buy them tokens sell them ETH to repay Aave
             daiAmount = _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
             // Transfer remaining ETH back to user
-            usrDedgeProxy.call.value(collateralAmount.sub(ethAmount))("");
-        } else if (collateralAddress == BatAddress) {
-            // Get back collateralized BAT
-            collateralAmount = _wipeAllAndFreeGem(DssCdpManagerAddress, BatJoinAddress, DaiJoinAddress, cdpId);
-            // Calculate amount of BAT we need to sell to pay back DAI
-            uint batAmount = getTokenToTokenPriceFromUniswap(DaiAddress, BatAddress, uniswapDaiDebt);
-            // Sell DAI to get BAT
-            ethAmount = _sellTokensForEthFromUniswap(BatAddress, batAmount);
+            (bool success, ) = usrDedgeProxy.call.value(collateralAmount.sub(ethAmount))("");
+            require(success, "mkr-mgr-eth-xfer-failed");
+        } else {
+            // Get back collateralized asset
+            collateralAmount = _wipeAllAndFreeGem(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
+            // Calculate amount of ERC20 we need to sell to pay back DAI
+            uint erc20Amount = getTokenToTokenPriceFromUniswap(DaiAddress, collateralAddress, uniswapDaiDebt);
+            // Sell DAI to get ERC20 token
+            ethAmount = _sellTokensForEthFromUniswap(collateralAddress, erc20Amount);
             daiAmount = _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
-            // Transfer remaining BAT back to user
+            // Transfer remaining ERC20 token back to user
             require(
-                IERC20(BatAddress).transfer(usrDedgeProxy, IERC20(BatAddress).balanceOf(makerMigrateManager)),
-                "mkr-mgr-bat-xfer-failed"
+                IERC20(collateralAddress).transfer(usrDedgeProxy, IERC20(collateralAddress).balanceOf(makerMigrateManager)),
+                "mkr-mgr-erc20-xfer-failed"
             );
         }
 
@@ -113,6 +148,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
         address usrDedgeProxy,
         address makerMigrateManager,
         address collateralAddress,
+        address collateralJoinAddress,
         uint cdpId
     ) public payable {
         // Allows contract to do stuff with the CDP
@@ -122,7 +158,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
         uint daiDebt = getVaultDebt(DssCdpManagerAddress, cdpId);
 
         // 1. Flashloan DAI
-        bytes memory data = abi.encode(usrDedgeProxy, makerMigrateManager, collateralAddress, cdpId);
+        bytes memory data = abi.encode(usrDedgeProxy, makerMigrateManager, collateralAddress, collateralJoinAddress, cdpId);
         ILendingPool lendingPool = ILendingPool(ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress).getLendingPool());
         lendingPool.flashLoan(makerMigrateManager, DaiAddress, daiDebt, data);
 
