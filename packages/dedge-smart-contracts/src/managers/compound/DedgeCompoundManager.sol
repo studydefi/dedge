@@ -17,7 +17,7 @@ import "../../interfaces/compound/IComptroller.sol";
 import "../../interfaces/compound/ICEther.sol";
 import "../../interfaces/compound/ICToken.sol";
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../../interfaces/IERC20.sol";
 
 contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBase {
     address constant AaveLendingPoolAddressProviderAddress = 0x24a42fD28C976A61Df5D00D0599C34c4f90748c8;
@@ -26,6 +26,9 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
     address constant CompoundPriceOracleAddress = 0x1D8aEdc9E924730DD3f9641CDb4D1B92B848b4bd;
     address constant CompoundComptrollerAddress = 0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B;
     address constant CEtherAddress = 0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5;
+    address constant CUSDCAddress = 0x39AA39c021dfbaE8faC545936693aC917d5E7563;
+    address constant CDaiAddress = 0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643;
+    address constant CSaiAddress = 0xF5DCe57282A584D2746FaF1593d3121Fcac444dC;
 
     address constant DaiAddress = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 
@@ -81,7 +84,7 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
     function maxBorrowTokensNo(
         address userDedgeProxy,
         address CToken
-    ) public view returns (uint tokenCanBorrowPerTurn) {
+    ) public view returns (uint) {
         // Calculate max borrowing amount for newCTokenAddress
         // https://compound.finance/developers/comptroller#account-liquidity
         // max borrow tokens = liquidity / price per token
@@ -92,9 +95,11 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
         require(shortfall == 0, "cmpnd-mgr-account-underwater");
         require(liquidity > 0, "cmpnd-mgr-excess-collateral");
 
+        // No need to account for decimal places as getUnderLyingPrice automatically
+        // converts it into the right decimal place, just need to multiply it by 1 ether (1e18)
+        // https://etherscan.io/address/0x1D8aEdc9E924730DD3f9641CDb4D1B92B848b4bd#code Line 4319
         uint tokenOraclePrice = ICompoundPriceOracle(CompoundPriceOracleAddress).getUnderlyingPrice(CToken);
-        // Want the result to be in Wei
-        tokenCanBorrowPerTurn = liquidity.mul(1 ether).div(tokenOraclePrice);
+        return liquidity.mul(1e18).div(tokenOraclePrice);
     }
 
     // Keeps calling `swapDebt`

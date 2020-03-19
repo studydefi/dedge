@@ -41,12 +41,14 @@ const addresses = {
         cDai: '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643',
         cSai: '0xf5dce57282a584d2746faf1593d3121fcac444dc',
         cBat: '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
-        cZRX: '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407'
+        cZRX: '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
+        cUSDC: '0x39aa39c021dfbae8fac545936693ac917d5e7563'
     },
     tokens: {
         dai: "0x6b175474e89094c44da98b954eedeac495271d0f",
         bat: "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
-        zrx: '0xE41d2489571d322189246DaFA5ebDe1F4699F498'
+        zrx: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
+        usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
     },
     uniswap: {
         factory: '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
@@ -84,6 +86,12 @@ const main = async () => {
         wallet
     )
 
+    const cUsdcContract = new ethers.Contract(
+        addresses.compound.cZRX,
+        CTokenAbi,
+        wallet
+    )
+
     const daiContract = new ethers.Contract(
         addresses.tokens.dai,
         ERC20Abi,
@@ -98,6 +106,12 @@ const main = async () => {
 
     const zrxContract = new ethers.Contract(
         addresses.tokens.zrx,
+        ERC20Abi,
+        wallet
+    )
+
+    const usdcContract = new ethers.Contract(
+        addresses.tokens.usdc,
         ERC20Abi,
         wallet
     )
@@ -159,25 +173,32 @@ const main = async () => {
     let batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
     let daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
     let zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
+    let usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
     let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
     
     let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
     let batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
     let zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
+    let usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
     let ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
 
-    let daiBalance = ethers.utils.formatEther(daiBalanceWei.toString())
-    
-    console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
-    console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-    console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
-    console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
+    const logBalances = () => {
+        console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
+        console.log(`USDC (Holding): ${ethers.utils.formatUnits(usdcBalanceWei.toString(), 6)}`) // 6 decimals
+        console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
+        console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
+        console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
 
-    console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
-    console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
-    console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
-    console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
-    
+        console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
+        console.log(`USDC Borrowed: ${ethers.utils.formatUnits(usdcBorrowStorage.toString(), 6)}`)
+        console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
+        console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
+        console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+    }
+
+    logBalances()
+
+    let daiBalance = ethers.utils.formatEther(daiBalanceWei.toString())
     const daiToBorrow = 95
     if (parseInt(daiBalance) < 20) {
         console.log(`Attempting to supply 2 ETH and borrow ${daiToBorrow.toString()} DAI`)
@@ -201,19 +222,10 @@ const main = async () => {
         daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
         daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
 
-        console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
-        console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-        console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
-        console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
-
-        console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
-        console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
-        console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
-        console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+        logBalances()
     }
 
     let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
-
     if (parseInt(daiBorrowed) == daiToBorrow) {
         console.log('Attempting to swap collateral from DAI to BAT')
         const daiDebtLeft = "15"
@@ -275,15 +287,53 @@ const main = async () => {
         daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
         batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
 
-        console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
-        console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-        console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
-        console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
+        logBalances()
+    }
 
-        console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
-        console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
-        console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
-        console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+    // USDC has 6 decimals, cUSDC has 8 decimals
+    daiBorrowStorageInt = parseInt(ethers.utils.formatEther(daiBorrowStorage.toString()))
+    daiDebtLeft = '8'
+    if (daiBorrowStorageInt > parseInt(daiDebtLeft)) {
+        console.log(`Swapping DAI debt to USDC debt, want ${daiDebtLeft} DAI debt remaining`)
+
+        const swapDebtCallbackData = IDedgeCompoundManager
+            .functions
+            .swapDebtUntil
+            .encode([
+                dedgeProxyAddress,
+                dedgeCompoundManagerAddress,
+                addresses.compound.cDai,
+                ethers.utils.parseEther(daiDebtLeft),  // Only want 8 DAI debt left
+                addresses.compound.cUSDC,
+            ])
+        
+        // SUPER hacky way to get pass timeouts (they're hardcoded in web.ts)
+        // The following line takes ~2.5 minutes to complete
+        // ethers.js timeouts in 2 minutes :(
+        try {
+            await dedgeProxyContract.execute(
+                dedgeCompoundManagerAddress,
+                swapDebtCallbackData,
+                {
+                    gasLimit: 4000000
+                }
+            )
+        } catch(e) {
+            if (e.toString().toLowerCase().includes("timeout")) {
+                await sleep(60 * 1000); // Sleep for 1 more minute after timeout
+            } else {
+                throw e
+            }
+        }
+        console.log("Swapped debt")
+
+        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
+        usdcBalanceWei = await usdcContract.balanceOf(dedgeProxyAddress)
+
+        daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
+        usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
+
+        logBalances()
     }
 
     let batBorrowStorageInt = parseInt(ethers.utils.formatEther(batBorrowStorage.toString()))
@@ -328,15 +378,7 @@ const main = async () => {
         batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
         zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
 
-        console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
-        console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-        console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
-        console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
-
-        console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
-        console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
-        console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
-        console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+        logBalances()
     }
 
     let zrxBorrowStorageInt = parseInt(ethers.utils.formatEther(zrxBorrowStorage.toString()))
@@ -381,15 +423,7 @@ const main = async () => {
         zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
         ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
 
-        console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
-        console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-        console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
-        console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
-
-        console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
-        console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
-        console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
-        console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+        logBalances()
     }
 
     let ethBorrowStorageFloat = parseFloat(ethers.utils.formatEther(ethBorrowStorage.toString()))
@@ -434,15 +468,7 @@ const main = async () => {
         daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
         ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
 
-        console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
-        console.log(`Dai (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-        console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
-        console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
-
-        console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
-        console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
-        console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
-        console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+        logBalances()
     }
 
     let payoutFeeAddress = await provider.getBalance("0x56D5e01D5D2F853aA8f4ac5d2FfB4cBBCa9e2b0f");

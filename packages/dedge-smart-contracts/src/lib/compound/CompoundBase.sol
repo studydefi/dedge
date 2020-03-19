@@ -7,7 +7,7 @@ import "../../interfaces/compound/IComptroller.sol";
 import "../../interfaces/compound/ICEther.sol";
 import "../../interfaces/compound/ICToken.sol";
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../../interfaces/IERC20.sol";
 
 contract CompoundBase {
     address constant CompoundComptrollerAddress = 0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B;

@@ -3,7 +3,7 @@ pragma solidity 0.5.16;
 import "../../interfaces/uniswap/IUniswapExchange.sol";
 import "../../interfaces/uniswap/IUniswapFactory.sol";
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../../interfaces/IERC20.sol";
 
 
 contract UniswapBase {

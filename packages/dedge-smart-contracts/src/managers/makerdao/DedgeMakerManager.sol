@@ -14,7 +14,7 @@ import "../../interfaces/aave/ILendingPool.sol";
 import "../../interfaces/uniswap/IUniswapExchange.sol";
 import "../../interfaces/uniswap/IUniswapFactory.sol";
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../../interfaces/IERC20.sol";
 
 
 contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase {
@@ -80,7 +80,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
         uint daiDebt = loanedAmount.add(fee);
 
         // (account for 2.5% slippage on avg)
-        uint uniswapDaiDebt = daiDebt.mul(1025).div(1000);
+        uint uniswapDaiInput = daiDebt.mul(1025).div(1000);
 
         // Extract data params
         (
@@ -105,7 +105,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
             // Get back collateralized ETH
             collateralAmount = _wipeAllAndFreeETH(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
             // Calculate amount of ETH we need to sell to pay back DAI
-            ethAmount = getTokenToEthInputPriceFromUniswap(DaiAddress, uniswapDaiDebt);
+            ethAmount = getTokenToEthInputPriceFromUniswap(DaiAddress, uniswapDaiInput);
             // Buy them tokens sell them ETH to repay Aave
             daiAmount = _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
             // Transfer remaining ETH back to user
@@ -115,7 +115,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
             // Get back collateralized asset
             collateralAmount = _wipeAllAndFreeGem(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
             // Calculate amount of ERC20 we need to sell to pay back DAI
-            uint erc20Amount = getTokenToTokenPriceFromUniswap(DaiAddress, collateralAddress, uniswapDaiDebt);
+            uint erc20Amount = getTokenToTokenPriceFromUniswap(DaiAddress, collateralAddress, uniswapDaiInput);
             // Sell DAI to get ERC20 token
             ethAmount = _sellTokensForEthFromUniswap(collateralAddress, erc20Amount);
             daiAmount = _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
@@ -125,7 +125,6 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
                 "mkr-mgr-erc20-xfer-failed"
             );
         }
-
 
         // Return funds
         transferFundsBackToPoolInternal(reserve, daiDebt);

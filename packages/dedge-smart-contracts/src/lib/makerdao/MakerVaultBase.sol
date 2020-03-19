@@ -2,7 +2,7 @@
 
 pragma solidity 0.5.16;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../../interfaces/IERC20.sol";
 
 contract GemLike {
     function approve(address, uint) public;

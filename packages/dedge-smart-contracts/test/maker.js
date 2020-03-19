@@ -116,7 +116,7 @@ const main = async () => {
     console.log(`Proxy address for user: ${proxyAddress}`)
 
     // This is our (maker)DsProxy contract
-    const dsProxyContract = new ethers.Contract(
+    let dsProxyContract = new ethers.Contract(
         proxyAddress,
         dsProxyAbi,
         wallet
@@ -138,9 +138,9 @@ const main = async () => {
     )
 
     const listOfIlks = [
+        // [ addresses.maker.ilkUsdcA, addresses.maker.usdcJoin, addresses.tokens.usdc ], // USDC not supported yet sorry
         [ addresses.maker.ilkBatA, addresses.maker.batJoin, addresses.tokens.bat ],
         [ addresses.maker.ilkEthA, addresses.maker.ethJoin, addresses.aave.ethAddress ],
-        // [ addresses.maker.ilkUsdcA, addresses.maker.usdcJoin, addresses.tokens.usdc ],
     ]
 
     for (let i = 0; i < listOfIlks.length; i++) {
@@ -181,7 +181,7 @@ const main = async () => {
             )
 
             const walletToken = await curTokenContract.balanceOf(wallet.address)
-            console.log(`Got ${ethers.utils.formatEther(walletToken.toString())} ${curIlk}`)
+            console.log(`Got ${ethers.utils.formatUnits(walletToken.toString(), curIlk === addresses.maker.ilkBatA ? 18 : 6)} ${curIlk}`)
         }
 
 
@@ -212,7 +212,9 @@ const main = async () => {
             await openVaultTx.wait()
         } else {
             // Open with ERC20 colalteral
-            const wadC = curIlk === addresses.maker.ilkBatA ? 1000 : 100
+            const wadC = curIlk === addresses.maker.ilkBatA ? 
+                ethers.utils.parseEther("1000") :
+                ethers.utils.parseUnits("150", 6) // USDC has 6 decimals
             // Open Vault with ERC-20 collateral
             const openVaultCalldata = IDssProxyActions.functions.openLockGemAndDraw.encode([
                 addresses.maker.dssCdpManager,
@@ -220,7 +222,7 @@ const main = async () => {
                 curIlkJoinAddress,
                 addresses.maker.daiJoin,
                 ethers.utils.formatBytes32String(curIlk),
-                ethers.utils.parseEther(wadC.toString()),
+                wadC,
                 ethers.utils.parseEther("20.0"), // Wanna Draw 20 DAI (minimum 20 DAI)
                 true
             ])
@@ -266,17 +268,17 @@ const main = async () => {
 
             console.log(`Repaying CDP ${lastCdpId} debt and migrating available ${curIlk} into dedgeProxyAddress`)
 
-            const collateralWei = await dedgeMakerManagerContract.getVaultCollateral(
+            let collateralWei = await dedgeMakerManagerContract.getVaultCollateral(
                 addresses.maker.dssCdpManager,
                 parseInt(lastCdpId)
             )
-            const debtWei = await dedgeMakerManagerContract.getVaultDebt(
+            let debtWei = await dedgeMakerManagerContract.getVaultDebt(
                 addresses.maker.dssCdpManager,
                 parseInt(lastCdpId)
             )
 
-            const collateral = ethers.utils.formatEther(collateralWei.toString())
-            const debt = ethers.utils.formatEther(debtWei.toString())
+            let collateral = ethers.utils.formatEther(collateralWei.toString())
+            let debt = ethers.utils.formatEther(debtWei.toString())
 
             console.log(`Collateral ${collateral.toString()} ${curIlk}`)
             console.log(`Debt ${debt.toString()} DAI`)
@@ -306,17 +308,17 @@ const main = async () => {
 
             console.log('Imported CDP, checking balance...')
 
-            const collateralWei = await dedgeMakerManagerContract.getVaultCollateral(
+            collateralWei = await dedgeMakerManagerContract.getVaultCollateral(
                 addresses.maker.dssCdpManager,
                 parseInt(lastCdpId)
             )
-            const debtWei = await dedgeMakerManagerContract.getVaultDebt(
+            debtWei = await dedgeMakerManagerContract.getVaultDebt(
                 addresses.maker.dssCdpManager,
                 parseInt(lastCdpId)
             )
 
-            const collateral = ethers.utils.formatEther(collateralWei.toString())
-            const debt = ethers.utils.formatEther(debtWei.toString())
+            collateral = ethers.utils.formatEther(collateralWei.toString())
+            debt = ethers.utils.formatEther(debtWei.toString())
 
             console.log(`Collateral ${collateral.toString()} ${curIlk}`)
             console.log(`Debt ${debt.toString()} DAI`)
@@ -334,12 +336,14 @@ const main = async () => {
             
             console.log(`Dai @ Wallet (Holding): ${ethers.utils.formatEther(walletDaiBalanceWei.toString())}`)
             console.log(`Bat @ Wallet (Holding): ${ethers.utils.formatEther(walletBatBalanceWei.toString())}`)
-            console.log(`USDC @ Wallet (Holding): ${ethers.utils.formatEther(walletUsdcBalanceWei.toString())}`)
+            console.log(`USDC @ Wallet (Holding): ${ethers.utils.formatUnits(walletUsdcBalanceWei.toString(), 6)}`) // USDC 6 decimals
 
             console.log(`Dai @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-            console.log(`USDC @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(usdcBalanceWei.toString())}`)
+            console.log(`USDC @ DedgeProxyAddress (Holding): ${ethers.utils.formatUnits(usdcBalanceWei.toString(), 6)}`)
             console.log(`BAT @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
             console.log(`ETH @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
+
+            console.log('---------')
         }
     }
 }
