@@ -116,7 +116,7 @@ contract MakerVaultBase {
         );
     }
 
-    function _convertToNativeUnits(address gemJoin, uint256 wad) internal returns (uint256 amt) {
+    function _convertToGemUnits(address gemJoin, uint256 wad) internal returns (uint256 amt) {
         // For those collaterals that have less than 18 decimals precision we need to do the conversion
         amt = wad / (10 ** (18 - GemJoinLike(gemJoin).dec()));
     }
@@ -338,10 +338,10 @@ contract MakerVaultBase {
 
         // Moves the amount from the CDP urn to proxy's address
         _flux(manager, cdp, address(this), ink);
-        // Convert gem to native units
-        uint256 nativeInk = _convertToNativeUnits(gemJoin, ink);
+        // Convert to gem units
+        uint256 gemInk = _convertToGemUnits(gemJoin, ink);
         // Exits token amount to the user's wallet as a token
-        GemJoinLike(gemJoin).exit(address(this), nativeInk);
+        GemJoinLike(gemJoin).exit(address(this), gemInk);
         return ink;
     }
 
