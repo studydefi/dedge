@@ -85,7 +85,7 @@ contract MakerVaultBase {
     }
 
     function daiJoin_join(address apt, address urn, uint wad) public {
-        // DAI is already in SwapActions contract as it was flashloaned to us
+        // DAI is already in contract as it was flashloaned to us
         // DaiJoinLike(apt).dai().transferFrom(msg.sender, address(this), wad);
         // Approves adapter to take the DAI amount
         DaiJoinLike(apt).dai().approve(apt, wad);
@@ -114,6 +114,11 @@ contract MakerVaultBase {
             amt,
             10 ** (18 - GemJoinLike(gemJoin).dec())
         );
+    }
+
+    function _convertToNativeUnits(address gemJoin, uint256 wad) internal returns (uint256 amt) {
+        // For those collaterals that have less than 18 decimals precision we need to do the conversion
+        amt = wad / (10 ** (18 - GemJoinLike(gemJoin).dec()));
     }
 
     function _cdpAllow(
@@ -321,18 +326,22 @@ contract MakerVaultBase {
 
         // Joins DAI amount into the vat
         daiJoin_join(daiJoin, urn, _getWipeAllWad(vat, urn, urn, ilk));
-        uint wad18 = _convertTo18(gemJoin, ink);
+        // uint wad18 = _convertTo18(gemJoin, ink);
+
         // Paybacks debt to the CDP and unlocks token amount from it
         _frob(
             manager,
             cdp,
-            -toInt(wad18),
+            -toInt(ink),
             -int(art)
         );
+
         // Moves the amount from the CDP urn to proxy's address
-        _flux(manager, cdp, address(this), wad18);
+        _flux(manager, cdp, address(this), ink);
+        // Convert gem to native units
+        uint256 nativeInk = _convertToNativeUnits(gemJoin, ink);
         // Exits token amount to the user's wallet as a token
-        GemJoinLike(gemJoin).exit(address(this), ink);
+        GemJoinLike(gemJoin).exit(address(this), nativeInk);
         return ink;
     }
 
@@ -364,5 +373,5 @@ contract MakerVaultBase {
         }
         // Exits DAI to the user's wallet as a token
         DaiJoinLike(daiJoin).exit(address(this), wadD);
-    }    
+    }
 }

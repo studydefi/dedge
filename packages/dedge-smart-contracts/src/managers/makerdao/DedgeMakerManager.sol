@@ -67,6 +67,26 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
         (ink,) = VatLike(vat).urns(ilk, urn);
     }
 
+    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
+        if (_i == 0) {
+            return "0";
+        }
+        uint j = _i;
+        uint len;
+        while (j != 0) {
+            len++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(len);
+        uint k = len - 1;
+        while (_i != 0) {
+            bstr[k--] = byte(uint8(48 + _i % 10));
+            _i /= 10;
+        }
+        return string(bstr);
+    }
+
+
     // Callback function called by Aave's lendingPool.flashLoan() function
     function executeOperation(
         address reserve,
@@ -97,31 +117,31 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
             uint
         ));
 
-        uint collateralAmount;
-        uint daiAmount;
-        uint ethAmount;
-
         if (collateralAddress == AaveEthAddress) {
             // Get back collateralized ETH
-            collateralAmount = _wipeAllAndFreeETH(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
-            // Calculate amount of ETH we need to sell to pay back DAI
-            ethAmount = getTokenToEthInputPriceFromUniswap(DaiAddress, uniswapDaiInput);
-            // Buy them tokens sell them ETH to repay Aave
-            daiAmount = _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
+            uint collateralAmount = _wipeAllAndFreeETH(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
+            // Calculate amount of collateral (ETH) we need to sell to pay back DAI
+            uint collateralSellAmount = getTokenToEthInputPriceFromUniswap(DaiAddress, uniswapDaiInput);
+            // Sell ETH, buy DAI to repay Aave
+            _buyTokensWithEthFromUniswap(DaiAddress, collateralSellAmount, daiDebt);
             // Transfer remaining ETH back to user
-            (bool success, ) = usrDedgeProxy.call.value(collateralAmount.sub(ethAmount))("");
+            (bool success, ) = usrDedgeProxy.call.value(collateralAmount.sub(collateralSellAmount))("");
             require(success, "mkr-mgr-eth-xfer-failed");
         } else {
             // Get back collateralized asset
-            collateralAmount = _wipeAllAndFreeGem(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
-            // Calculate amount of ERC20 we need to sell to pay back DAI
-            uint erc20Amount = getTokenToTokenPriceFromUniswap(DaiAddress, collateralAddress, uniswapDaiInput);
-            // Sell DAI to get ERC20 token
-            ethAmount = _sellTokensForEthFromUniswap(collateralAddress, erc20Amount);
-            daiAmount = _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
+            _wipeAllAndFreeGem(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
+            // Calculate amount of collateral (ERC20) we need to sell to pay back DAI
+            uint collateralSellAmount = getTokenToTokenPriceFromUniswap(DaiAddress, collateralAddress, uniswapDaiInput);
+            // Sell collateral token to get ETH
+            uint ethAmount = _sellTokensForEthFromUniswap(collateralAddress, collateralSellAmount);
+            // Sell ETH to get DAI
+            _buyTokensWithEthFromUniswap(DaiAddress, ethAmount, daiDebt);
             // Transfer remaining ERC20 token back to user
             require(
-                IERC20(collateralAddress).transfer(usrDedgeProxy, IERC20(collateralAddress).balanceOf(makerMigrateManager)),
+                IERC20(collateralAddress).transfer(
+                    usrDedgeProxy,
+                    IERC20(collateralAddress).balanceOf(makerMigrateManager)
+                ),
                 "mkr-mgr-erc20-xfer-failed"
             );
         }

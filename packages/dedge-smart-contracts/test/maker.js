@@ -137,8 +137,11 @@ const main = async () => {
         wallet
     )
 
+    proxyAddress = dedgeProxyAddress
+    dsProxyContract = dedgeProxyContract
+
     const listOfIlks = [
-        // [ addresses.maker.ilkUsdcA, addresses.maker.usdcJoin, addresses.tokens.usdc ], // USDC not supported yet sorry
+        [ addresses.maker.ilkUsdcA, addresses.maker.usdcJoin, addresses.tokens.usdc ],
         [ addresses.maker.ilkBatA, addresses.maker.batJoin, addresses.tokens.bat ],
         [ addresses.maker.ilkEthA, addresses.maker.ethJoin, addresses.aave.ethAddress ],
     ]
@@ -282,8 +285,6 @@ const main = async () => {
 
             console.log(`Collateral ${collateral.toString()} ${curIlk}`)
             console.log(`Debt ${debt.toString()} DAI`)
-
-            console.log('Importing CDP....')
 
             const importMakerVaultCallbackdata = IDedgeMakerManager
                 .functions
