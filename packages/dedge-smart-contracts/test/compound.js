@@ -170,18 +170,30 @@ const main = async () => {
     }
     console.log(`Entered into ${marketsEntered.length} market`)
 
+    let batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
+    let daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
+    let zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
+    let usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
+    let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
+    
+    let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
+    let batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
+    let zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
+    let usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
+    let ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
+
     const logBalances = async () => {
-        let batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
-        let daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-        let zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
-        let usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
-        let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
-        
-        let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
-        let batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
-        let zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
-        let usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
-        let ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
+        batBalanceWei = await batContract.balanceOf(dedgeProxyAddress)
+        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
+        zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
+        usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
+        ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
+    
+        daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
+        batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
+        zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
+        usdcBorrowStorage = await cUsdcContract.borrowBalanceStored(dedgeProxyAddress)
+        ethBorrowStorage = await cEtherContract.borrowBalanceStored(dedgeProxyAddress)
 
         console.log(`Bat (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
         console.log(`USDC (Holding): ${ethers.utils.formatUnits(usdcBalanceWei.toString(), 6)}`) // 6 decimals
