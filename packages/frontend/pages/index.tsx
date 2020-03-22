@@ -1,3 +1,9 @@
-const Home = () => <h1>Hello world!</h1>;
+import { Button } from "rimble-ui/";
+
+const Home = () => (
+  <>
+    <Button size={"medium"}>Click me!</Button>
+  </>
+);
 
 export default Home;

@@ -14,7 +14,9 @@
   "dependencies": {
     "next": "^9.3.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "rimble-ui": "^0.13.1",
+    "styled-components": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^13.9.2",
