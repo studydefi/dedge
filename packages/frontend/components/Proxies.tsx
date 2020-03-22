@@ -8,9 +8,9 @@ const Proxy = ({ address, makeProxy }) => {
     return (
       <div>
         <Text>Proxy not found</Text>
-        <Button size="small" onClick={makeProxy}>
-          Create Proxy
-        </Button>
+        <Button.Text size="small" onClick={makeProxy}>
+          + Create Proxy
+        </Button.Text>
       </div>
     );
   }
@@ -33,8 +33,7 @@ const Proxies = () => {
 
   return (
     <Card>
-      <Heading as="h2">Proxies</Heading>
-      {signer && <Button icon="Refresh" onClick={getProxyAddresses}></Button>}
+      <Heading as="h2">Proxies{signer && <Button.Text size="small" onClick={getProxyAddresses}>refresh</Button.Text>}</Heading>
 
       <Heading as="h4">MakerDAO</Heading>
       <Proxy address={makerProxyAddr} makeProxy={makeMakerProxy} />
