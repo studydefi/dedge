@@ -80,8 +80,8 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
         return getEthToTokenInputPriceFromUniswap(newToken, deltaEthTargetDebt);
     }
 
-    // Calculates the maximum number of `CToken` user can borrow
-    function maxBorrowTokensNo(
+    // Calculates the maximum number of `CToken` user can retrieve
+    function maxRetrieveTokensNo(
         address userDedgeProxy,
         address CToken
     ) public view returns (uint) {
@@ -104,34 +104,31 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
 
      // Swapping Collateral until...
     function swapCollateralUntil(
-        address payable compoundManager,
+        address dedgeProxyAddress,
         address oldCTokenAddress,
-        uint oldCTokenAmount, // Keeps swapping until old collateral reaches this amount
+        uint oldTokensRedeemDelta, // Keeps swapping until old collateral reaches this amount
         address newCTokenAddress
     ) public payable {
         // Calculates the maximum number of tokens the user can redeem
-        uint maxTokenToBeRedeemed = maxBorrowTokensNo(msg.sender, oldCTokenAddress).mul(99).div(100);
-
-        // Calculate the delta between desired token amount and actual token amount
-        uint tokensRedeemDelta = ICToken(oldCTokenAddress).balanceOfUnderlying().sub(oldCTokenAmount);
+        // (Account for 2.5% slippage)
+        uint maxTokenToBeRedeemed = maxRetrieveTokensNo(dedgeProxyAddress, oldCTokenAddress).mul(985).div(1000);
 
         // If we can swap collateral in 1 tx, do it
-        if (maxTokenToBeRedeemed > tokensRedeemDelta) {
-            swapCollateral(oldCTokenAddress, tokensRedeemDelta, newCTokenAddress);
+        if (maxTokenToBeRedeemed >= oldTokensRedeemDelta) {
+            swapCollateral(oldCTokenAddress, oldTokensRedeemDelta, newCTokenAddress);
         }
 
         // Otherwise we keep swapping collateral until we hit the threshold
         else {
-            while (tokensRedeemDelta > 0) {
-                if (maxTokenToBeRedeemed > tokensRedeemDelta) {
-                    swapCollateral(oldCTokenAddress, tokensRedeemDelta, newCTokenAddress);
+            while (oldTokensRedeemDelta > 0) {
+                if (maxTokenToBeRedeemed >= oldTokensRedeemDelta) {
+                    swapCollateral(oldCTokenAddress, oldTokensRedeemDelta, newCTokenAddress);
+                    return;
                 } else {
                     swapCollateral(oldCTokenAddress, maxTokenToBeRedeemed, newCTokenAddress);
                 }
 
-                tokensRedeemDelta = tokensRedeemDelta.sub(maxTokenToBeRedeemed)
-
-                maxTokenToBeRedeemed = maxBorrowTokensNo(msg.sender, oldCTokenAddress).mul(99).div(100)
+                oldTokensRedeemDelta = oldTokensRedeemDelta.sub(maxTokenToBeRedeemed);
             }
         }
     }
@@ -157,7 +154,7 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
             // Supplies Ether
             supply(CEtherAddress, ethAmount);
         } else if (oldCTokenAddress == CEtherAddress) {
-            // If we're going from ETH -> <token>            
+            // If we're going from ETH -> <token>
             address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
             uint tokenAmount = _buyTokensWithEthFromUniswap(newTokenUnderlying, oldCollateralRemoveAmount);
 
@@ -196,7 +193,7 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
 
         // Only use 99% of the tokens we can obtain as
         // there is a chance it won't go through due to slippage
-        uint maxNewTokenToBeBorrowed = maxBorrowTokensNo(
+        uint maxNewTokenToBeBorrowed = maxRetrieveTokensNo(
             dedgeUserProxy,
             newCToken
         ).mul(99).div(100);
@@ -231,7 +228,7 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
                 );
 
                 // Recalculate max tokens that can be borrowed
-                maxNewTokenToBeBorrowed = maxBorrowTokensNo(
+                maxNewTokenToBeBorrowed = maxRetrieveTokensNo(
                     dedgeUserProxy,
                     newCToken
                 ).mul(99).div(100);

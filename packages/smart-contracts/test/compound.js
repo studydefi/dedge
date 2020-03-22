@@ -251,25 +251,37 @@ const main = async () => {
     }
 
     ethSupplyWei = await cEtherContract.balanceOfUnderlying(dedgeProxyAddress)
-    const ethCollateralToSwap = "0.25"
+    const ethCollateralSwapUntil = "1.5"
     if (parseFloat(ethers.utils.formatEther(ethSupplyWei)) > 1.8) {
-        console.log(`Attempting to swap collateral, move ${ethCollateralToSwap} ETH collateral to USDC`)
+        console.log(`Attempting to swap collateral from ETH to USDC, want to swap ${ethCollateralSwapUntil} ETH to USDC`)
 
         const swapCollateralCalldata = IDedgeCompoundManager
             .functions
-            .swapCollateral
+            .swapCollateralUntil
             .encode([
+                dedgeProxyAddress,
                 addresses.compound.cEther,
-                ethers.utils.parseEther(ethCollateralToSwap).toString(),
+                ethers.utils.parseEther(ethCollateralSwapUntil).toString(),
                 addresses.compound.cUSDC,
             ])
-        await dedgeProxyContract.execute(
-            dedgeCompoundManagerAddress,
-            swapCollateralCalldata,
-            {
-                gasLimit: 4000000,
+
+        try {
+            await dedgeProxyContract.execute(
+                dedgeCompoundManagerAddress,
+                swapCollateralCalldata,
+                {
+                    gasLimit: 4000000,
+                }
+            )
+        }
+        catch(e) {
+            const eStr = e.toString().toLowerCase()
+            if (eStr.includes("timeout") || eStr.includes("0")) {
+                await sleep(60 * 1000); // Sleep for 1 more minute after timeout
+            } else {
+                throw e
             }
-        )
+        }
 
         await logBalances()
     }
@@ -288,7 +300,7 @@ const main = async () => {
         )
 
         // Max amount of BAT compound allows us to borrow
-        const maxBatToBeBorrowed = await dedgeCompoundManagerContract.maxBorrowTokensNo(
+        const maxBatToBeBorrowed = await dedgeCompoundManagerContract.maxRetrieveTokensNo(
             dedgeProxyAddress,
             addresses.compound.cBat
         )
