@@ -235,12 +235,12 @@ const main = async () => {
         daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
         daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
 
-        logBalances()
+        await logBalances()
     }
 
     let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
     if (parseInt(daiBorrowed) == daiToBorrow) {
-        console.log('Attempting to swap collateral from DAI to BAT')
+        console.log('Attempting to swap debt from DAI to BAT')
         const daiDebtLeft = "15"
         console.log(`Want ${daiDebtLeft} DAI debt left`)
 
