@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import EthersContainer from "../containers/Ethers";
 import ContractsContainer from "../containers/Contracts";
 import ProxiesContainer from "../containers/Proxies";
+import VaultsContainer from "../containers/Vaults";
 
 import Connect from "../components/Connect";
 import Proxies from "../components/Proxies";
@@ -14,10 +15,12 @@ const App = () => (
   <EthersContainer.Provider>
     <ContractsContainer.Provider>
       <ProxiesContainer.Provider>
-        <Connect />
-        <Proxies />
-        <Vaults />
-        <CompoundPosition />
+        <VaultsContainer.Provider>
+          <Connect />
+          <Proxies />
+          <Vaults />
+          <CompoundPosition />
+        </VaultsContainer.Provider>
       </ProxiesContainer.Provider>
     </ContractsContainer.Provider>
   </EthersContainer.Provider>
