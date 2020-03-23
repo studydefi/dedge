@@ -5,11 +5,16 @@ import { Card, Flex, Box, Heading, Button } from "rimble-ui";
 import VaultsContainer from "../containers/Vaults";
 
 const Vaults = () => {
-  const { makerVaults, dedgeVaults } = VaultsContainer.useContainer();
+  const {
+    makerVaults,
+    dedgeVaults,
+    fetchVaults,
+  } = VaultsContainer.useContainer();
 
   return (
     <Card>
       <Heading as="h2">MakerDAO Vaults</Heading>
+      <Button onClick={fetchVaults}>Fetch Vaults</Button>
       {/* <Box>
           <Button size={"small"} icon="AddCircle">
             Import Vault

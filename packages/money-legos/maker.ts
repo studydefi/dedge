@@ -1,5 +1,6 @@
 import makerProxyRegistryAbi from "../smart-contracts/test/abi/ProxyRegistry.json";
 import dssCdpManagerAbi from "../smart-contracts/test/abi/DssCdpManager.json";
+import dssProxyActionsAbi from "../smart-contracts/test/abi/DssProxyActions.json";
 
 const maker = {
   proxyRegistry: {
@@ -9,6 +10,10 @@ const maker = {
   dssCdpManager: {
     address: "0x5ef30b9986345249bc32d8928B7ee64DE9435E39",
     abi: dssCdpManagerAbi,
+  },
+  dssProxyActions: {
+    address: "0x82ecd135dce65fbc6dbdd0e4237e0af93ffd5038",
+    abi: dssProxyActionsAbi,
   },
   jug: {
     address: "0x19c0976f590D67707E62397C87829d896Dc0f1F1",

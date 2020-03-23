@@ -11,6 +11,8 @@ import Proxies from "../components/Proxies";
 import Vaults from "../components/Vaults";
 import CompoundPosition from "../components/CompoundPosition";
 
+import Debug from "../components/Debug"
+
 const App = () => (
   <EthersContainer.Provider>
     <ContractsContainer.Provider>
@@ -19,6 +21,7 @@ const App = () => (
           <Connect />
           <Proxies />
           <Vaults />
+          <Debug />
           <CompoundPosition />
         </VaultsContainer.Provider>
       </ProxiesContainer.Provider>
