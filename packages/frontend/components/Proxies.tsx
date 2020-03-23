@@ -16,7 +16,7 @@ const Proxy = ({ address, makeProxy }) => {
   }
   return (
     <div>
-      <pre>{address}</pre>
+      <span style={{ fontFamily: "monospace" }}>{address}</span>
     </div>
   );
 };
@@ -33,13 +33,36 @@ const Proxies = () => {
 
   return (
     <Card>
-      <Heading as="h2">Proxies{signer && <Button.Text size="small" onClick={getProxyAddresses}>refresh</Button.Text>}</Heading>
+      <Heading as="h2" mb="3">
+        Proxies
+        {signer && (
+          <Button.Text size="small" onClick={getProxyAddresses}>
+            refresh
+          </Button.Text>
+        )}
+      </Heading>
 
-      <Heading as="h4">MakerDAO</Heading>
-      <Proxy address={makerProxyAddr} makeProxy={makeMakerProxy} />
+      {signer ? (
+        <>
+          <Heading as="h4">MakerDAO</Heading>
+          <Proxy address={makerProxyAddr} makeProxy={makeMakerProxy} />
 
-      <Heading as="h4">Dedge</Heading>
-      <Proxy address={dedgeProxyAddr} makeProxy={makeDedgeProxy} />
+          <Heading as="h4">Dedge</Heading>
+          <Proxy address={dedgeProxyAddr} makeProxy={makeDedgeProxy} />
+        </>
+      ) : (
+        <>
+          <Heading as="h4">MakerDAO</Heading>
+          <div>
+            <Text>Please connect to MetaMask</Text>
+          </div>
+
+          <Heading as="h4">Dedge</Heading>
+          <div>
+            <Text>Please connect to MetaMask</Text>
+          </div>
+        </>
+      )}
     </Card>
   );
 };
