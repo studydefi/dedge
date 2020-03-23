@@ -1,32 +1,33 @@
 import { createContainer } from "unstated-next";
 import { useState, useEffect } from "react";
+import { ethers } from "ethers";
 
 import ContractsContainer from "./Contracts";
 import ProxiesContainer from "./Proxies";
 
-import { getVaults as getVaultsForProxy } from "./vaultHelpers";
+import { getVaults } from "./vaultHelpers";
+
+type Vaults = Record<string, string>;
 
 function useVaults() {
-  const { contracts } = ContractsContainer.useContainer() as any;
+  const { contracts } = ContractsContainer.useContainer();
   const { makerProxyAddr, dedgeProxyAddr } = ProxiesContainer.useContainer();
 
-  const [makerVaults, setMakerVaults] = useState(null);
-  const [dedgeVaults, setDedgeVaults] = useState(null);
+  const [makerVaults, setMakerVaults] = useState<Vaults | null>(null);
+  const [dedgeVaults, setDedgeVaults] = useState<Vaults | null>(null);
 
-  const getVaults = async () => {
-    const { dssCdpManager } = contracts;
-    const makerVaults = await getVaultsForProxy(dssCdpManager, makerProxyAddr);
-    const dedgeVaults = await getVaultsForProxy(dssCdpManager, dedgeProxyAddr);
-    setMakerVaults(makerVaults);
-    setDedgeVaults(dedgeVaults);
-  };
-
-  const fetchVaults = () => {
+  const fetchVaults = async () => {
     const EMPTY_ADDR = "0x0000000000000000000000000000000000000000";
     const exists = addr => addr && addr !== EMPTY_ADDR;
 
     if (exists(makerProxyAddr) && exists(dedgeProxyAddr)) {
-      getVaults();
+      const { dssCdpManager } = contracts;
+
+      const makerVaults = await getVaults(dssCdpManager, makerProxyAddr);
+      const dedgeVaults = await getVaults(dssCdpManager, dedgeProxyAddr);
+
+      setMakerVaults(makerVaults);
+      setDedgeVaults(dedgeVaults);
     }
   };
 

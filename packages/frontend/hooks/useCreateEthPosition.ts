@@ -5,7 +5,7 @@ const { maker } = legos;
 
 const IDssProxyActions = new ethers.utils.Interface(maker.dssProxyActions.abi);
 
-const useCreateEthPosition = dedgeProxy => {
+const useCreateEthPosition = (dedgeProxy: ethers.Contract) => {
   const openVaultCalldata = IDssProxyActions.functions.openLockETHAndDraw.encode(
     [
       maker.dssCdpManager.address,

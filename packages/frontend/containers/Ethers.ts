@@ -2,11 +2,14 @@ import { createContainer } from "unstated-next";
 import { useState } from "react";
 import { ethers } from "ethers";
 
+type Provider = ethers.providers.Provider;
+type Signer = ethers.Signer;
+
 function useEthers() {
-  const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
-  const [address, setAddress] = useState(null);
-  const [error, setError] = useState(null);
+  const [provider, setProvider] = useState<Provider | null>(null);
+  const [signer, setSigner] = useState<Signer | null>(null);
+  const [address, setAddress] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const attemptConnection = async () => {
     if (window.ethereum === undefined) {

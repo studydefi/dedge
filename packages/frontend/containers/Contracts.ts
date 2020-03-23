@@ -5,7 +5,12 @@ import { ethers } from "ethers";
 import EthersContainer from "./Ethers";
 import legos from "../../money-legos";
 
-const CONTRACTS = {
+interface Lego {
+  address?: string;
+  abi?: Array<any>;
+}
+
+const CONTRACTS: Record<string, Lego> = {
   makerProxyRegistry: legos.maker.proxyRegistry,
   dedgeProxyRegistry: legos.dedge.proxyRegistry,
   dssCdpManager: legos.maker.dssCdpManager,
@@ -16,8 +21,10 @@ const CONTRACTS = {
   uniswapFactory: legos.uniswap.uniswapFactory,
 };
 
+type Contracts = Record<string, ethers.Contract>;
+
 function useContracts() {
-  const [contracts, setContracts] = useState({});
+  const [contracts, setContracts] = useState<Contracts>({});
   const { signer } = EthersContainer.useContainer();
 
   const initContracts = () => {
@@ -25,8 +32,6 @@ function useContracts() {
 
     for (const name in CONTRACTS) {
       const { address, abi } = CONTRACTS[name];
-      console.log(name, address)
-      if (name === "uniswapFactory") console.log(abi)
       const instance = new ethers.Contract(address, abi, signer);
       contractInstances[name] = instance;
     }
