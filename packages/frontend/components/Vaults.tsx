@@ -1,10 +1,12 @@
 import { Card, Flex, Box, Heading, Button } from "rimble-ui";
 
+import ContractsContainer from "../containers/Contracts"
 // import Vault from "./Vault";
 
 const Vaults = () => {
   // const { address } = Ethers.useContainer();
-  // const { proxyRegistry } = Contracts.useContainer();
+  const { contracts } = ContractsContainer.useContainer();
+  console.log(contracts)
 
   return (
     <Card>
