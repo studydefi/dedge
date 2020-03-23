@@ -102,6 +102,81 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
         return liquidity.mul(1e18).div(tokenOraclePrice);
     }
 
+     // Swapping Collateral until...
+    function swapCollateralUntil(
+        address payable compoundManager,
+        address oldCTokenAddress,
+        uint oldCTokenAmount, // Keeps swapping until old collateral reaches this amount
+        address newCTokenAddress
+    ) public payable {
+        // Calculates the maximum number of tokens the user can redeem
+        uint maxTokenToBeRedeemed = maxBorrowTokensNo(msg.sender, oldCTokenAddress).mul(99).div(100);
+
+        // Calculate the delta between desired token amount and actual token amount
+        uint tokensRedeemDelta = ICToken(oldCTokenAddress).balanceOfUnderlying().sub(oldCTokenAmount);
+
+        // If we can swap collateral in 1 tx, do it
+        if (maxTokenToBeRedeemed > tokensRedeemDelta) {
+            swapCollateral(oldCTokenAddress, tokensRedeemDelta, newCTokenAddress);
+        }
+
+        // Otherwise we keep swapping collateral until we hit the threshold
+        else {
+            while (tokensRedeemDelta > 0) {
+                if (maxTokenToBeRedeemed > tokensRedeemDelta) {
+                    swapCollateral(oldCTokenAddress, tokensRedeemDelta, newCTokenAddress);
+                } else {
+                    swapCollateral(oldCTokenAddress, maxTokenToBeRedeemed, newCTokenAddress);
+                }
+
+                tokensRedeemDelta = tokensRedeemDelta.sub(maxTokenToBeRedeemed)
+
+                maxTokenToBeRedeemed = maxBorrowTokensNo(msg.sender, oldCTokenAddress).mul(99).div(100)
+            }
+        }
+    }
+
+    // Swapping Collateral on Compound Finance
+    function swapCollateral(
+      address oldCTokenAddress,
+      uint oldCollateralRemoveAmount, // Amount to remove from the old collateral (in terms of old collateral units)
+      address newCTokenAddress
+    ) public payable {
+        // 1. Redeem out old tokens (loses borrowing power)
+        // 2. Converts old token to new collateral
+        // 3. Supplies new collateral (gains borrowing power)
+        require(newCTokenAddress != oldCTokenAddress, "cmpnd-mgr-old-new-col-same");
+
+        redeemUnderlying(oldCTokenAddress, oldCollateralRemoveAmount);
+
+        // If we're going from <token> -> ETH
+        if (newCTokenAddress == CEtherAddress) {
+            address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+            uint ethAmount = _sellTokensForEthFromUniswap(oldTokenUnderlying, oldCollateralRemoveAmount);
+
+            // Supplies Ether
+            supply(CEtherAddress, ethAmount);
+        } else if (oldCTokenAddress == CEtherAddress) {
+            // If we're going from ETH -> <token>            
+            address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+            uint tokenAmount = _buyTokensWithEthFromUniswap(newTokenUnderlying, oldCollateralRemoveAmount);
+
+            supply(newCTokenAddress, tokenAmount);
+        } else {
+            // We're going from <token> -> <token>
+            address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+            address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+
+            uint tokenAmount = _sellTokensForTokensFromUniswap(
+                oldTokenUnderlying,
+                newTokenUnderlying,
+                oldCollateralRemoveAmount
+            );
+
+            supply(newCTokenAddress, tokenAmount);
+        }
+    }
+
     // Keeps calling `swapDebt`
     // until oldCToken's debt reaches ~oldTokenTargetDebt
     function swapDebtUntil(
@@ -200,10 +275,9 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
         // 1. Borrow out new tokens
         borrow(newCTokenAddress, newCTokenAdditionalDebtAmount);
 
-        // 2. Converts tokens to DAI
+        // 2. Converts tokens to ETH
         uint ethDebtAmount;
 
-        // If we loaned ether, we can just convert it to DAI
         if (newCTokenAddress == CEtherAddress) {
             ethDebtAmount = newCTokenAdditionalDebtAmount;
         } else {

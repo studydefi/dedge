@@ -33,6 +33,11 @@ contract UniswapBase {
             .tokenToEthSwapInput(tokenAmount, uint(1), uint(now + 60));
     }
 
+    function _sellTokensForTokensFromUniswap(address from, address to, uint tokenAmount) internal returns (uint) {
+        uint ethAmount = _sellTokensForEthFromUniswap(from, tokenAmount);
+        return _buyTokensWithEthFromUniswap(to, ethAmount);
+    }
+
     function getTokenToEthInputPriceFromUniswap(address tokenAddress, uint tokenAmount) public view returns (uint) {
         return IUniswapExchange(_getUniswapExchange(tokenAddress)).getTokenToEthInputPrice(tokenAmount);
     }
