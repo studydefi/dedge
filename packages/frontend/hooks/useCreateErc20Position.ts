@@ -5,7 +5,7 @@ const { maker } = legos;
 
 const IDssProxyActions = new ethers.utils.Interface(maker.dssProxyActions.abi);
 
-const useCreateErc20Position = dedgeProxy => {
+const useCreateErc20Position = (dedgeProxy: ethers.Contract) => {
   const openWithBat = async () => {
     const collateralAmount = ethers.utils.parseEther("1000"); // lock 1000 BAT
     const debtAmount = ethers.utils.parseEther("20.0"); // draw 20 DAI (minimum 20 DAI)

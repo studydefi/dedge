@@ -1,7 +1,11 @@
 import { ethers } from "ethers";
 import legos from "../../money-legos";
 
-const useGetCoinsFromUniswap = (contracts, proxyAddress, signer) => {
+const useGetCoinsFromUniswap = (
+  contracts: Record<string, ethers.Contract>,
+  proxyAddress: string,
+  signer: ethers.Signer,
+) => {
   const approveBat = async () => {
     const { bat } = contracts;
     await bat.approve(proxyAddress, "0xffffffffffffffffffffffffffffffff");

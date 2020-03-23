@@ -1,6 +1,11 @@
 import { ethers } from "ethers";
 
-export const getVaults = async (dssCdpManager, proxyAddress) => {
+type Vaults = Record<string, string>;
+
+export const getVaults = async (
+  dssCdpManager: ethers.Contract,
+  proxyAddress: string,
+) => {
   // get vault count
   const vaultCountRaw = await dssCdpManager.count(proxyAddress);
   const vaultCount = parseInt(vaultCountRaw.toString());
@@ -8,7 +13,7 @@ export const getVaults = async (dssCdpManager, proxyAddress) => {
   if (vaultCount === 0) return {};
 
   // object to hold vaults
-  const vaults = {};
+  const vaults: Vaults = {};
 
   // get last vault
   let lastVaultRaw = await dssCdpManager.last(proxyAddress);

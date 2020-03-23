@@ -11,10 +11,10 @@ function useProxies() {
   const { signer } = EthersContainer.useContainer();
   const { contracts } = ContractsContainer.useContainer() as any;
 
-  const [makerProxyAddr, setMakerProxyAddr] = useState(null);
-  const [dedgeProxyAddr, setDedgeProxyAddr] = useState(null);
-  const [makerProxy, setMakerProxy] = useState(null);
-  const [dedgeProxy, setDedgeProxy] = useState(null);
+  const [makerProxyAddr, setMakerProxyAddr] = useState<string | null>(null);
+  const [dedgeProxyAddr, setDedgeProxyAddr] = useState<string | null>(null);
+  const [makerProxy, setMakerProxy] = useState<ethers.Contract | null>(null);
+  const [dedgeProxy, setDedgeProxy] = useState<ethers.Contract | null>(null);
 
   // get proxy addresses
   const getProxyAddresses = async () => {
@@ -24,15 +24,6 @@ function useProxies() {
     const dedgeAddr = await dedgeProxyRegistry.proxies(userAddr);
     setMakerProxyAddr(makerAddr);
     setDedgeProxyAddr(dedgeAddr);
-  };
-
-  // set proxy contract instances
-  const setProxyContracts = async () => {
-    const { dsproxy } = legos.dappsys;
-    const makerProxy = new ethers.Contract(makerProxyAddr, dsproxy.abi, signer);
-    const dedgeProxy = new ethers.Contract(dedgeProxyAddr, dsproxy.abi, signer);
-    setMakerProxy(makerProxy);
-    setDedgeProxy(dedgeProxy);
   };
 
   // create a proxy for user
@@ -46,17 +37,23 @@ function useProxies() {
     setTimeout(getProxyAddresses, 0);
   };
 
+  // trigger get proxy addresses
   useEffect(() => {
     if (contracts.makerProxyRegistry && contracts.dedgeProxyRegistry) {
       getProxyAddresses();
     }
   }, [signer, contracts, makerProxyAddr, dedgeProxyAddr]);
 
+  // set proxy contract instances
   useEffect(() => {
     if (makerProxyAddr && dedgeProxyAddr) {
-      setProxyContracts();
+      const { abi } = legos.dappsys.dsproxy;
+      const makerProxy = new ethers.Contract(makerProxyAddr, abi, signer);
+      const dedgeProxy = new ethers.Contract(dedgeProxyAddr, abi, signer);
+      setMakerProxy(makerProxy);
+      setDedgeProxy(dedgeProxy);
     }
-  }, [makerProxyAddr, dedgeProxyAddr]);
+  }, [makerProxyAddr, dedgeProxyAddr, signer]);
 
   return {
     makerProxyAddr,

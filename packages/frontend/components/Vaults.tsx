@@ -49,7 +49,7 @@ const Vaults = () => {
         <Heading as="h4">Imported</Heading>
         {dedgeVaultsArr.length === 0 && <Text>No vaults found</Text>}
         {dedgeVaultsArr.map(vault => (
-          <Text>
+          <Text key={vault.id}>
             Vault ID: {vault.id}, Collateral: {vault.collateral}
           </Text>
         ))}
