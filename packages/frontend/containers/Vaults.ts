@@ -26,16 +26,20 @@ function useVaults() {
     setDedgeVaults(dedgeVaults);
   };
 
-  useEffect(() => {
+  const fetchVaults = () => {
     const EMPTY_ADDR = "0x0000000000000000000000000000000000000000";
     const exists = addr => addr && addr !== EMPTY_ADDR;
 
     if (exists(makerProxyAddr) && exists(dedgeProxyAddr)) {
       getVaults();
     }
+  };
+
+  useEffect(() => {
+    fetchVaults();
   }, [makerProxyAddr, dedgeProxyAddr]);
 
-  return { makerVaults, dedgeVaults };
+  return { makerVaults, dedgeVaults, fetchVaults };
 }
 
 const VaultsContainer = createContainer(useVaults);
