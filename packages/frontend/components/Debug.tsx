@@ -5,6 +5,7 @@ import EthersContainer from "../containers/Ethers";
 import ProxiesContainer from "../containers/Proxies";
 
 import useCreateEthPosition from "../hooks/useCreateEthPosition";
+import useCreateErc20Position from "../hooks/useCreateErc20Position";
 import useGetCoinsFromUniswap from "../hooks/useGetCoinsFromUniswap";
 
 import useBalances from "../hooks/useBalances";
@@ -15,6 +16,7 @@ const Debug = () => {
   const { dedgeProxy, dedgeProxyAddr } = ProxiesContainer.useContainer();
 
   const [createPosition] = useCreateEthPosition(dedgeProxy);
+  const [openWithBat, openWithUsdc] = useCreateErc20Position(dedgeProxy);
 
   const [walletBalances, getWalletBalances] = useBalances(
     contracts,
@@ -90,10 +92,10 @@ const Debug = () => {
       <Button size="small" onClick={createPosition} mb="1" mr="1">
         w/ ETH collateral
       </Button>
-      <Button size="small" onClick={createPosition} mb="1" mr="1">
+      <Button size="small" onClick={openWithBat} mb="1" mr="1">
         w/ BAT collateral
       </Button>
-      <Button size="small" onClick={createPosition} mb="1" mr="1">
+      <Button size="small" onClick={openWithUsdc} mb="1" mr="1">
         w/ USDC collateral
       </Button>
     </Card>
