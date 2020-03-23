@@ -8,6 +8,11 @@ import legos from "../../money-legos";
 const CONTRACTS = {
   makerProxyRegistry: legos.maker.proxyRegistry,
   dedgeProxyRegistry: legos.dedge.proxyRegistry,
+  dssCdpManager: legos.maker.dssCdpManager,
+  dedgeMakerManager: legos.dedge.dedgeMakerManager,
+  dai: legos.erc20.dai,
+  bat: legos.erc20.bat,
+  usdc: legos.erc20.usdc,
 };
 
 function useContracts() {
