@@ -13,6 +13,7 @@ const CONTRACTS = {
   dai: legos.erc20.dai,
   bat: legos.erc20.bat,
   usdc: legos.erc20.usdc,
+  uniswapFactory: legos.uniswap.uniswapFactory,
 };
 
 function useContracts() {
@@ -24,6 +25,8 @@ function useContracts() {
 
     for (const name in CONTRACTS) {
       const { address, abi } = CONTRACTS[name];
+      console.log(name, address)
+      if (name === "uniswapFactory") console.log(abi)
       const instance = new ethers.Contract(address, abi, signer);
       contractInstances[name] = instance;
     }

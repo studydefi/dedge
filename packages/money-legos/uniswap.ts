@@ -1,13 +1,13 @@
-import uniswapFactoryAbi from "../smart-contracts/build/IUniswapFactory.json";
-import uniswapExchangeAbi from "../smart-contracts/build/IUniswapExchange.json";
+import uniswapFactoryDef from "../smart-contracts/build/IUniswapFactory.json";
+import uniswapExchangeDef from "../smart-contracts/build/IUniswapExchange.json";
 
 const uniswap = {
   uniswapFactory: {
     address: "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95",
-    abi: uniswapFactoryAbi,
+    abi: uniswapFactoryDef.abi,
   },
   uniswapExchange: {
-    abi: uniswapExchangeAbi,
+    abi: uniswapExchangeDef.abi,
   },
 };
 
