@@ -15,14 +15,9 @@ function useVaults() {
 
   const getVaults = async () => {
     const { dssCdpManager } = contracts;
-    console.log("getting makerVaults...");
     const makerVaults = await getVaultsForProxy(dssCdpManager, makerProxyAddr);
-    console.log("makerVaults", makerVaults);
-    setMakerVaults(makerVaults);
-
-    console.log("getting dedgeVaults...");
     const dedgeVaults = await getVaultsForProxy(dssCdpManager, dedgeProxyAddr);
-    console.log("dedgeVaults", dedgeVaults);
+    setMakerVaults(makerVaults);
     setDedgeVaults(dedgeVaults);
   };
 

@@ -5,7 +5,7 @@ export const getVaults = async (dssCdpManager, proxyAddress) => {
   const vaultCountRaw = await dssCdpManager.count(proxyAddress);
   const vaultCount = parseInt(vaultCountRaw.toString());
 
-  if (vaultCount === 0) return;
+  if (vaultCount === 0) return {};
 
   // object to hold vaults
   const vaults = {};

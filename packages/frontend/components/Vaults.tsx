@@ -1,31 +1,58 @@
-import { Card, Flex, Box, Heading, Button } from "rimble-ui";
+import { Card, Text, Box, Heading, Button } from "rimble-ui";
 
-// import ContractsContainer from "../containers/Contracts"
-// import ProxiesContainer from "../containers/Proxies";
 import VaultsContainer from "../containers/Vaults";
+import EthersContainer from "../containers/Ethers";
+
+const vaultsObjToArray = vaultsObj => {
+  const result = [];
+  for (const key in vaultsObj) {
+    const collateral = vaultsObj[key];
+    result.push({ id: key, collateral });
+  }
+  return result;
+};
 
 const Vaults = () => {
+  const { signer } = EthersContainer.useContainer();
   const {
     makerVaults,
     dedgeVaults,
     fetchVaults,
   } = VaultsContainer.useContainer();
 
+  // console.log("makerVaults", makerVaults);
+  // console.log("dedgeVaults", dedgeVaults);
+
+  const makerVaultsArr = vaultsObjToArray(makerVaults);
+  const dedgeVaultsArr = vaultsObjToArray(dedgeVaults);
+
   return (
     <Card>
-      <Heading as="h2">MakerDAO Vaults</Heading>
-      <Button onClick={fetchVaults}>Fetch Vaults</Button>
-      {/* <Box>
-          <Button size={"small"} icon="AddCircle">
-            Import Vault
-          </Button>
-        </Box> */}
+      <Heading as="h2" mb="3">
+        Vaults
+        {signer && (
+          <Button.Text size="small" onClick={fetchVaults}>
+            refresh
+          </Button.Text>
+        )}
+      </Heading>
       <Box>
-        {/* <Heading as="h3">Proxies</Heading>
-        <Heading as="h4">MakerDAO</Heading>
-        {proxyAddress}
-
-         <Heading as="h4">Dedge</Heading> */}
+        <Heading as="h4">Unimported</Heading>
+        {makerVaultsArr.length === 0 && <Text>No vaults found</Text>}
+        {makerVaultsArr.map(vault => (
+          <Text>
+            Vault ID: {vault.id}, Collateral: {vault.collateral}
+          </Text>
+        ))}
+      </Box>
+      <Box>
+        <Heading as="h4">Imported</Heading>
+        {dedgeVaultsArr.length === 0 && <Text>No vaults found</Text>}
+        {dedgeVaultsArr.map(vault => (
+          <Text>
+            Vault ID: {vault.id}, Collateral: {vault.collateral}
+          </Text>
+        ))}
       </Box>
     </Card>
   );
