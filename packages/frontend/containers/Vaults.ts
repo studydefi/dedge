@@ -21,6 +21,9 @@ function useVaults() {
     const exists = addr => addr && addr !== EMPTY_ADDR;
 
     if (exists(makerProxyAddr) && exists(dedgeProxyAddr)) {
+      setMakerVaults(null);
+      setDedgeVaults(null);
+
       const { dssCdpManager } = contracts;
 
       const makerVaults = await getVaults(dssCdpManager, makerProxyAddr);

@@ -14,9 +14,9 @@ const useCreateErc20Position = (dedgeProxy: ethers.Contract) => {
       [
         maker.dssCdpManager.address,
         maker.jug.address,
-        maker.batJoin.address,
+        maker.ilks["BAT-A"].join.address,
         maker.daiJoin.address,
-        ethers.utils.formatBytes32String(maker.ilks.batA),
+        ethers.utils.formatBytes32String("BAT-A"),
         collateralAmount,
         debtAmount,
         true,
@@ -41,9 +41,9 @@ const useCreateErc20Position = (dedgeProxy: ethers.Contract) => {
       [
         maker.dssCdpManager.address,
         maker.jug.address,
-        maker.usdcJoin.address,
+        maker.ilks["USDC-A"].join.address,
         maker.daiJoin.address,
-        ethers.utils.formatBytes32String(maker.ilks.usdcA),
+        ethers.utils.formatBytes32String("USDC-A"),
         collateralAmount,
         debtAmount,
         true,

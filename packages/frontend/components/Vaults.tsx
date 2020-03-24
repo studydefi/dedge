@@ -9,7 +9,7 @@ const vaultsObjToArray = vaultsObj => {
   const result = [];
   for (const key in vaultsObj) {
     const collateral = vaultsObj[key];
-    result.push({ id: key, collateral });
+    result.push({ id: key, ilk: collateral });
   }
   return result;
 };

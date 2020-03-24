@@ -10,9 +10,9 @@ const useCreateEthPosition = (dedgeProxy: ethers.Contract) => {
     [
       maker.dssCdpManager.address,
       maker.jug.address,
-      maker.ethJoin.address,
+      maker.ilks["ETH-A"].join.address,
       maker.daiJoin.address,
-      ethers.utils.formatBytes32String(maker.ilks.ethA),
+      ethers.utils.formatBytes32String("ETH-A"),
       ethers.utils.parseEther("20.0"), // Wanna Draw 20 DAI (minimum 20 DAI)
     ],
   );
