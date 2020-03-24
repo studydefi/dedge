@@ -1,9 +1,9 @@
 import { Card, Flex, Box, Heading, Button } from "rimble-ui";
 
-const Vault = () => (
+const Vault = ({ vault }) => (
   <>
-    <div>Vault Item</div>
-    <Button size={"small"}>Transfer position to Compound</Button>
+    <div>Vault ID: {vault.id}, Collateral: {vault.collateral}</div>
+    {/* <Button size={"small"}>Transfer position to Compound</Button> */}
   </>
 );
 
