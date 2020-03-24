@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 const wallet = new ethers.Wallet(
-    "0x94a9f52a9ef7933f3865a91766cb5e12d25f62d6aecf1d768508d95526bfee29",
+    "0xc5cb7686c83376fa45c032bb6e1bc9a5b7447e191b2ba084db6d4064106e432e",
     provider
 );
 const { dedgeProxyFactoryAddress, dedgeCompoundManagerAddress } = require("../build/DeployedAddresses.json");
@@ -42,7 +42,8 @@ const addresses = {
         cSai: '0xf5dce57282a584d2746faf1593d3121fcac444dc',
         cBat: '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
         cZRX: '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
-        cUSDC: '0x39aa39c021dfbae8fac545936693ac917d5e7563'
+        cUSDC: '0x39aa39c021dfbae8fac545936693ac917d5e7563',
+        cREP: '0x158079ee67fce2f58472a96584a73c7ab9ac95c1'
     },
     tokens: {
         dai: "0x6b175474e89094c44da98b954eedeac495271d0f",
@@ -155,7 +156,7 @@ const main = async () => {
             .functions
             .enterMarketsAndApproveCTokens
             .encode([
-                [ addresses.compound.cDai, addresses.compound.cEther, addresses.compound.cBat, addresses.compound.cZRX ],
+                [ addresses.compound.cDai, addresses.compound.cEther, addresses.compound.cBat, addresses.compound.cZRX, addresses.compound.cREP, addresses.compound.cUSDC ],
             ])
 
         await dedgeProxyContract.execute(
@@ -175,6 +176,11 @@ const main = async () => {
     let zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
     let usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
     let ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
+
+    // There's an issue with ganache where if you haven't supplied anything i.e. USDC or ETH
+    // and call balanceOfUnderlying, it _will_ just hang :|
+    let ethSupplyWei
+    let usdcSupplyWei
     
     let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
     let batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
@@ -188,7 +194,10 @@ const main = async () => {
         zrxBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
         usdcBalanceWei = await zrxContract.balanceOf(dedgeProxyAddress)
         ethBalanceWei = await provider.getBalance(dedgeProxyAddress)
-    
+
+        ethSupplyWei = await cEtherContract.balanceOfUnderlying(dedgeProxyAddress)
+        usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dedgeProxyAddress)
+
         daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
         batBorrowStorage = await cBatContract.borrowBalanceStored(dedgeProxyAddress)
         zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dedgeProxyAddress)
@@ -201,6 +210,9 @@ const main = async () => {
         console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
         console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
 
+        console.log(`ETH Supplied: ${ethers.utils.formatEther(ethSupplyWei.toString())}`)
+        console.log(`USDC Supplied: ${ethers.utils.formatUnits(usdcSupplyWei.toString(), 6)}`)
+
         console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
         console.log(`USDC Borrowed: ${ethers.utils.formatUnits(usdcBorrowStorage.toString(), 6)}`)
         console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
@@ -209,7 +221,7 @@ const main = async () => {
         console.log('---------------')
     }
 
-    await logBalances()
+    // await logBalances()
 
     let daiBalance = ethers.utils.formatEther(daiBalanceWei.toString())
     const daiToBorrow = 95
@@ -223,7 +235,8 @@ const main = async () => {
                 addresses.compound.cDai,
                 ethers.utils.parseEther(daiToBorrow.toString())
             ])
-        await dedgeProxyContract.execute(
+        
+        const tx = await dedgeProxyContract.execute(
             dedgeCompoundManagerAddress,
             supplyEthAndBorrowCalldata,
             {
@@ -232,8 +245,43 @@ const main = async () => {
             }
         )
 
-        daiBalanceWei = await daiContract.balanceOf(dedgeProxyAddress)
-        daiBorrowStorage = await cDaiContract.borrowBalanceStored(dedgeProxyAddress)
+        await tx.wait()
+
+        console.log(`Supplied ETH and borrowed ${daiToBorrow} DAI`)
+    }
+
+    ethSupplyWei = await cEtherContract.balanceOfUnderlying(dedgeProxyAddress)
+    const ethCollateralSwapUntil = "1.5"
+    if (parseFloat(ethers.utils.formatEther(ethSupplyWei)) > 1.8) {
+        console.log(`Attempting to swap collateral from ETH to USDC, want to swap ${ethCollateralSwapUntil} ETH to USDC`)
+
+        const swapCollateralCalldata = IDedgeCompoundManager
+            .functions
+            .swapCollateralUntil
+            .encode([
+                dedgeProxyAddress,
+                addresses.compound.cEther,
+                ethers.utils.parseEther(ethCollateralSwapUntil).toString(),
+                addresses.compound.cUSDC,
+            ])
+
+        try {
+            await dedgeProxyContract.execute(
+                dedgeCompoundManagerAddress,
+                swapCollateralCalldata,
+                {
+                    gasLimit: 4000000,
+                }
+            )
+        }
+        catch(e) {
+            const eStr = e.toString().toLowerCase()
+            if (eStr.includes("timeout") || eStr.includes("0")) {
+                await sleep(60 * 1000); // Sleep for 1 more minute after timeout
+            } else {
+                throw e
+            }
+        }
 
         await logBalances()
     }
@@ -252,7 +300,7 @@ const main = async () => {
         )
 
         // Max amount of BAT compound allows us to borrow
-        const maxBatToBeBorrowed = await dedgeCompoundManagerContract.maxBorrowTokensNo(
+        const maxBatToBeBorrowed = await dedgeCompoundManagerContract.maxRetrieveTokensNo(
             dedgeProxyAddress,
             addresses.compound.cBat
         )
@@ -285,7 +333,8 @@ const main = async () => {
                 }
             )
         } catch(e) {
-            if (e.toString().toLowerCase().includes("timeout")) {
+            const eStr = e.toString().toLowerCase()
+            if (eStr.includes("timeout") || eStr.includes("0")) {
                 await sleep(60 * 1000); // Sleep for 1 more minute after timeout
             } else {
                 throw e
@@ -293,46 +342,6 @@ const main = async () => {
         }
 
         console.log('Swapped debt from DAI to BAT')
-
-        await logBalances()
-    }
-
-    // USDC has 6 decimals, cUSDC has 8 decimals
-    daiBorrowStorageInt = parseInt(ethers.utils.formatEther(daiBorrowStorage.toString()))
-    daiDebtLeft = '8'
-    if (daiBorrowStorageInt > parseInt(daiDebtLeft)) {
-        console.log(`Swapping DAI debt to USDC debt, want ${daiDebtLeft} DAI debt remaining`)
-
-        const swapDebtCallbackData = IDedgeCompoundManager
-            .functions
-            .swapDebtUntil
-            .encode([
-                dedgeProxyAddress,
-                dedgeCompoundManagerAddress,
-                addresses.compound.cDai,
-                ethers.utils.parseEther(daiDebtLeft),  // Only want 8 DAI debt left
-                addresses.compound.cUSDC,
-            ])
-        
-        // SUPER hacky way to get pass timeouts (they're hardcoded in web.ts)
-        // The following line takes ~2.5 minutes to complete
-        // ethers.js timeouts in 2 minutes :(
-        try {
-            await dedgeProxyContract.execute(
-                dedgeCompoundManagerAddress,
-                swapDebtCallbackData,
-                {
-                    gasLimit: 4000000
-                }
-            )
-        } catch(e) {
-            if (e.toString().toLowerCase().includes("timeout")) {
-                await sleep(60 * 1000); // Sleep for 1 more minute after timeout
-            } else {
-                throw e
-            }
-        }
-        console.log("Swapped debt")
 
         await logBalances()
     }
@@ -365,7 +374,8 @@ const main = async () => {
                 }
             )
         } catch(e) {
-            if (e.toString().toLowerCase().includes("timeout")) {
+            const eStr = e.toString().toLowerCase()
+            if (eStr.includes("timeout") || eStr.includes("0")) {
                 await sleep(60 * 1000); // Sleep for 1 more minute after timeout
             } else {
                 throw e
@@ -404,7 +414,8 @@ const main = async () => {
                 }
             )
         } catch(e) {
-            if (e.toString().toLowerCase().includes("timeout")) {
+            const eStr = e.toString().toLowerCase()
+            if (eStr.includes("timeout") || eStr.includes("0")) {
                 await sleep(60 * 1000); // Sleep for 1 more minute after timeout
             } else {
                 throw e
@@ -443,7 +454,8 @@ const main = async () => {
                 }
             )
         } catch(e) {
-            if (e.toString().toLowerCase().includes("timeout")) {
+            const eStr = e.toString().toLowerCase()
+            if (eStr.includes("timeout") || eStr.includes("0")) {
                 await sleep(60 * 1000); // Sleep for 1 more minute after timeout
             } else {
                 throw e
@@ -453,6 +465,7 @@ const main = async () => {
 
         await logBalances()
     }
+    
 
     let payoutFeeAddress = await provider.getBalance("0x56D5e01D5D2F853aA8f4ac5d2FfB4cBBCa9e2b0f");
     console.log(`Payout Address ETH (should be >0): ${ethers.utils.formatEther(payoutFeeAddress.toString())}`)

@@ -4,7 +4,7 @@ pragma solidity 0.5.16;
 
 import "../../lib/aave/FlashLoanReceiverBase.sol";
 
-import "../../lib/makerdao/MakerVaultBase.sol";
+import "../../lib/makerdao/DssProxyActionsBase.sol";
 
 import "../../lib/uniswap/UniswapBase.sol";
 
@@ -17,7 +17,7 @@ import "../../interfaces/uniswap/IUniswapFactory.sol";
 import "../../interfaces/IERC20.sol";
 
 
-contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase {
+contract DedgeMakerManager is DssProxyActionsBase, UniswapBase, FlashLoanReceiverBase {
     address constant AaveLendingPoolAddressProviderAddress = 0x24a42fD28C976A61Df5D00D0599C34c4f90748c8;
     address constant AaveEthAddress = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
@@ -34,6 +34,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
     address constant BatJoinAddress = 0x3D0B1912B66114d4096F48A8CEe3A56C231772cA;
     address constant DaiJoinAddress = 0x9759A6Ac90977b93B58547b4A71c78317f391A28;
     address constant JugAddress = 0x19c0976f590D67707E62397C87829d896Dc0f1F1;
+    address constant DssProxyActionsAddress = 0x82ecD135Dce65Fbc6DbdD0e4237E0AF93FFD5038;
     address constant DssCdpManagerAddress = 0x5ef30b9986345249bc32d8928B7ee64DE9435E39;
 
     function () external payable {}
@@ -67,26 +68,6 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
         (ink,) = VatLike(vat).urns(ilk, urn);
     }
 
-    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
-        if (_i == 0) {
-            return "0";
-        }
-        uint j = _i;
-        uint len;
-        while (j != 0) {
-            len++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(len);
-        uint k = len - 1;
-        while (_i != 0) {
-            bstr[k--] = byte(uint8(48 + _i % 10));
-            _i /= 10;
-        }
-        return string(bstr);
-    }
-
-
     // Callback function called by Aave's lendingPool.flashLoan() function
     function executeOperation(
         address reserve,
@@ -117,9 +98,13 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
             uint
         ));
 
+        // Collateral in Wad (wadC)
+        uint collateralAmount = getVaultCollateral(DssCdpManagerAddress, cdpId);
+
         if (collateralAddress == AaveEthAddress) {
             // Get back collateralized ETH
-            uint collateralAmount = _wipeAllAndFreeETH(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
+            wipeAllAndFreeETH(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId, collateralAmount);
+
             // Calculate amount of collateral (ETH) we need to sell to pay back DAI
             uint collateralSellAmount = getTokenToEthInputPriceFromUniswap(DaiAddress, uniswapDaiInput);
             // Sell ETH, buy DAI to repay Aave
@@ -129,7 +114,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
             require(success, "mkr-mgr-eth-xfer-failed");
         } else {
             // Get back collateralized asset
-            _wipeAllAndFreeGem(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId);
+            wipeAllAndFreeGem(DssCdpManagerAddress, collateralJoinAddress, DaiJoinAddress, cdpId, collateralAmount);
             // Calculate amount of collateral (ERC20) we need to sell to pay back DAI
             uint collateralSellAmount = getTokenToTokenPriceFromUniswap(DaiAddress, collateralAddress, uniswapDaiInput);
             // Sell collateral token to get ETH
@@ -157,9 +142,6 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
                 "mkr-mgr-dai-xfer-failed"
             );
         }
-
-        // Contract has no more access to CDP
-        _cdpAllow(DssCdpManagerAddress, cdpId, makerMigrateManager, 0);
     }
 
     // Imports maker vault into Dedge
@@ -171,7 +153,7 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
         uint cdpId
     ) public payable {
         // Allows contract to do stuff with the CDP
-        _cdpAllow(DssCdpManagerAddress, cdpId, makerMigrateManager, 1);
+        cdpAllow(DssCdpManagerAddress, cdpId, makerMigrateManager, 1);
 
         // Get Debt
         uint daiDebt = getVaultDebt(DssCdpManagerAddress, cdpId);
@@ -183,5 +165,6 @@ contract DedgeMakerManager is MakerVaultBase, UniswapBase, FlashLoanReceiverBase
 
         // Flashloan should now call the `executeOperation` contract
         // UserDedgeProxy should now have their original collateral _and_ their excess DAI (if any)
+        cdpAllow(DssCdpManagerAddress, cdpId, makerMigrateManager, 0);
     }
 }

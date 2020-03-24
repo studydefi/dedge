@@ -80,8 +80,8 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
         return getEthToTokenInputPriceFromUniswap(newToken, deltaEthTargetDebt);
     }
 
-    // Calculates the maximum number of `CToken` user can borrow
-    function maxBorrowTokensNo(
+    // Calculates the maximum number of `CToken` user can retrieve
+    function maxRetrieveTokensNo(
         address userDedgeProxy,
         address CToken
     ) public view returns (uint) {
@@ -100,6 +100,78 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
         // https://etherscan.io/address/0x1D8aEdc9E924730DD3f9641CDb4D1B92B848b4bd#code Line 4319
         uint tokenOraclePrice = ICompoundPriceOracle(CompoundPriceOracleAddress).getUnderlyingPrice(CToken);
         return liquidity.mul(1e18).div(tokenOraclePrice);
+    }
+
+     // Swapping Collateral until...
+    function swapCollateralUntil(
+        address dedgeProxyAddress,
+        address oldCTokenAddress,
+        uint oldTokensRedeemDelta, // Keeps swapping until old collateral reaches this amount
+        address newCTokenAddress
+    ) public payable {
+        // Calculates the maximum number of tokens the user can redeem
+        // (Account for 2.5% slippage)
+        uint maxTokenToBeRedeemed = maxRetrieveTokensNo(dedgeProxyAddress, oldCTokenAddress).mul(985).div(1000);
+
+        // If we can swap collateral in 1 tx, do it
+        if (maxTokenToBeRedeemed >= oldTokensRedeemDelta) {
+            swapCollateral(oldCTokenAddress, oldTokensRedeemDelta, newCTokenAddress);
+        }
+
+        // Otherwise we keep swapping collateral until we hit the threshold
+        else {
+            while (oldTokensRedeemDelta > 0) {
+                if (maxTokenToBeRedeemed >= oldTokensRedeemDelta) {
+                    swapCollateral(oldCTokenAddress, oldTokensRedeemDelta, newCTokenAddress);
+                    return;
+                } else {
+                    swapCollateral(oldCTokenAddress, maxTokenToBeRedeemed, newCTokenAddress);
+                }
+
+                oldTokensRedeemDelta = oldTokensRedeemDelta.sub(maxTokenToBeRedeemed);
+            }
+        }
+    }
+
+    // Swapping Collateral on Compound Finance
+    function swapCollateral(
+      address oldCTokenAddress,
+      uint oldCollateralRemoveAmount, // Amount to remove from the old collateral (in terms of old collateral units)
+      address newCTokenAddress
+    ) public payable {
+        // 1. Redeem out old tokens (loses borrowing power)
+        // 2. Converts old token to new collateral
+        // 3. Supplies new collateral (gains borrowing power)
+        require(newCTokenAddress != oldCTokenAddress, "cmpnd-mgr-old-new-col-same");
+
+        redeemUnderlying(oldCTokenAddress, oldCollateralRemoveAmount);
+
+        // If we're going from <token> -> ETH
+        if (newCTokenAddress == CEtherAddress) {
+            address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+            uint ethAmount = _sellTokensForEthFromUniswap(oldTokenUnderlying, oldCollateralRemoveAmount);
+
+            // Supplies Ether
+            supply(CEtherAddress, ethAmount);
+        } else if (oldCTokenAddress == CEtherAddress) {
+            // If we're going from ETH -> <token>
+            address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+            uint tokenAmount = _buyTokensWithEthFromUniswap(newTokenUnderlying, oldCollateralRemoveAmount);
+
+            supply(newCTokenAddress, tokenAmount);
+        } else {
+            // We're going from <token> -> <token>
+            address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+            address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+
+            uint tokenAmount = _sellTokensForTokensFromUniswap(
+                oldTokenUnderlying,
+                newTokenUnderlying,
+                oldCollateralRemoveAmount
+            );
+
+            supply(newCTokenAddress, tokenAmount);
+        }
     }
 
     // Keeps calling `swapDebt`
@@ -121,7 +193,7 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
 
         // Only use 99% of the tokens we can obtain as
         // there is a chance it won't go through due to slippage
-        uint maxNewTokenToBeBorrowed = maxBorrowTokensNo(
+        uint maxNewTokenToBeBorrowed = maxRetrieveTokensNo(
             dedgeUserProxy,
             newCToken
         ).mul(99).div(100);
@@ -156,7 +228,7 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
                 );
 
                 // Recalculate max tokens that can be borrowed
-                maxNewTokenToBeBorrowed = maxBorrowTokensNo(
+                maxNewTokenToBeBorrowed = maxRetrieveTokensNo(
                     dedgeUserProxy,
                     newCToken
                 ).mul(99).div(100);
@@ -200,10 +272,9 @@ contract DedgeCompoundManager is FlashLoanReceiverBase, CompoundBase, UniswapBas
         // 1. Borrow out new tokens
         borrow(newCTokenAddress, newCTokenAdditionalDebtAmount);
 
-        // 2. Converts tokens to DAI
+        // 2. Converts tokens to ETH
         uint ethDebtAmount;
 
-        // If we loaned ether, we can just convert it to DAI
         if (newCTokenAddress == CEtherAddress) {
             ethDebtAmount = newCTokenAdditionalDebtAmount;
         } else {

@@ -49,6 +49,17 @@ contract CompoundBase {
         ICEther(CEtherAddress).mint.value(msg.value)();
     }
 
+    function supply(address cToken, uint amount) public payable {
+        if (cToken == CEtherAddress) {
+            ICEther(CEtherAddress).mint.value(amount)();
+        } else {
+            require(
+              ICToken(cToken).mint(amount) == 0,
+              "cmpnd-mgr-ctoken-supply-failed"
+            );
+        }
+    }
+
     function borrow(address cToken, uint borrowAmount) public {
         require(ICToken(cToken).borrow(borrowAmount) == 0, "cmpnd-mgr-ctoken-borrow-failed");
     }
