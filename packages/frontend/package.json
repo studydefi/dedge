@@ -1,0 +1,28 @@
+{
+  "name": "dedge-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next -p 14124",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^4.0.46",
+    "next": "^9.3.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rimble-ui": "^0.13.1",
+    "styled-components": "^5.0.1",
+    "unstated-next": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.2",
+    "@types/react": "^16.9.25",
+    "typescript": "^3.8.3"
+  }
+}
