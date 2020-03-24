@@ -3,11 +3,13 @@ import { Card, Text, Box, Heading, Button } from "rimble-ui";
 import VaultsContainer from "../containers/Vaults";
 import EthersContainer from "../containers/Ethers";
 
+import Vault from "./Vault";
+
 const vaultsObjToArray = vaultsObj => {
   const result = [];
   for (const key in vaultsObj) {
     const collateral = vaultsObj[key];
-    result.push({ id: key, collateral });
+    result.push({ id: key, ilk: collateral });
   }
   return result;
 };
@@ -39,19 +41,17 @@ const Vaults = () => {
       <Box>
         <Heading as="h4">Unimported</Heading>
         {makerVaultsArr.length === 0 && <Text>No vaults found</Text>}
+
         {makerVaultsArr.map(vault => (
-          <Text>
-            Vault ID: {vault.id}, Collateral: {vault.collateral}
-          </Text>
+          <Vault key={vault.id} vault={vault} />
         ))}
       </Box>
       <Box>
         <Heading as="h4">Imported</Heading>
         {dedgeVaultsArr.length === 0 && <Text>No vaults found</Text>}
+
         {dedgeVaultsArr.map(vault => (
-          <Text key={vault.id}>
-            Vault ID: {vault.id}, Collateral: {vault.collateral}
-          </Text>
+          <Vault key={vault.id} vault={vault} />
         ))}
       </Box>
     </Card>
