@@ -121,25 +121,6 @@ contract DACProxy is
         }
     }
 
-    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
-        if (_i == 0) {
-            return "0";
-        }
-        uint j = _i;
-        uint len;
-        while (j != 0) {
-            len++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(len);
-        uint k = len - 1;
-        while (_i != 0) {
-            bstr[k--] = byte(uint8(48 + _i % 10));
-            _i /= 10;
-        }
-        return string(bstr);
-    }
-
     function _swapCollateral(
         address CEtherAddress,
         address oldCTokenAddress,
@@ -159,14 +140,16 @@ contract DACProxy is
         // Steps 2 + 3
         // Converts ETH to newCToken underlying and supply
         // Unless old target underlying is already ether
+        uint repayAmount = loanAmount.sub(feeAmount);
+
         if (newCTokenAddress == CEtherAddress) {
-            ICEther(newCTokenAddress).mint.value(loanAmount)();
+            ICEther(newCTokenAddress).mint.value(repayAmount)();
         } else {
             // Gets new token underlying and converts ETH into newCToken underlying
             address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
             uint newTokenUnderlyingAmount = _ethToToken(
                 newTokenUnderlying,
-                loanAmount
+                repayAmount
             );
 
             // Supplies new CTokens
@@ -197,9 +180,6 @@ contract DACProxy is
             // Converts them into ETH
             _tokenToEth(oldTokenUnderlying, oldTokenUnderlyingAmount, loanAmount);
         }
-
-        // Draws some ETH to pay for fees
-        require(ICEther(CEtherAddress).borrow(feeAmount) == 0, "dacproxy-cether-borrow-failed");
     }
 
     // This is for Aave flashloans

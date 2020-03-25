@@ -284,7 +284,7 @@ const main = async () => {
 
         // TODO: Change to borrowBalanceCurrent
         const tokenBorrowWei = await CTokenContract.borrowBalanceStored(dacProxyAddress)
-        const tokenDelta = tokenBorrowWei - ethers.utils.parseUnits(debtLeft.toString(), decimalPlaces)
+        const tokenDelta = tokenBorrowWei.sub(ethers.utils.parseUnits(debtLeft.toString(), decimalPlaces))
 
         const swapDebtCallbackData = IDACManager
             .functions
@@ -356,55 +356,55 @@ const main = async () => {
     //
 
     // Swap debt
-    let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
-    const daiDebtLeft = 15
-    if (parseInt(daiBorrowed)=== parseInt(daiToBorrow)) {
-        await swapDebt(
-            'DAI',
-            'BAT',
-            addresses.compound.cDai,
-            addresses.compound.cBat,
-            daiDebtLeft
-        )
-    }
+    // let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
+    // const daiDebtLeft = 15
+    // if (parseInt(daiBorrowed)=== parseInt(daiToBorrow)) {
+    //     await swapDebt(
+    //         'DAI',
+    //         'BAT',
+    //         addresses.compound.cDai,
+    //         addresses.compound.cBat,
+    //         daiDebtLeft
+    //     )
+    // }
 
-    // Swap Collateral
-    ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
-    const ethCollateralLeft = 0.1
-    if (parseInt(ethers.utils.formatEther(ethSupplyWei.toString())) === ethToSupply) {
-        await swapCollateral(
-            'ETH',
-            'USDC',
-            addresses.compound.cEther,
-            addresses.compound.cUSDC,
-            ethCollateralLeft
-        )
-    }
+    // // Swap Collateral
+    // ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
+    // const ethCollateralLeft = 0.1
+    // if (parseInt(ethers.utils.formatEther(ethSupplyWei.toString())) === ethToSupply) {
+    //     await swapCollateral(
+    //         'ETH',
+    //         'USDC',
+    //         addresses.compound.cEther,
+    //         addresses.compound.cUSDC,
+    //         ethCollateralLeft
+    //     )
+    // }
 
-    usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
-    const usdcCollateralLeft = 30
-    if (parseInt(ethers.utils.formatEther(usdcSupplyWei.toString())) !== usdcCollateralLeft) {
-        await swapCollateral(
-            'USDC',
-            'REP',
-            addresses.compound.cUSDC,
-            addresses.compound.cREP,
-            usdcCollateralLeft,
-            6
-        )
-    }
+    // usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
+    // const usdcCollateralLeft = 30
+    // if (parseInt(ethers.utils.formatEther(usdcSupplyWei.toString())) !== usdcCollateralLeft) {
+    //     await swapCollateral(
+    //         'USDC',
+    //         'REP',
+    //         addresses.compound.cUSDC,
+    //         addresses.compound.cREP,
+    //         usdcCollateralLeft,
+    //         6
+    //     )
+    // }
 
-    repSupplyWei = await cRepContract.balanceOfUnderlying(dacProxyAddress)
-    const repCollateralLeft = 8
-    if (parseInt(ethers.utils.formatEther(repSupplyWei.toString())) !== repCollateralLeft) {
-        await swapCollateral(
-            'REP',
-            'ETHER',
-            addresses.compound.cREP,
-            addresses.compound.cEther,
-            repCollateralLeft
-        )
-    }
+    // repSupplyWei = await cRepContract.balanceOfUnderlying(dacProxyAddress)
+    // const repCollateralLeft = 10
+    // if (parseInt(ethers.utils.formatEther(repSupplyWei.toString())) !== repCollateralLeft) {
+    //     await swapCollateral(
+    //         'REP',
+    //         'ETHER',
+    //         addresses.compound.cREP,
+    //         addresses.compound.cEther,
+    //         repCollateralLeft
+    //     )
+    // }
 
     // Going back to swapping debt
     let batBorrowed = ethers.utils.formatEther(batBorrowStorage.toString())

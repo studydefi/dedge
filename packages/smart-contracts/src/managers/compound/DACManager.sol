@@ -167,4 +167,30 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             newCTokenAddress
         );
     }
+
+    // Clears dust debt by swapping old debt into new debt
+    function clearDebtDust(
+        address oldCTokenAddress,
+        uint oldTokenUnderlyingAmount,
+        address newCTokenAddress
+    ) public payable {
+        // i.e. Has 900 DAI debt 0.1 ETH debt
+        // wants to have it all in DAI
+
+        // 0. Calculates 0.1 ETH equilavent in DAI
+        // 1. Borrows out 0.1 ETH equilavent in DAI (~10 DAI as of march 2020)
+        // 2. Convert 10 DAI into 0.1 ETH
+        // 3. Repay 0.1 ETH
+    }
+
+    function clearCollateralDust(
+
+    ) public payable {
+        // i.e. Has 10 ETH collateral and 10 DAI collateral
+        // wants to have it all in ETH
+
+        // 1. Redeems 10 DAI collateral
+        // 2. Converts it to ETH
+        // 3. Puts it into ETH
+    }
 }
