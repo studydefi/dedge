@@ -88,7 +88,7 @@ contract DACProxy is
         // Calculates new debt amount to borrow
         // Unless new target underlying is already ether
         if (newCTokenAddress == CEtherAddress) {
-            ICEther(oldCTokenAddress).borrow(debtAmount);
+            ICEther(newCTokenAddress).borrow(debtAmount);
         } else {
             // Gets new token underlying
             address newTokenUnderlying = ICToken(newCTokenAddress).underlying();

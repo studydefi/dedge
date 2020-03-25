@@ -235,9 +235,9 @@ const main = async () => {
     }
     console.log(`Entered into ${marketsEntered.length} market`)
 
-    const daiToBorrow = 95
+    const daiToBorrow = 500
     if (parseInt(ethers.utils.formatEther(daiBalanceWei.toString())) < daiToBorrow) {
-        console.log(`Attempting to supply 2 ETH and borrow ${daiToBorrow.toString()} DAI`)
+        console.log(`Attempting to supply 10 ETH and borrow ${daiToBorrow.toString()} DAI`)
 
         const supplyEthAndBorrowCalldata = IDACManager
             .functions
@@ -253,7 +253,7 @@ const main = async () => {
                 supplyEthAndBorrowCalldata,
                 {
                     gasLimit: 4000000,
-                    value: ethers.utils.parseEther("2.0")
+                    value: ethers.utils.parseEther("10.0")
                 }
             )   
         )
