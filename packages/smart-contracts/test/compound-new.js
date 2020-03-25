@@ -385,7 +385,8 @@ const main = async () => {
             'REP',
             addresses.compound.cUSDC,
             addresses.compound.cREP,
-            usdcCollateralLeft
+            usdcCollateralLeft,
+            6
         )
     }
 
