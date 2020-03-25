@@ -126,6 +126,7 @@ const cDaiContract = newCTokenContract(addresses.compound.cDai)
 const cBatContract = newCTokenContract(addresses.compound.cBat)
 const cZrxContract = newCTokenContract(addresses.compound.cZRX)
 const cUsdcContract = newCTokenContract(addresses.compound.cUSDC)
+const cRepContract = newCTokenContract(addresses.compound.cREP)
 
 const daiContract = newERC20Contract(addresses.tokens.dai)
 const batContract = newERC20Contract(addresses.tokens.bat)
@@ -161,6 +162,7 @@ const main = async () => {
     // and call balanceOfUnderlying, it _will_ just hang :|
     let ethSupplyWei
     let usdcSupplyWei
+    let repSupplyWei
     
     let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dacProxyAddress)
     let batBorrowStorage = await cBatContract.borrowBalanceStored(dacProxyAddress)
@@ -187,9 +189,6 @@ const main = async () => {
         console.log(`ZRX (Holding): ${ethers.utils.formatEther(zrxBalanceWei.toString())}`)
         console.log(`ETH (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
 
-        // console.log(`ETH Supplied: ${ethers.utils.formatEther(ethSupplyWei.toString())}`)
-        // console.log(`USDC Supplied: ${ethers.utils.formatUnits(usdcSupplyWei.toString(), 6)}`)
-
         console.log(`Dai Borrowed: ${ethers.utils.formatEther(daiBorrowStorage.toString())}`)
         console.log(`USDC Borrowed: ${ethers.utils.formatUnits(usdcBorrowStorage.toString(), 6)}`)
         console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
@@ -203,9 +202,11 @@ const main = async () => {
     const logUnderlyingBalances = async () => {
         ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
         usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
+        repSupplyWei = await cRepContract.balanceOfUnderlying(dacProxyAddress)
 
         console.log(`ETH Supplied: ${ethers.utils.formatEther(ethSupplyWei.toString())}`)
         console.log(`USDC Supplied: ${ethers.utils.formatUnits(usdcSupplyWei.toString(), 6)}`)
+        console.log(`REP Supplied: ${ethers.utils.formatEther(repSupplyWei.toString())}`)
         console.log('---------------')
     }
 
@@ -311,6 +312,45 @@ const main = async () => {
         await logBalances()
     }
 
+    const swapCollateral = async (fromToken, toToken, fromAddress, toAddress, collateralLeft, decimalPlaces=18) => {
+        console.log(`Attempting to swap collateral from ${fromToken} to ${toToken}`)
+        console.log(`Want ${collateralLeft} ${fromToken} left`)
+
+        const CTokenContract = new ethers.Contract(
+            fromAddress,
+            CTokenAbi,
+            wallet
+        )
+        const tokenSupplyWei = await CTokenContract.balanceOfUnderlying(dacProxyAddress)
+        const tokenDelta = tokenSupplyWei - ethers.utils.parseUnits(collateralLeft.toString(), decimalPlaces)
+
+        const swapCollateralCallbackData = IDACManager
+            .functions
+            .swapCollateral
+            .encode([
+                actionRegistryAddress,
+                addressRegistryAddress,
+                dacProxyAddress,
+                fromAddress,
+                tokenDelta.toString(),
+                toAddress
+            ])
+
+        await tryAndWait(
+            dacProxyContract.execute(
+                dacManagerAddress,
+                swapCollateralCallbackData,
+                {
+                    gasLimit: 4000000,
+                }
+            )
+        )
+
+        console.log(`Swapped collateral from ${fromToken} to ${toToken}`)
+
+        await logUnderlyingBalances()
+    }
+
     // Swap debt
     let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
     const daiDebtLeft = 15
@@ -328,38 +368,40 @@ const main = async () => {
     ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
     const ethCollateralLeft = 0.1
     if (parseInt(ethers.utils.formatEther(ethSupplyWei.toString())) === ethToSupply) {
-        console.log(`Attempting to swap collateral from ETH to USDC`)
-        console.log(`Want 0.1 ETH collateral left`)
-
-        const etherDelta = ethSupplyWei - ethers.utils.parseEther(ethCollateralLeft.toString())
-
-        const swapCollateralCallbackData = IDACManager
-            .functions
-            .swapCollateral
-            .encode([
-                actionRegistryAddress,
-                addressRegistryAddress,
-                dacProxyAddress,
-                addresses.compound.cEther,
-                etherDelta.toString(),
-                addresses.compound.cUSDC
-            ])
-
-        await tryAndWait(
-            dacProxyContract.execute(
-                dacManagerAddress,
-                swapCollateralCallbackData,
-                {
-                    gasLimit: 4000000,
-                }
-            )
+        await swapCollateral(
+            'ETH',
+            'USDC',
+            addresses.compound.cEther,
+            addresses.compound.cUSDC,
+            ethCollateralLeft
         )
-
-        console.log(`Swapped collateral from ETH to USDC`)
-
-        await logUnderlyingBalances()
     }
 
+    usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
+    const usdcCollateralLeft = 10
+    if (parseInt(ethers.utils.formatEther(usdcSupplyWei.toString())) !== usdcCollateralLeft) {
+        await swapCollateral(
+            'USDC',
+            'REP',
+            addresses.compound.cUSDC,
+            addresses.compound.cREP,
+            usdcCollateralLeft
+        )
+    }
+
+    repSupplyWei = await cRepContract.balanceOfUnderlying(dacProxyAddress)
+    const repCollateralLeft = 2
+    if (parseInt(ethers.utils.formatEther(repSupplyWei.toString())) !== repCollateralLeft) {
+        await swapCollateral(
+            'REP',
+            'ETHER',
+            addresses.compound.cREP,
+            addresses.compound.cEther,
+            repCollateralLeft
+        )
+    }
+
+    // Going back to swapping debt
     let batBorrowed = ethers.utils.formatEther(batBorrowStorage.toString())
     const batDebtLeft = 10
     if (parseInt(batBorrowed) !== parseInt(batDebtLeft)) {

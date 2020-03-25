@@ -130,7 +130,7 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         address addressRegistryAddress,
         address payable dacProxyAddress,
         address oldCTokenAddress,            // Old CToken collateral address
-        uint oldTokenUnderlyingTargetAmount, // Target collateral of the ctoken underlying debt
+        uint oldTokenUnderlyingDelta, // Target collateral of the ctoken underlying debt
         address newCTokenAddress             // New collateral address (must be a cToken address)
     ) public payable {
         ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
@@ -141,7 +141,7 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             addressRegistryAddress,
             dacProxyAddress,
             oldCTokenAddress,
-            oldTokenUnderlyingTargetAmount,
+            oldTokenUnderlyingDelta,
             newCTokenAddress
         );
     }
@@ -152,7 +152,7 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         address addressRegistryAddress,
         address payable dacProxyAddress,
         address oldCTokenAddress,            // Old CToken debt address
-        uint oldTokenUnderlyingTargetAmount, // Target debt of the ctoken underlying debt
+        uint oldTokenUnderlyingDelta, // Target debt of the ctoken underlying debt
         address newCTokenAddress             // New debt address (must be a cToken address)
     ) public payable {
         ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
@@ -163,7 +163,7 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             addressRegistryAddress,
             dacProxyAddress,
             oldCTokenAddress,
-            oldTokenUnderlyingTargetAmount,
+            oldTokenUnderlyingDelta,
             newCTokenAddress
         );
     }
