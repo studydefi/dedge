@@ -11,6 +11,7 @@ interface Balances {
   dai: string;
   bat: string;
   usdc: string;
+  zrx: string;
 }
 
 type Contracts = Record<string, ethers.Contract>;
@@ -24,18 +25,20 @@ const useBalances = (
   const [balances, setBalances] = useState<Balances | null>(null);
 
   const getBalances = async () => {
-    const { dai, bat, usdc } = contracts;
+    const { dai, bat, usdc, zrx } = contracts;
 
     const ethBalanceWei = await provider.getBalance(address);
     const daiBalanceWei = await dai.balanceOf(address);
     const batBalanceWei = await bat.balanceOf(address);
     const usdcBalanceWei = await usdc.balanceOf(address);
+    const zrxBalanceWei = await zrx.balanceOf(address);
 
     const newBalance = {
       eth: weiToString(ethBalanceWei),
       dai: weiToString(daiBalanceWei),
       bat: weiToString(batBalanceWei),
       usdc: weiToString(usdcBalanceWei, true),
+      zrx: weiToString(zrxBalanceWei),
     };
 
     setBalances(newBalance);
