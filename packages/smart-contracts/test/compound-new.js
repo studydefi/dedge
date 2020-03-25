@@ -312,6 +312,8 @@ const main = async () => {
         await logBalances()
     }
 
+    console.log('Due to AMM slippages, we recommend only swapping a maximum of ~97% of your portfolio')
+
     const swapCollateral = async (fromToken, toToken, fromAddress, toAddress, collateralLeft, decimalPlaces=18) => {
         console.log(`Attempting to swap collateral from ${fromToken} to ${toToken}`)
         console.log(`Want ${collateralLeft} ${fromToken} left`)
@@ -351,6 +353,8 @@ const main = async () => {
         await logUnderlyingBalances()
     }
 
+    //
+
     // Swap debt
     let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
     const daiDebtLeft = 15
@@ -378,7 +382,7 @@ const main = async () => {
     }
 
     usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
-    const usdcCollateralLeft = 10
+    const usdcCollateralLeft = 30
     if (parseInt(ethers.utils.formatEther(usdcSupplyWei.toString())) !== usdcCollateralLeft) {
         await swapCollateral(
             'USDC',
@@ -391,7 +395,7 @@ const main = async () => {
     }
 
     repSupplyWei = await cRepContract.balanceOfUnderlying(dacProxyAddress)
-    const repCollateralLeft = 2
+    const repCollateralLeft = 8
     if (parseInt(ethers.utils.formatEther(repSupplyWei.toString())) !== repCollateralLeft) {
         await swapCollateral(
             'REP',

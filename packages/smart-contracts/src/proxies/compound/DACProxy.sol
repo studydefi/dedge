@@ -121,16 +121,34 @@ contract DACProxy is
         }
     }
 
+    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
+        if (_i == 0) {
+            return "0";
+        }
+        uint j = _i;
+        uint len;
+        while (j != 0) {
+            len++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(len);
+        uint k = len - 1;
+        while (_i != 0) {
+            bstr[k--] = byte(uint8(48 + _i % 10));
+            _i /= 10;
+        }
+        return string(bstr);
+    }
+
     function _swapCollateral(
         address CEtherAddress,
         address oldCTokenAddress,
         address newCTokenAddress,
         uint loanAmount,        // How much we loaned
-        uint feeAmount          // How much fees we owned
+        uint feeAmount         // How much we owe in fees
     ) internal {
-        // Total owe = loanAmount + feeAmount
+        // Note: totalDebt = loanAmount + feeAmount
 
-        // Note: debtAmonut = loanAmount + fees
         // 1. Has ETH from Aave flashloan
         // 2. Converts ETH into newCToken underlying
         // 3. Supplies newCToken underlying
@@ -166,9 +184,9 @@ contract DACProxy is
                 "dacproxy-ctoken-redeem-underlying-failed"
             );
         } else {
-            // Gets old token underlying and amount
+            // Gets old token underlying and amount to redeem (based on uniswap)
             address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
-            uint oldTokenUnderlyingAmount = ICToken(oldCTokenAddress).balanceOfUnderlying(address(this));
+            uint oldTokenUnderlyingAmount = _getTokenToEthOutput(oldTokenUnderlying, loanAmount);
 
             // Redeems them
             require(
@@ -177,7 +195,7 @@ contract DACProxy is
             );
 
             // Converts them into ETH
-            _tokenToEth(oldTokenUnderlying, loanAmount, loanAmount);
+            _tokenToEth(oldTokenUnderlying, oldTokenUnderlyingAmount, loanAmount);
         }
 
         // Draws some ETH to pay for fees
@@ -204,10 +222,10 @@ contract DACProxy is
         // we will have totalDebt would of _reserve to repay
         // aave and the protocol
         uint protocolFee = _fee.div(2);
+        uint totalDebt = _amount.add(_fee).add(protocolFee);
 
         // If we're swapping debt
         if (soCalldata.actionId == actionRegistry.ACTION_SWAP_DEBT()) {
-            uint totalDebt = _amount.add(_fee).add(_fee.div(2));
 
             _swapDebt(
                 addressRegistry.CEtherAddress(),
