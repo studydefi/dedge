@@ -83,7 +83,7 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             ethDebtAmount = oldTokenUnderlyingDelta;
         } else {
             // Otherwise calculate it from uniswap
-            ethDebtAmount = _getTokenToEthInput(
+            ethDebtAmount = _getEthToTokenOutput(
                 ICToken(oldCTokenAddress).underlying(),
                 oldTokenUnderlyingDelta
             );

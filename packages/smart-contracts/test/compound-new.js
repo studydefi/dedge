@@ -293,7 +293,7 @@ const main = async () => {
 
     let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
     const daiDebtLeft = 15
-    if (parseInt(daiBorrowed) !== daiDebtLeft) {
+    if (parseInt(daiBorrowed) !== parseInt(daiDebtLeft)) {
         await swapDebt(
             'DAI',
             'BAT',
@@ -305,7 +305,7 @@ const main = async () => {
 
     let batBorrowed = ethers.utils.formatEther(batBorrowStorage.toString())
     const batDebtLeft = 10
-    if (parseInt(batBorrowed) !== 0) {
+    if (parseInt(batBorrowed) !== parseInt(batDebtLeft)) {
         await swapDebt(
             'BAT',
             'ETH',
@@ -317,13 +317,25 @@ const main = async () => {
 
     let ethBorrowed = ethers.utils.formatEther(ethBorrowStorage.toString())
     const ethDebtLeft = '0.1'
-    if (parseInt(ethBorrowed) !== 0) {
+    if (parseFloat(ethBorrowed) > parseFloat(ethDebtLeft) + 0.1) {
         await swapDebt(
             'ETH',
             'ZRX',
             addresses.compound.cEther,
             addresses.compound.cZRX,
             ethDebtLeft
+        )
+    }
+
+    let zrxBorrowed = ethers.utils.formatEther(zrxBorrowStorage.toString())
+    const zrxDebtLeft = '50'
+    if (parseInt(zrxBorrowed) !== parseInt(zrxDebtLeft)) {
+        await swapDebt(
+            'ZRX',
+            'DAI',
+            addresses.compound.cZRX,
+            addresses.compound.cDai,
+            zrxDebtLeft
         )
     }
 
