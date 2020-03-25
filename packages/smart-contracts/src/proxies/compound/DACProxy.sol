@@ -12,8 +12,9 @@ import "../../lib/dapphub/Proxy.sol";
 
 import "../../lib/uniswap/UniswapLiteBase.sol";
 
-import "../../interfaces/IAddressRegistry.sol";
-import "../../interfaces/IActionRegistry.sol";
+import "../../registries/AddressRegistry.sol";
+import "../../registries/ActionRegistry.sol";
+
 import "../../interfaces/IERC20.sol";
 import "../../interfaces/compound/ICEther.sol";
 import "../../interfaces/compound/ICToken.sol";
@@ -32,6 +33,14 @@ contract DACProxy is
 
     function() external payable {}
 
+    struct SwapOperationCalldata {
+        uint actionId;
+        address actionRegistryAddress;
+        address addressRegistryAddress;
+        address oldCTokenAddress;
+        address newCTokenAddress;
+    }
+
     // For future lego building blocks :)
     function executes(address[] memory _targets, bytes[] memory data)
         public auth note payable returns (bytes[] memory response)
@@ -43,13 +52,12 @@ contract DACProxy is
         }
     }
 
-    // Helper functions
     function _swapDebt(
         address CEtherAddress,
         address oldCTokenAddress,
         address newCTokenAddress,
-        uint loanAmount,
-        uint debtAmount
+        uint loanAmount,        // How much we loaned
+        uint debtAmount         // How much we need to pay back
     ) internal {
         // Note: debtAmonut = loanAmount + fees
         // 1. Has ETH from Aave flashloan
@@ -80,7 +88,7 @@ contract DACProxy is
             // Repays CToken
             require(
                 ICToken(oldCTokenAddress).repayBorrow(oldTokenUnderlyingAmount) == 0,
-                "cmpnd-repay-ctoken-fail"
+                "dacproxy-repay-ctoken-fail"
             );
         }
 
@@ -103,7 +111,7 @@ contract DACProxy is
             // Borrows new debt
             require(
                 ICToken(newCTokenAddress).borrow(newTokenUnderlyingAmount) == 0,
-                "cmpnd-borrow-ctoken-fail"
+                "dacproxy-borrow-ctoken-fail"
             );
 
             // Converts to ether
@@ -111,6 +119,69 @@ contract DACProxy is
             // enough ETH to repay Aave
             _tokenToEth(newTokenUnderlying, newTokenUnderlyingAmount, debtAmount);
         }
+    }
+
+    function _swapCollateral(
+        address CEtherAddress,
+        address oldCTokenAddress,
+        address newCTokenAddress,
+        uint loanAmount,        // How much we loaned
+        uint feeAmount          // How much fees we owned
+    ) internal {
+        // Total owe = loanAmount + feeAmount
+
+        // Note: debtAmonut = loanAmount + fees
+        // 1. Has ETH from Aave flashloan
+        // 2. Converts ETH into newCToken underlying
+        // 3. Supplies newCToken underlying
+        // 4. Redeems oldCToken underlying
+        // 5. Converts outCToken underlying to ETH
+        // 6. Borrow <fee> ETH to repay aave
+
+        // Steps 2 + 3
+        // Converts ETH to newCToken underlying and supply
+        // Unless old target underlying is already ether
+        if (newCTokenAddress == CEtherAddress) {
+            ICEther(newCTokenAddress).mint.value(loanAmount)();
+        } else {
+            // Gets new token underlying and converts ETH into newCToken underlying
+            address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+            uint newTokenUnderlyingAmount = _ethToToken(
+                newTokenUnderlying,
+                loanAmount
+            );
+
+            // Supplies new CTokens
+            require(
+                ICToken(newCTokenAddress).mint(newTokenUnderlyingAmount) == 0,
+                "dacproxy-ctoken-supply-failed"
+            );
+        }
+
+        // Steps 4, 5
+        // Redeem CToken underlying
+        if (oldCTokenAddress == CEtherAddress) {
+            require(
+                ICEther(oldCTokenAddress).redeemUnderlying(loanAmount) == 0,
+                "dacproxy-ctoken-redeem-underlying-failed"
+            );
+        } else {
+            // Gets old token underlying and amount
+            address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+            uint oldTokenUnderlyingAmount = ICToken(oldCTokenAddress).balanceOfUnderlying(address(this));
+
+            // Redeems them
+            require(
+                ICEther(oldCTokenAddress).redeemUnderlying(oldTokenUnderlyingAmount) == 0,
+                "dacproxy-ctoken-redeem-underlying-failed"
+            );
+
+            // Converts them into ETH
+            _tokenToEth(oldTokenUnderlying, loanAmount, loanAmount);
+        }
+
+        // Draws some ETH to pay for fees
+        require(ICEther(CEtherAddress).borrow(feeAmount) == 0, "dacproxy-cether-borrow-failed");
     }
 
     // This is for Aave flashloans
@@ -122,45 +193,45 @@ contract DACProxy is
     ) external
         auth
     {
-
         // Decode params
-        (
-            uint actionId,
-            address actionRegistryAddress,
-            address addressRegistryAddress,
-            address oldCTokenAddress,
-            address newCTokenAddress
-        ) = abi.decode(
-            _params,
-            (uint, address, address, address, address)
-        );
+        SwapOperationCalldata memory soCalldata = abi.decode(_params, (SwapOperationCalldata));
 
-        // Gets address registry
-        IActionRegistry actionRegistry = IActionRegistry(actionRegistryAddress);
-        IAddressRegistry addressRegistry = IAddressRegistry(addressRegistryAddress);
-
-        // Calculate debt
-        uint totalDebt = _amount.add(_fee).add(_fee.div(2));
+        // Gets registries
+        ActionRegistry actionRegistry = ActionRegistry(soCalldata.actionRegistryAddress);
+        AddressRegistry addressRegistry = AddressRegistry(soCalldata.addressRegistryAddress);
 
         // Assumes that once the action(s) are performed
         // we will have totalDebt would of _reserve to repay
         // aave and the protocol
+        uint protocolFee = _fee.div(2);
 
         // If we're swapping debt
-        if (actionId == actionRegistry.ACTION_SWAP_DEBT()) {
+        if (soCalldata.actionId == actionRegistry.ACTION_SWAP_DEBT()) {
+            uint totalDebt = _amount.add(_fee).add(_fee.div(2));
+
             _swapDebt(
                 addressRegistry.CEtherAddress(),
-                oldCTokenAddress,
-                newCTokenAddress,
+                soCalldata.oldCTokenAddress,
+                soCalldata.newCTokenAddress,
                 _amount,
                 totalDebt
             );
+        } else if (soCalldata.actionId == actionRegistry.ACTION_SWAP_COLLATERAL()) {
+            _swapCollateral(
+                addressRegistry.CEtherAddress(),
+                soCalldata.oldCTokenAddress,
+                soCalldata.newCTokenAddress,
+                _amount,
+                _fee.add(protocolFee)
+            );
+        } else {
+            revert("dacproxy-invalid-action");
         }
 
         // Repays aave
         transferFundsBackToPoolInternal(_reserve, _amount.add(_fee));
 
         // Payout fee
-        protocolFeePayoutAddress.call.value(_fee.div(2))("");
+        protocolFeePayoutAddress.call.value(protocolFee)("");
     }
 }

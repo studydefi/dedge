@@ -3,6 +3,7 @@
 */
 
 pragma solidity 0.5.16;
+pragma experimental ABIEncoderV2;
 
 
 import "../../lib/compound/CompoundBase.sol";
@@ -20,9 +21,10 @@ import "../../interfaces/compound/IComptroller.sol";
 import "../../interfaces/compound/ICEther.sol";
 import "../../interfaces/compound/ICToken.sol";
 
-import "../../interfaces/IAddressRegistry.sol";
-import "../../interfaces/IActionRegistry.sol";
 import "../../interfaces/IERC20.sol";
+
+import "../../registries/AddressRegistry.sol";
+import "../../registries/ActionRegistry.sol";
 
 import "../../proxies/compound/DACProxy.sol";
 
@@ -47,42 +49,44 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         );
     }
 
-    // Main entry point for swapping debt
-    function swapDebt(
+    struct SwapOperationCalldata {
+        uint actionId;
+        address actionRegistryAddress;
+        address addressRegistryAddress;
+        address oldCTokenAddress;
+        address newCTokenAddress;
+    }
+
+    // Generic swap operation
+    function _swapOperation(
+        uint actionId,
         address actionRegistryAddress,
         address addressRegistryAddress,
         address payable dacProxyAddress,
-        address oldCTokenAddress,            // Old CToken debt address
-        uint oldTokenUnderlyingTargetAmount, // Target debt of the ctoken underlying debt
-        address newCTokenAddress             // New debt address (must be a cToken address)
-    ) public payable {
+        address oldCTokenAddress,            // Old CToken address for [debt|collateral]
+        uint oldTokenUnderlyingDelta,        // Amount of old tokens to swap to new tokens
+        address newCTokenAddress             // New  address for [debt|collateral] (must be a cToken address)
+    ) internal {
         // Calling from dacProxy context (msg.sender is dacProxy)
-        // 1. Calculates delta between current oldCToken and target oldCToken
-        // 2. Get amount of ETH you would get selling that from Uniswap
-        // 3. Flashloans ETH to dacProxy
+        // 1. Get amount of ETH obtained by selling that from Uniswap
+        // 2. Flashloans ETH to dacProxy
         require(oldCTokenAddress != newCTokenAddress, "cmpd-old-new-debt-address-same");
         
         // Gets registries
-        IAddressRegistry addressRegistry = IAddressRegistry(addressRegistryAddress);
-        IActionRegistry actionRegistry = IActionRegistry(actionRegistryAddress);
+        AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
+        ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
 
         // Get user guard
         address guardAddress = address(DACProxy(dacProxyAddress).authority());
 
-        // 1. Calculates delta
-        // TODO: Change from borrowBalanceStored to borrowBalanceCurrent
-        uint oldTokenUnderlyingDelta = ICToken(oldCTokenAddress)
-            .borrowBalanceStored(dacProxyAddress)
-            .sub(oldTokenUnderlyingTargetAmount);
-
+        // 1. Get amount of ETH needed
+        // If the old target is ether than the ethDebtAmount is just the delta
         uint ethDebtAmount;
 
-        // 2. Get amount of ETH needed
-        // If the old target is ether than the ethDebtAmount is just the delta
         if (oldCTokenAddress == addressRegistry.CEtherAddress()) {
             ethDebtAmount = oldTokenUnderlyingDelta;
         } else {
-            // Otherwise calculate it from uniswap
+            // Otherwise calculate it from the exchange
             ethDebtAmount = _getEthToTokenOutput(
                 ICToken(oldCTokenAddress).underlying(),
                 oldTokenUnderlyingDelta
@@ -91,11 +95,13 @@ contract DACManager is UniswapLiteBase, CompoundBase {
 
         // 3. Flashloan ETH with relevant data
         bytes memory data = abi.encode(
-            actionRegistry.ACTION_SWAP_DEBT(),
-            actionRegistryAddress,
-            addressRegistryAddress,
-            oldCTokenAddress,
-            newCTokenAddress
+            SwapOperationCalldata({
+                actionId: actionId,
+                actionRegistryAddress: actionRegistryAddress,
+                addressRegistryAddress: addressRegistryAddress,
+                oldCTokenAddress: oldCTokenAddress,
+                newCTokenAddress: newCTokenAddress
+            })
         );
 
         ILendingPool lendingPool = ILendingPool(
@@ -104,7 +110,7 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             ).getLendingPool()
         );
 
-        // Approve lending pool to call proxy
+        // Approve lendingPool to call proxy
         _guardPermit(guardAddress, address(lendingPool));
 
         lendingPool.flashLoan(
@@ -114,7 +120,51 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             data
         );
 
-        // Forbids lending pool to call proxy
+        // Forbids lendingPool to call proxy
         _guardForbid(guardAddress, address(lendingPool));
+    }
+
+    // Main entry point for swapping collateral
+    function swapCollateral(
+        address actionRegistryAddress,
+        address addressRegistryAddress,
+        address payable dacProxyAddress,
+        address oldCTokenAddress,            // Old CToken collateral address
+        uint oldTokenUnderlyingTargetAmount, // Target collateral of the ctoken underlying debt
+        address newCTokenAddress             // New collateral address (must be a cToken address)
+    ) public payable {
+        ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
+
+        _swapOperation(
+            actionRegistry.ACTION_SWAP_COLLATERAL(),
+            actionRegistryAddress,
+            addressRegistryAddress,
+            dacProxyAddress,
+            oldCTokenAddress,
+            oldTokenUnderlyingTargetAmount,
+            newCTokenAddress
+        );
+    }
+
+    // Main entry point for swapping debt
+    function swapDebt(
+        address actionRegistryAddress,
+        address addressRegistryAddress,
+        address payable dacProxyAddress,
+        address oldCTokenAddress,            // Old CToken debt address
+        uint oldTokenUnderlyingTargetAmount, // Target debt of the ctoken underlying debt
+        address newCTokenAddress             // New debt address (must be a cToken address)
+    ) public payable {
+        ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
+
+        _swapOperation(
+            actionRegistry.ACTION_SWAP_DEBT(),
+            actionRegistryAddress,
+            addressRegistryAddress,
+            dacProxyAddress,
+            oldCTokenAddress,
+            oldTokenUnderlyingTargetAmount,
+            newCTokenAddress
+        );
     }
 }

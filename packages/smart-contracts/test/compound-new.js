@@ -175,9 +175,6 @@ const main = async () => {
         usdcBalanceWei = await zrxContract.balanceOf(dacProxyAddress)
         ethBalanceWei = await provider.getBalance(dacProxyAddress)
 
-        // ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
-        // usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
-
         daiBorrowStorage = await cDaiContract.borrowBalanceStored(dacProxyAddress)
         batBorrowStorage = await cBatContract.borrowBalanceStored(dacProxyAddress)
         zrxBorrowStorage = await cZrxContract.borrowBalanceStored(dacProxyAddress)
@@ -198,6 +195,17 @@ const main = async () => {
         console.log(`Bat Borrowed: ${ethers.utils.formatEther(batBorrowStorage.toString())}`)
         console.log(`ZRX Borrowed: ${ethers.utils.formatEther(zrxBorrowStorage.toString())}`)
         console.log(`ETH Borrowed: ${ethers.utils.formatEther(ethBorrowStorage.toString())}`)
+        console.log('---------------')
+    }
+
+    // Have this here separately cause calling balanceOfUnderlying w/o any underlying balance
+    // freezes ganache
+    const logUnderlyingBalances = async () => {
+        ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
+        usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
+
+        console.log(`ETH Supplied: ${ethers.utils.formatEther(ethSupplyWei.toString())}`)
+        console.log(`USDC Supplied: ${ethers.utils.formatUnits(usdcSupplyWei.toString(), 6)}`)
         console.log('---------------')
     }
 
@@ -235,9 +243,10 @@ const main = async () => {
     }
     console.log(`Entered into ${marketsEntered.length} market`)
 
+    const ethToSupply = 10
     const daiToBorrow = 500
     if (parseInt(ethers.utils.formatEther(daiBalanceWei.toString())) < daiToBorrow) {
-        console.log(`Attempting to supply 10 ETH and borrow ${daiToBorrow.toString()} DAI`)
+        console.log(`Attempting to supply ${ethToSupply} ETH and borrow ${daiToBorrow.toString()} DAI`)
 
         const supplyEthAndBorrowCalldata = IDACManager
             .functions
@@ -253,17 +262,28 @@ const main = async () => {
                 supplyEthAndBorrowCalldata,
                 {
                     gasLimit: 4000000,
-                    value: ethers.utils.parseEther("10.0")
+                    value: ethers.utils.parseEther(ethToSupply.toString())
                 }
             )   
         )
 
         console.log(`Supplied ETH and borrowed ${daiToBorrow} DAI`)
+        await logBalances()
     }
 
     const swapDebt = async (fromToken, toToken, fromAddress, toAddress, debtLeft, decimalPlaces=18) => {
         console.log(`Attempting to swap debt from ${fromToken} to ${toToken}`)
         console.log(`Want ${debtLeft} ${fromToken} debt left`)
+
+        const CTokenContract = new ethers.Contract(
+            fromAddress,
+            CTokenAbi,
+            wallet
+        )
+
+        // TODO: Change to borrowBalanceCurrent
+        const tokenBorrowWei = await CTokenContract.borrowBalanceStored(dacProxyAddress)
+        const tokenDelta = tokenBorrowWei - ethers.utils.parseUnits(debtLeft.toString(), decimalPlaces)
 
         const swapDebtCallbackData = IDACManager
             .functions
@@ -273,7 +293,7 @@ const main = async () => {
                 addressRegistryAddress,
                 dacProxyAddress,
                 fromAddress,
-                ethers.utils.parseUnits(debtLeft.toString(), decimalPlaces).toString(),
+                tokenDelta.toString(),
                 toAddress
             ])
 
@@ -291,9 +311,10 @@ const main = async () => {
         await logBalances()
     }
 
+    // Swap debt
     let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
     const daiDebtLeft = 15
-    if (parseInt(daiBorrowed) !== parseInt(daiDebtLeft)) {
+    if (parseInt(daiBorrowed)=== parseInt(daiToBorrow)) {
         await swapDebt(
             'DAI',
             'BAT',
@@ -301,6 +322,42 @@ const main = async () => {
             addresses.compound.cBat,
             daiDebtLeft
         )
+    }
+
+    // Swap Collateral
+    ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
+    const ethCollateralLeft = 0.1
+    if (parseInt(ethers.utils.formatEther(ethSupplyWei.toString())) === ethToSupply) {
+        console.log(`Attempting to swap collateral from ETH to USDC`)
+        console.log(`Want 0.1 ETH collateral left`)
+
+        const etherDelta = ethSupplyWei - ethers.utils.parseEther(ethCollateralLeft.toString())
+
+        const swapCollateralCallbackData = IDACManager
+            .functions
+            .swapCollateral
+            .encode([
+                actionRegistryAddress,
+                addressRegistryAddress,
+                dacProxyAddress,
+                addresses.compound.cEther,
+                etherDelta.toString(),
+                addresses.compound.cUSDC
+            ])
+
+        await tryAndWait(
+            dacProxyContract.execute(
+                dacManagerAddress,
+                swapCollateralCallbackData,
+                {
+                    gasLimit: 4000000,
+                }
+            )
+        )
+
+        console.log(`Swapped collateral from ETH to USDC`)
+
+        await logUnderlyingBalances()
     }
 
     let batBorrowed = ethers.utils.formatEther(batBorrowStorage.toString())
@@ -338,7 +395,6 @@ const main = async () => {
             zrxDebtLeft
         )
     }
-
 }
 
 main()
