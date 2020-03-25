@@ -170,21 +170,78 @@ contract DACManager is UniswapLiteBase, CompoundBase {
 
     // Clears dust debt by swapping old debt into new debt
     function clearDebtDust(
+        address addressRegistryAddress,
         address oldCTokenAddress,
-        uint oldTokenUnderlyingAmount,
+        uint oldTokenUnderlyingDustAmount,
         address newCTokenAddress
     ) public payable {
-        // i.e. Has 900 DAI debt 0.1 ETH debt
+        // i.e. Has 0.1 ETH (oldCToken) debt 900 DAI (newCToken)
         // wants to have it all in DAI
 
         // 0. Calculates 0.1 ETH equilavent in DAI
         // 1. Borrows out 0.1 ETH equilavent in DAI (~10 DAI as of march 2020)
         // 2. Convert 10 DAI into 0.1 ETH
         // 3. Repay 0.1 ETH
+
+        require(oldCTokenAddress != newCTokenAddress, "clear-debt-same-address");
+
+        AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
+
+        uint borrowAmount;
+        address oldTokenUnderlying;
+        address newTokenUnderlying;
+
+        if (oldCTokenAddress == addressRegistry.CEtherAddress()) {
+            // ETH -> Token
+            newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+
+            // Calculates ETH equilavent in token
+            borrowAmount = _getTokenToEthOutput(newTokenUnderlying, oldTokenUnderlyingDustAmount);
+
+            // Borrows out equilavent token
+            borrow(newCTokenAddress, borrowAmount);
+
+            // Converts token to ETH
+            _tokenToEth(newTokenUnderlying, borrowAmount, oldTokenUnderlyingDustAmount);
+        } else if (newCTokenAddress == addressRegistry.CEtherAddress()) {
+            // Token -> ETH
+            oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+
+            // Calculates token equilavent in ETH
+            borrowAmount = _getEthToTokenOutput(oldTokenUnderlying, oldTokenUnderlyingDustAmount);
+
+            // Borrows out equilavent ETH
+            borrow(newCTokenAddress, borrowAmount);
+
+            // Converts ETH to token
+            _ethToToken(oldTokenUnderlying, borrowAmount, oldTokenUnderlyingDustAmount);
+        } else {
+            // token -> token
+            oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+            newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+
+            // Calculates eth borrow amount
+            uint ethAmount = _getEthToTokenOutput(oldTokenUnderlying, oldTokenUnderlyingDustAmount);
+
+            // Calculates token borrow amount
+            borrowAmount = _getTokenToEthOutput(newTokenUnderlying, ethAmount);
+
+            // Borrows out equilavent token
+            borrow(newCTokenAddress, borrowAmount);
+
+            // Converts old token to target token
+            _tokenToToken(oldTokenUnderlying, newTokenUnderlying, borrowAmount, oldTokenUnderlyingDustAmount);
+        }
+
+        // Repays borrowed
+        repayBorrowed(oldCTokenAddress, oldTokenUnderlyingDustAmount);
     }
 
     function clearCollateralDust(
-
+        address addressRegistryAddress,
+        address oldCTokenAddress,
+        uint oldTokenUnderlyingAmount,
+        address newCTokenAddress
     ) public payable {
         // i.e. Has 10 ETH collateral and 10 DAI collateral
         // wants to have it all in ETH
@@ -192,5 +249,42 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         // 1. Redeems 10 DAI collateral
         // 2. Converts it to ETH
         // 3. Puts it into ETH
+
+        // More abstractly,
+        // 1. Redeems tokens
+        // 2. Convert it to other token
+        // 3. Put other token in
+
+        require(oldCTokenAddress != newCTokenAddress, "clear-collateral-same-address");
+
+        uint supplyAmount;
+        AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
+
+        // Redeems collateral
+        redeemUnderlying(oldCTokenAddress, oldTokenUnderlyingAmount);
+
+        if (oldCTokenAddress == addressRegistry.CEtherAddress()) {
+            // ETH -> Token
+            supplyAmount = _ethToToken(
+                ICToken(newCTokenAddress).underlying(),
+                oldTokenUnderlyingAmount
+            );
+        } else if (newCTokenAddress == addressRegistry.CEtherAddress()) {
+            // Token -> ETH
+            supplyAmount = _tokenToEth(
+                ICToken(oldCTokenAddress).underlying(),
+                oldTokenUnderlyingAmount
+            );
+        } else {
+            // Token -> Token
+            supplyAmount = _tokenToToken(
+                ICToken(oldCTokenAddress).underlying(),
+                ICToken(newCTokenAddress).underlying(),
+                oldTokenUnderlyingAmount
+            );
+        }
+
+        // Supplies collateral
+        supply(newCTokenAddress, supplyAmount);
     }
 }

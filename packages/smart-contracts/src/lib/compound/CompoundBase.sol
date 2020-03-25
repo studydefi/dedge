@@ -64,6 +64,16 @@ contract CompoundBase {
         require(ICToken(cToken).borrow(borrowAmount) == 0, "cmpnd-mgr-ctoken-borrow-failed");
     }
 
+    function supplyAndBorrow(
+        address supplyCToken,
+        uint supplyAmount,
+        address borrowCToken,
+        uint borrowAmount
+    ) public payable {
+        supply(supplyCToken, supplyAmount);
+        borrow(borrowCToken, borrowAmount);
+    }
+
     function supplyETHAndBorrow(
         address cToken,
         uint borrowAmount
