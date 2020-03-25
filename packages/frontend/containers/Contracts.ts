@@ -22,6 +22,11 @@ const CONTRACTS: Record<string, Lego> = {
   uniswapFactory: legos.uniswap.uniswapFactory,
   compoundComptroller: legos.compound.comptroller,
   dedgeCompoundManager: legos.dedge.dedgeCompoundManager,
+  cEther: legos.compound.cEther,
+  cDai: legos.compound.cDai,
+  cBat: legos.compound.cBat,
+  cUsdc: legos.compound.cUSDC,
+  cZrx: legos.compound.cZRX,
 };
 
 type Contracts = Record<string, ethers.Contract>;
