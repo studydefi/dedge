@@ -48,7 +48,7 @@ const useCompoundPosition = () => {
     }
   }, [dedgeProxyAddr, contracts]);
 
-  return [supplied, borrowed];
+  return [supplied, borrowed, getPositions];
 };
 
 export default useCompoundPosition;

@@ -9,7 +9,7 @@ const CompoundPosition = () => {
 
   const [markets] = useCompoundMarkets();
   const [enterMarkets] = useEnterCompoundMarkets();
-  const [supplied, borrowed] = useCompoundPosition();
+  const [supplied, borrowed, getPosition] = useCompoundPosition();
 
   if (!markets || markets.length < 2) {
     return (
@@ -26,7 +26,12 @@ const CompoundPosition = () => {
 
   return (
     <Card>
-      <Heading as="h2">Compound Position</Heading>
+      <Heading as="h2">
+        Compound Position{" "}
+        <Button.Text size="small" onClick={getPosition}>
+          refresh
+        </Button.Text>
+      </Heading>
 
       <Heading as="h2">Supplied</Heading>
       {supplied && <pre>{JSON.stringify(supplied, null, 4)}</pre>}
