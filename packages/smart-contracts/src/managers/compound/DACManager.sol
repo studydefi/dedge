@@ -7,6 +7,8 @@ pragma solidity 0.5.16;
 
 import "../../lib/compound/CompoundBase.sol";
 
+import "../../lib/dapphub/Guard.sol";
+
 import "../../lib/uniswap/UniswapLiteBase.sol";
 
 import "../../interfaces/aave/ILendingPoolAddressesProvider.sol";
@@ -22,16 +24,34 @@ import "../../interfaces/IAddressRegistry.sol";
 import "../../interfaces/IActionRegistry.sol";
 import "../../interfaces/IERC20.sol";
 
+import "../../proxies/compound/DACProxy.sol";
+
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract DACManager is UniswapLiteBase, CompoundBase {
     using SafeMath for uint;
 
+    function _guardPermit(address g, address src) internal {
+        DSGuard(g).permit(
+            bytes32(bytes20(address(src))),
+            DSGuard(g).ANY(),
+            DSGuard(g).ANY()
+        );
+    }
+
+    function _guardForbid(address g, address src) internal {
+        DSGuard(g).forbid(
+            bytes32(bytes20(address(src))),
+            DSGuard(g).ANY(),
+            DSGuard(g).ANY()
+        );
+    }
+
     // Main entry point for swapping debt
     function swapDebt(
         address actionRegistryAddress,
         address addressRegistryAddress,
-        address dacProxyAddress,
+        address payable dacProxyAddress,
         address oldCTokenAddress,            // Old CToken debt address
         uint oldTokenUnderlyingTargetAmount, // Target debt of the ctoken underlying debt
         address newCTokenAddress             // New debt address (must be a cToken address)
@@ -45,6 +65,9 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         // Gets registries
         IAddressRegistry addressRegistry = IAddressRegistry(addressRegistryAddress);
         IActionRegistry actionRegistry = IActionRegistry(actionRegistryAddress);
+
+        // Get user guard
+        address guardAddress = address(DACProxy(dacProxyAddress).authority());
 
         // 1. Calculates delta
         // TODO: Change from borrowBalanceStored to borrowBalanceCurrent
@@ -81,13 +104,17 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             ).getLendingPool()
         );
 
+        // Approve lending pool to call proxy
+        _guardPermit(guardAddress, address(lendingPool));
+
         lendingPool.flashLoan(
             dacProxyAddress,
             addressRegistry.AaveEthAddress(),
             ethDebtAmount,
             data
         );
+
+        // Forbids lending pool to call proxy
+        _guardForbid(guardAddress, address(lendingPool));
     }
-
-
 }

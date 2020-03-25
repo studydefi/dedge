@@ -74,11 +74,11 @@ contract DSGuard is DSAuth, DSAuthority, DSGuardEvents {
 }
 
 contract DSGuardFactory {
-    mapping (address => address) public guards;
+    mapping (address => bool)  public  isGuard;
 
     function newGuard() public returns (DSGuard guard) {
         guard = new DSGuard();
         guard.setOwner(msg.sender);
-        guards[msg.sender] = address(guard);
+        isGuard[address(guard)] = true;
     }
 }

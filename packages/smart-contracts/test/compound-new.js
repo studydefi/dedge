@@ -261,11 +261,9 @@ const main = async () => {
         console.log(`Supplied ETH and borrowed ${daiToBorrow} DAI`)
     }
 
-    let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
-    const daiDebtLeft = 15
-    if (parseInt(daiBorrowed) !== daiDebtLeft) {
-        console.log('Attempting to swap debt from DAI to BAT')
-        console.log(`Want ${daiDebtLeft} DAI debt left`)
+    const swapDebt = async (fromToken, toToken, fromAddress, toAddress, debtLeft, decimalPlaces=18) => {
+        console.log(`Attempting to swap debt from ${fromToken} to ${toToken}`)
+        console.log(`Want ${debtLeft} ${fromToken} debt left`)
 
         const swapDebtCallbackData = IDACManager
             .functions
@@ -274,9 +272,9 @@ const main = async () => {
                 actionRegistryAddress,
                 addressRegistryAddress,
                 dacProxyAddress,
-                addresses.compound.cDai,
-                ethers.utils.parseEther(daiDebtLeft.toString()).toString(),
-                addresses.compound.cBat
+                fromAddress,
+                ethers.utils.parseUnits(debtLeft.toString(), decimalPlaces).toString(),
+                toAddress
             ])
 
         await tryAndWait(
@@ -289,10 +287,46 @@ const main = async () => {
             )
         )
 
-        console.log('Swapped debt from DAI to BAT')
+        console.log(`Swapped debt from ${fromToken} to ${toToken}`)
+        await logBalances()
     }
 
-    await logBalances()
+    let daiBorrowed = ethers.utils.formatEther(daiBorrowStorage.toString())
+    const daiDebtLeft = 15
+    if (parseInt(daiBorrowed) !== daiDebtLeft) {
+        await swapDebt(
+            'DAI',
+            'BAT',
+            addresses.compound.cDai,
+            addresses.compound.cBat,
+            daiDebtLeft
+        )
+    }
+
+    let batBorrowed = ethers.utils.formatEther(batBorrowStorage.toString())
+    const batDebtLeft = 10
+    if (parseInt(batBorrowed) !== 0) {
+        await swapDebt(
+            'BAT',
+            'ETH',
+            addresses.compound.cBat,
+            addresses.compound.cEther,
+            batDebtLeft
+        )
+    }
+
+    let ethBorrowed = ethers.utils.formatEther(ethBorrowStorage.toString())
+    const ethDebtLeft = '0.1'
+    if (parseInt(ethBorrowed) !== 0) {
+        await swapDebt(
+            'ETH',
+            'ZRX',
+            addresses.compound.cEther,
+            addresses.compound.cZRX,
+            ethDebtLeft
+        )
+    }
+
 }
 
 main()

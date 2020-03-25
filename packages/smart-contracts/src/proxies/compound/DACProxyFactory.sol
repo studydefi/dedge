@@ -33,15 +33,7 @@ contract DACProxyFactory {
         emit Created(msg.sender, owner, address(proxy), address(cache));
 
         DSGuard guard = dsGuardFactory.newGuard();
-
-        // Approves Aave LendingPool contract to call it
-        address aaveLendingPool = ILendingPoolAddressesProvider(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8).getLendingPool();
-        guard.permit(
-            bytes32(bytes20(aaveLendingPool)),
-            guard.ANY(),
-            guard.ANY()
-        );
-        guard.setOwner(owner);
+        guard.setOwner(proxy);  // Guard belongs to proxy
 
         DACProxy(proxy).setAuthority(guard);
         DACProxy(proxy).setOwner(owner);

@@ -50,7 +50,7 @@ contract DACProxy is
         address newCTokenAddress,
         uint loanAmount,
         uint debtAmount
-    ) internal auth {
+    ) internal {
         // Note: debtAmonut = loanAmount + fees
         // 1. Has ETH from Aave flashloan
         // 2. Converts ETH to oldCToken underlying
