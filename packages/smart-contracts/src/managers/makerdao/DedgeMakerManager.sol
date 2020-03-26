@@ -85,7 +85,7 @@ contract DedgeMakerManager is DssProxyActionsBase, UniswapBase, FlashLoanReceive
 
         // Extract data params
         (
-            address payable usrDedgeProxy,
+            address payable userProxy,
             address makerMigrateManager,
             address collateralAddress,
             address collateralJoinAddress,
@@ -110,7 +110,7 @@ contract DedgeMakerManager is DssProxyActionsBase, UniswapBase, FlashLoanReceive
             // Sell ETH, buy DAI to repay Aave
             _buyTokensWithEthFromUniswap(DaiAddress, collateralSellAmount, daiDebt);
             // Transfer remaining ETH back to user
-            (bool success, ) = usrDedgeProxy.call.value(collateralAmount.sub(collateralSellAmount))("");
+            (bool success, ) = userProxy.call.value(collateralAmount.sub(collateralSellAmount))("");
             require(success, "mkr-mgr-eth-xfer-failed");
         } else {
             // Get back collateralized asset
@@ -124,7 +124,7 @@ contract DedgeMakerManager is DssProxyActionsBase, UniswapBase, FlashLoanReceive
             // Transfer remaining ERC20 token back to user
             require(
                 IERC20(collateralAddress).transfer(
-                    usrDedgeProxy,
+                    userProxy,
                     IERC20(collateralAddress).balanceOf(makerMigrateManager)
                 ),
                 "mkr-mgr-erc20-xfer-failed"
@@ -138,7 +138,7 @@ contract DedgeMakerManager is DssProxyActionsBase, UniswapBase, FlashLoanReceive
         uint daiLeftoverBalance = IERC20(DaiAddress).balanceOf(makerMigrateManager);
         if (daiLeftoverBalance > 0) {
             require(
-                IERC20(DaiAddress).transfer(usrDedgeProxy, daiLeftoverBalance),
+                IERC20(DaiAddress).transfer(userProxy, daiLeftoverBalance),
                 "mkr-mgr-dai-xfer-failed"
             );
         }
@@ -146,7 +146,7 @@ contract DedgeMakerManager is DssProxyActionsBase, UniswapBase, FlashLoanReceive
 
     // Imports maker vault into Dedge
     function importMakerVault(
-        address usrDedgeProxy,
+        address userProxy,
         address makerMigrateManager,
         address collateralAddress,
         address collateralJoinAddress,
@@ -159,7 +159,7 @@ contract DedgeMakerManager is DssProxyActionsBase, UniswapBase, FlashLoanReceive
         uint daiDebt = getVaultDebt(DssCdpManagerAddress, cdpId);
 
         // 1. Flashloan DAI
-        bytes memory data = abi.encode(usrDedgeProxy, makerMigrateManager, collateralAddress, collateralJoinAddress, cdpId);
+        bytes memory data = abi.encode(userProxy, makerMigrateManager, collateralAddress, collateralJoinAddress, cdpId);
         ILendingPool lendingPool = ILendingPool(ILendingPoolAddressesProvider(AaveLendingPoolAddressProviderAddress).getLendingPool());
         lendingPool.flashLoan(makerMigrateManager, DaiAddress, daiDebt, data);
 

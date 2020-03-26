@@ -1,31 +1,23 @@
 const fs = require("fs");
 const path = require("path");
 
-// const Dedge = artifacts.require("Dedge");
-const DedgeProxyFactory = artifacts.require("DedgeProxyFactory");
-const DedgeCompoundManager = artifacts.require("DedgeCompoundManager");
-const DedgeMakerManager = artifacts.require("DedgeMakerManager");
-const DedgeGeneralManager = artifacts.require("DedgeGeneralManager");
+const DACProxyFactory = artifacts.require("DACProxyFactory");
+const DACManager = artifacts.require("DACManager");
+const AddressRegistry = artifacts.require("AddressRegistry");
+const ActionRegistry = artifacts.require("ActionRegistry");
 
 module.exports = async deployer => {
-    // Deploys DedgeProxyFactory
-    await deployer.deploy(DedgeProxyFactory)
-
-    // Deploys Dedge Contract
-    await deployer.deploy(DedgeMakerManager);
-
-    // Deploys DedgeCompoundManager
-    await deployer.deploy(DedgeCompoundManager)
-
-    // Deploys DedgeGeneralManager
-    await deployer.deploy(DedgeGeneralManager)
+    await deployer.deploy(DACProxyFactory)
+    await deployer.deploy(DACManager)
+    await deployer.deploy(AddressRegistry)
+    await deployer.deploy(ActionRegistry)
 
     // Saves to a file if needed
     const data = JSON.stringify({
-        dedgeGeneralManagerAddress: DedgeGeneralManager.address,
-        dedgeProxyFactoryAddress: DedgeProxyFactory.address,
-        dedgeMakerManagerAddress: DedgeMakerManager.address,
-        dedgeCompoundManagerAddress: DedgeCompoundManager.address
+        dacProxyFactoryAddress: DACProxyFactory.address,
+        dacManagerAddress: DACManager.address,
+        addressRegistryAddress: AddressRegistry.address,
+        actionRegistryAddress: ActionRegistry.address,
     });
 
     const buildDir = path.resolve(__dirname, "../build");

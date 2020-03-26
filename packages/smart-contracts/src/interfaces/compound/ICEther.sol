@@ -2,6 +2,7 @@ pragma solidity 0.5.16;
 
 contract ICEther {
     function mint() external payable;
+    function borrow(uint borrowAmount) external returns (uint);
     function redeem(uint redeemTokens) external returns (uint);
     function redeemUnderlying(uint redeemAmount) external returns (uint);
     function repayBorrow() external payable;
