@@ -352,6 +352,7 @@ const main = async () => {
                 addressRegistryAddress,
                 ilkCTokenEquilavent,
                 joinAddress,
+                decimalPlaces.toString(),
                 cdpId.toString()
             ])
         await tryAndWait(
@@ -372,14 +373,14 @@ const main = async () => {
     
     await logBalances()
 
-    // await openAndImportVault(
-    //     addresses.maker.ilkEthA,
-    //     addresses.maker.ethJoin,
-    //     2,
-    //     addresses.compound.cEther,
-    // )
+    await openAndImportVault(
+        addresses.maker.ilkEthA,
+        addresses.maker.ethJoin,
+        2,
+        addresses.compound.cEther,
+    )
 
-    // await logBalances()
+    await logBalances()
 
     await openAndImportVault(
         addresses.maker.ilkBatA,

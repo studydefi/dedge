@@ -60,6 +60,7 @@ contract DACProxy is
         uint cdpId;
         address collateralCTokenAddress;
         address collateralJoinAddress;
+        uint8 collateralDecimals;
         address dedgeMakerManagerAddress;
     }
 
@@ -211,6 +212,7 @@ contract DACProxy is
         uint cdpId,
         address collateralCTokenAddress,
         address collateralJoinAddress,
+        uint8 collateralDecimals,
         uint totalDebt
     ) internal {
         AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
@@ -261,26 +263,19 @@ contract DACProxy is
                 collateral
             );
 
-            // Fix from Wei to ERC20 specific decimals
-            uint collateralFixed = makerManager.convertToERC20Decimals(
-                ICToken(collateralCTokenAddress).underlying(),
-                collateral
+            // Convert collateral to relevant decimal places
+            collateral = makerManager.convert18ToDecimal(
+                collateral, collateralDecimals
             );
 
-            // Approve CToken Collateral underlying
-            // to call transferFrom
+            // Approve CToken Collateral underlying to enable call transferFrom
             IERC20(ICToken(collateralCTokenAddress).underlying())
-                .approve(collateralCTokenAddress, collateralFixed);
+                .approve(collateralCTokenAddress, collateral);
 
             // Supply GEM and Borrow DAI (Compound)
-            // uint bal = IERC20(ICToken(collateralCTokenAddress).underlying())
-            //     .balanceOf(address(this));
-            // uint a = ICToken(collateralCTokenAddress).mint(
-            //     collateralFixed
-            // );
             require(
                 ICToken(collateralCTokenAddress).mint(
-                    collateralFixed
+                    collateral
                 ) == 0,
                 "dacproxy-gem-supply-fail"
             );
@@ -353,6 +348,7 @@ contract DACProxy is
                 ivCalldata.cdpId,
                 ivCalldata.collateralCTokenAddress,
                 ivCalldata.collateralJoinAddress,
+                ivCalldata.collateralDecimals,
                 totalDebt
             );
 

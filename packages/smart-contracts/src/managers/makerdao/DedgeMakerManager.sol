@@ -37,14 +37,13 @@ contract DedgeMakerManager is DssProxyActionsBase {
         uint cdpId;
         address collateralCTokenAddress;
         address collateralJoinAddress;
+        uint8 collateralDecimals;
         address dedgeMakerManagerAddress;
     }
 
     // Helper functions
-    function convertToERC20Decimals(address token, uint256 wad18) public returns (uint256) {
-        // Converts wad18 decimal place collateral
-        // (aka what getVaultCollateral returns) to ERC20 decimals
-        return wad18 / (10 ** (18 - IERC20(token).decimals()));
+    function convert18ToDecimal(uint amount, uint8 decimals) public view returns (uint) {
+        return amount / (10 ** (18 - uint(decimals)));
     }
 
     function getVaultDebt(
@@ -63,6 +62,7 @@ contract DedgeMakerManager is DssProxyActionsBase {
         debt = _getWipeAllWad(vat, owner, urn, ilk);
     }
 
+    // Get vaults collateral, returns in 18 decimal places
     function getVaultCollateral(
         address manager,
         uint cdp
@@ -97,6 +97,7 @@ contract DedgeMakerManager is DssProxyActionsBase {
         address addressRegistryAddress,
         address collateralCTokenAddress,
         address collateralJoinAddress,
+        uint8 collateralDecimals,
         uint cdpId
     ) public payable {
         AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
@@ -116,6 +117,7 @@ contract DedgeMakerManager is DssProxyActionsBase {
             cdpId: cdpId,
             collateralCTokenAddress: collateralCTokenAddress,
             collateralJoinAddress: collateralJoinAddress,
+            collateralDecimals: collateralDecimals,
             dedgeMakerManagerAddress: dedgeMakerManagerAddress
         }));
 
