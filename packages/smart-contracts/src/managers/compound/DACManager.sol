@@ -168,6 +168,20 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         );
     }
 
+    function clearDebtDust(
+        address addressRegistryAddress,
+        address oldCTokenAddress,
+        address newCTokenAddress
+    ) public payable {
+        // TODO: Change to borrow balance current
+        clearDebtDust(
+            addressRegistryAddress,
+            oldCTokenAddress,
+            ICToken(oldCTokenAddress).borrowBalanceStored(msg.sender),
+            newCTokenAddress
+        );
+    }
+
     // Clears dust debt by swapping old debt into new debt
     function clearDebtDust(
         address addressRegistryAddress,
@@ -236,6 +250,19 @@ contract DACManager is UniswapLiteBase, CompoundBase {
 
         // Repays borrowed
         repayBorrowed(oldCTokenAddress, oldTokenUnderlyingDustAmount);
+    }
+
+    function clearCollateralDust(
+        address addressRegistryAddress,
+        address oldCTokenAddress,
+        address newCTokenAddress
+    ) public payable {
+        clearCollateralDust(
+            addressRegistryAddress,
+            oldCTokenAddress,
+            ICToken(oldCTokenAddress).balanceOfUnderlying(msg.sender),
+            newCTokenAddress
+        );
     }
 
     function clearCollateralDust(

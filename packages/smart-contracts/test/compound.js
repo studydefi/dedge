@@ -15,7 +15,6 @@ const {
     dacManagerAddress,
     addressRegistryAddress,
     actionRegistryAddress
-
 } = require("../build/DeployedAddresses.json");
 
 const dacProxyDef = require("../build/DACProxy.json");
