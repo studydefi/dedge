@@ -48,6 +48,8 @@ const ERC20Abi = require('./abi/ERC20.json')
 const dsProxyAbi = require('./abi/DSProxy.json')
 const dssProxyActionsAbi = require('./abi/DssProxyActions.json')
 
+const CEtherAbi = require('../build/ICEther.json').abi
+const CTokenAbi = require('../build/ICToken.json').abi
 const uniswapFactoryAbi = require('../build/IUniswapFactory.json').abi
 const uniswapExchangeAbi = require('../build/IUniswapExchange.json').abi
 
@@ -74,7 +76,8 @@ const addresses = {
         cEther: '0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5',
         cDai: '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643',
         cSai: '0xf5dce57282a584d2746faf1593d3121fcac444dc',
-        cBat: '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e'
+        cBat: '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
+        cUSDC: '0x39aa39c021dfbae8fac545936693ac917d5e7563',
     },
     tokens: {
         dai: "0x6b175474e89094c44da98b954eedeac495271d0f",
@@ -85,6 +88,9 @@ const addresses = {
         factory: '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
     }
 }
+
+const newERC20Contract = addr => new ethers.Contract(addr, ERC20Abi, wallet)
+const newCTokenContract = addr => new ethers.Contract(addr, CTokenAbi, wallet)
 
 const dacProxyFactoryContract = new ethers.Contract(
     dacProxyFactoryAddress,
@@ -140,6 +146,16 @@ const uniswapFactoryContract = new ethers.Contract(
     wallet
 )
 
+const cEtherContract = new ethers.Contract(
+    addresses.compound.cEther,
+    CEtherAbi,
+    wallet
+)
+
+const cDaiContract = newCTokenContract(addresses.compound.cDai)
+const cBatContract = newCTokenContract(addresses.compound.cBat)
+const cUsdcContract = newCTokenContract(addresses.compound.cUSDC)
+
 const IDssProxyActions = new ethers.utils.Interface(dssProxyActionsAbi)
 const IDssCdpManager = new ethers.utils.Interface(dssCdpManagerAbi)
 const IDedgeMakerManager = new ethers.utils.Interface(dedgeMakerManagerDef.abi)
@@ -181,29 +197,41 @@ const main = async () => {
     let walletBatBalanceWei = await batContract.balanceOf(wallet.address)
     let walletUsdcBalanceWei = await usdcContract.balanceOf(wallet.address)
 
-    let daiBalanceWei = await daiContract.balanceOf(dsProxyAddress)
-    let usdcBalanceWei = await usdcContract.balanceOf(dsProxyAddress)
-    let batBalanceWei = await batContract.balanceOf(dsProxyAddress)
-    let ethBalanceWei = await provider.getBalance(dsProxyAddress)
+    let daiBalanceWei = await daiContract.balanceOf(dacProxyAddress)
+    let usdcBalanceWei = await usdcContract.balanceOf(dacProxyAddress)
+    let batBalanceWei = await batContract.balanceOf(dacProxyAddress)
+    let ethBalanceWei = await provider.getBalance(dacProxyAddress)
 
     const logBalances = async () => {
         walletDaiBalanceWei = await daiContract.balanceOf(wallet.address)
         walletBatBalanceWei = await batContract.balanceOf(wallet.address)
         walletUsdcBalanceWei = await usdcContract.balanceOf(wallet.address)
 
-        daiBalanceWei = await daiContract.balanceOf(dsProxyAddress)
-        usdcBalanceWei = await usdcContract.balanceOf(dsProxyAddress)
-        batBalanceWei = await batContract.balanceOf(dsProxyAddress)
-        ethBalanceWei = await provider.getBalance(dsProxyAddress)
+        daiBalanceWei = await daiContract.balanceOf(dacProxyAddress)
+        usdcBalanceWei = await usdcContract.balanceOf(dacProxyAddress)
+        batBalanceWei = await batContract.balanceOf(dacProxyAddress)
+        ethBalanceWei = await provider.getBalance(dacProxyAddress)
+
+        cDaiBorrowed = await cDaiContract.borrowBalanceStored(dacProxyAddress)
+
+        ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
+        batSupplyWei = await cBatContract.balanceOfUnderlying(dacProxyAddress)
+        usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
 
         console.log(`Dai @ Wallet (Holding): ${ethers.utils.formatEther(walletDaiBalanceWei.toString())}`)
         console.log(`Bat @ Wallet (Holding): ${ethers.utils.formatEther(walletBatBalanceWei.toString())}`)
         console.log(`USDC @ Wallet (Holding): ${ethers.utils.formatUnits(walletUsdcBalanceWei.toString(), 6)}`) // USDC 6 decimals
 
-        console.log(`Dai @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
-        console.log(`USDC @ DedgeProxyAddress (Holding): ${ethers.utils.formatUnits(usdcBalanceWei.toString(), 6)}`)
-        console.log(`BAT @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
-        console.log(`ETH @ DedgeProxyAddress (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
+        console.log(`Dai @ dacProxyAddress (Holding): ${ethers.utils.formatEther(daiBalanceWei.toString())}`)
+        console.log(`USDC @ dacProxyAddress (Holding): ${ethers.utils.formatUnits(usdcBalanceWei.toString(), 6)}`)
+        console.log(`BAT @ dacProxyAddress (Holding): ${ethers.utils.formatEther(batBalanceWei.toString())}`)
+        console.log(`ETH @ dacProxyAddress (Holding): ${ethers.utils.formatEther(ethBalanceWei.toString())}`)
+
+        console.log(`Dai borrowed from Compound: ${ethers.utils.formatEther(cDaiBorrowed.toString())}`)
+
+        console.log(`ETH supplied to Compound: ${ethers.utils.formatEther(ethSupplyWei.toString())}`)
+        console.log(`BAT supplied to Compound: ${ethers.utils.formatEther(batSupplyWei.toString())}`)
+        console.log(`USDC supplied to Compound: ${ethers.utils.formatUnits(usdcSupplyWei.toString(), 6)}`)
         console.log('---------')
     }
 
@@ -230,6 +258,11 @@ const main = async () => {
             wallet
         )
 
+        await tokenContract.approve(
+            dsProxyAddress,
+            "0xffffffffffffffffffffffffffffffff",
+        )
+
         const walletToken = await tokenContract.balanceOf(wallet.address)
         console.log(`Got ${ethers.utils.formatUnits(walletToken.toString(), decimalPlaces)} ${tokenName}`)
     }
@@ -253,7 +286,7 @@ const main = async () => {
                 ilkJoinAddress,
                 addresses.maker.daiJoin,
                 ethers.utils.formatBytes32String(ilk),
-                ethers.utils.parseUnits(amount, decimalPlaces),
+                ethers.utils.parseUnits(amount.toString(), decimalPlaces),
                 ethers.utils.parseEther("20.0"), // Wanna Draw 20 DAI (minimum 20 DAI)
                 true
             ])
@@ -273,17 +306,6 @@ const main = async () => {
 
         return await dssCdpManagerContract.last(dsProxyAddress)
     }
-
-    // Gets tokens needed
-    if (parseInt(walletBatBalanceWei.toString()) === 0) {
-        await getTokenFromUniswap("BAT", addresses.tokens.bat)
-    }
-
-    if (parseInt(walletUsdcBalanceWei.toString()) === 0) {
-        await getTokenFromUniswap("USDC", addresses.tokens.usdc, 6)
-    }
-
-    await logBalances()
 
     // Opens vault and gets opened id
     const openAndImportVault = async (
@@ -344,12 +366,39 @@ const main = async () => {
         console.log('CDP Imported')
     }
 
+    // Gets tokens needed
+    await getTokenFromUniswap("BAT", addresses.tokens.bat)
+    await getTokenFromUniswap("USDC", addresses.tokens.usdc, 6)
+    
+    await logBalances()
+
+    // await openAndImportVault(
+    //     addresses.maker.ilkEthA,
+    //     addresses.maker.ethJoin,
+    //     2,
+    //     addresses.compound.cEther,
+    // )
+
+    // await logBalances()
+
     await openAndImportVault(
-        addresses.maker.ilkEthA,
-        addresses.maker.ethJoin,
-        2,
-        addresses.compound.cEther,
+        addresses.maker.ilkBatA,
+        addresses.maker.batJoin,
+        2000,
+        addresses.compound.cBat,
     )
+
+    await logBalances()
+
+    await openAndImportVault(
+        addresses.maker.ilkUsdcA,
+        addresses.maker.usdcJoin,
+        200,
+        addresses.compound.cUSDC,
+        6
+    )
+
+    await logBalances()
 }
 
 main()

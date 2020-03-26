@@ -41,6 +41,12 @@ contract DedgeMakerManager is DssProxyActionsBase {
     }
 
     // Helper functions
+    function convertToERC20Decimals(address token, uint256 wad18) public returns (uint256) {
+        // Converts wad18 decimal place collateral
+        // (aka what getVaultCollateral returns) to ERC20 decimals
+        return wad18 / (10 ** (18 - IERC20(token).decimals()));
+    }
+
     function getVaultDebt(
         address manager,
         uint cdp

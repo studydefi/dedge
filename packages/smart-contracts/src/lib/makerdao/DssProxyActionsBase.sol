@@ -266,6 +266,7 @@ contract DssProxyActionsBase is Common {
 
         // Joins DAI amount into the vat
         daiJoin_join(daiJoin, urn, _getWipeAllWad(vat, urn, urn, ilk));
+        
         // Paybacks debt to the CDP and unlocks token amount from it
         frob(
             manager,
@@ -275,6 +276,7 @@ contract DssProxyActionsBase is Common {
         );
         // Moves the amount from the CDP urn to proxy's address
         flux(manager, cdp, address(this), wadC);
+
         // Exits token amount to the user's wallet as a token
         uint256 gemWadC = convertToGemUnits(gemJoin, wadC);
         GemJoinLike(gemJoin).exit(msg.sender, gemWadC);

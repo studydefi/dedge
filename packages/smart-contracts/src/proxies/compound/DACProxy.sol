@@ -217,7 +217,7 @@ contract DACProxy is
 
         DedgeMakerManager makerManager = DedgeMakerManager(address(uint160(dedgeMakerManagerAddress)));
         address cdpManager = addressRegistry.DssCdpManagerAddress();
-        bytes32 ilk = ManagerLike(cdpManager).ilks(cdpId);
+
         uint collateral = makerManager.getVaultCollateral(cdpManager, cdpId);
 
         // Allows daiJoin to call transferFrom
@@ -235,7 +235,7 @@ contract DACProxy is
         require(enterMarketErrors[0] == 0, "dacproxy-enter-gem-failed");
         require(enterMarketErrors[1] == 0, "dacproxy-enter-dai-failed");
 
-        if (ilk == bytes32("ETH-A")) {
+        if (ManagerLike(cdpManager).ilks(cdpId) == bytes32("ETH-A")) {
             // Free ETH (Maker)
             makerManager.wipeAllAndFreeETH(
                 cdpManager,
@@ -252,7 +252,7 @@ contract DACProxy is
                 "dacproxy-dai-borrow-fail"
             );
         } else {
-            // Free GEM (Maker)
+            // Free GEM
             makerManager.wipeAllAndFreeGem(
                 cdpManager,
                 collateralJoinAddress,
@@ -261,10 +261,28 @@ contract DACProxy is
                 collateral
             );
 
+            // Fix from Wei to ERC20 specific decimals
+            uint collateralFixed = makerManager.convertToERC20Decimals(
+                ICToken(collateralCTokenAddress).underlying(),
+                collateral
+            );
+
+            // Approve CToken Collateral underlying
+            // to call transferFrom
+            IERC20(ICToken(collateralCTokenAddress).underlying())
+                .approve(collateralCTokenAddress, collateralFixed);
+
             // Supply GEM and Borrow DAI (Compound)
+            // uint bal = IERC20(ICToken(collateralCTokenAddress).underlying())
+            //     .balanceOf(address(this));
+            // uint a = ICToken(collateralCTokenAddress).mint(
+            //     collateralFixed
+            // );
             require(
-                ICToken(collateralCTokenAddress).mint(collateral) == 0,
-                "dacproxy-import-vault-supply-fail"
+                ICToken(collateralCTokenAddress).mint(
+                    collateralFixed
+                ) == 0,
+                "dacproxy-gem-supply-fail"
             );
             require(
                 ICToken(addressRegistry.CDaiAddress()).borrow(totalDebt) == 0,
