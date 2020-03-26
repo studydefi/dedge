@@ -163,6 +163,8 @@ const main = async () => {
     let ethSupplyWei
     let usdcSupplyWei
     let repSupplyWei
+    let daiSupplyWei
+    let zrxSupplyWei
     
     let daiBorrowStorage = await cDaiContract.borrowBalanceStored(dacProxyAddress)
     let batBorrowStorage = await cBatContract.borrowBalanceStored(dacProxyAddress)
@@ -203,10 +205,14 @@ const main = async () => {
         ethSupplyWei = await cEtherContract.balanceOfUnderlying(dacProxyAddress)
         usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
         repSupplyWei = await cRepContract.balanceOfUnderlying(dacProxyAddress)
+        daiSupplyWei = await cDaiContract.balanceOfUnderlying(dacProxyAddress)
+        zrxSupplyWei = await cZrxContract.balanceOfUnderlying(dacProxyAddress)
 
         console.log(`ETH Supplied: ${ethers.utils.formatEther(ethSupplyWei.toString())}`)
         console.log(`USDC Supplied: ${ethers.utils.formatUnits(usdcSupplyWei.toString(), 6)}`)
         console.log(`REP Supplied: ${ethers.utils.formatEther(repSupplyWei.toString())}`)
+        console.log(`DAI Supplied: ${ethers.utils.formatEther(daiSupplyWei.toString())}`)
+        console.log(`ZRX Supplied: ${ethers.utils.formatEther(zrxSupplyWei.toString())}`)
         console.log('---------------')
     }
 
@@ -272,6 +278,7 @@ const main = async () => {
         await logBalances()
     }
 
+    // Helper functions
     const swapDebt = async (fromToken, toToken, fromAddress, toAddress, debtLeft, decimalPlaces=18) => {
         console.log(`Attempting to swap debt from ${fromToken} to ${toToken}`)
         console.log(`Want ${debtLeft} ${fromToken} debt left`)
@@ -312,8 +319,6 @@ const main = async () => {
         await logBalances()
     }
 
-    console.log('Due to AMM slippages, we recommend only swapping a maximum of ~97% of your portfolio')
-
     const swapCollateral = async (fromToken, toToken, fromAddress, toAddress, collateralLeft, decimalPlaces=18) => {
         console.log(`Attempting to swap collateral from ${fromToken} to ${toToken}`)
         console.log(`Want ${collateralLeft} ${fromToken} left`)
@@ -352,6 +357,119 @@ const main = async () => {
 
         await logUnderlyingBalances()
     }
+
+    const clearDebtDust = async (fromToken, toToken, fromAddress, toAddress, clearAmount, decimalPlaces=18) => {
+        console.log(`Attempting to clear debt dust from ${fromToken} to ${toToken}`)
+        console.log(`Want to move ${clearAmount} ${fromToken} to ${toToken}`)
+
+        const clearDustDebtCallback = IDACManager
+            .functions
+            .clearDebtDust
+            .encode([
+                addressRegistryAddress,
+                fromAddress,
+                ethers.utils.parseUnits(clearAmount.toString(), decimalPlaces),
+                toAddress,
+            ])
+
+        await tryAndWait(
+            dacProxyContract.execute(
+                dacManagerAddress,
+                clearDustDebtCallback,
+                {
+                    gasLimit: 4000000
+                }
+            )
+        )
+            
+        await logBalances()
+    }
+
+    const clearCollateralDust = async (fromToken, toToken, fromAddress, toAddress, clearAmount, decimalPlaces=18) => {
+        console.log(`Attempting to clear collateral dust from ${fromToken} to ${toToken}`)
+        console.log(`Want to move ${clearAmount} ${fromToken} to ${toToken}`)
+
+        const clearDustCollateralCallback = IDACManager
+            .functions
+            .clearCollateralDust
+            .encode([
+                addressRegistryAddress,
+                fromAddress,
+                ethers.utils.parseUnits(clearAmount.toString(), decimalPlaces),
+                toAddress,
+            ])
+
+        await tryAndWait(
+            dacProxyContract.execute(
+                dacManagerAddress,
+                clearDustCollateralCallback,
+                {
+                    gasLimit: 4000000
+                }
+            )
+        )
+            
+        await logUnderlyingBalances()
+    }
+
+    // Swapping begins here
+
+    await logBalances()
+    await logUnderlyingBalances()
+
+    // Clearing "dust" for debt
+    // await clearDebtDust(
+    //     'DAI',
+    //     'BAT',
+    //     addresses.compound.cDai,
+    //     addresses.compound.cBat,
+    //     10
+    // )
+
+    // await clearDebtDust(
+    //     'DAI',
+    //     'ETH',
+    //     addresses.compound.cDai,
+    //     addresses.compound.cEther,
+    //     100
+    // )
+
+    // await clearDebtDust(
+    //     'ETH',
+    //     'BAT',
+    //     addresses.compound.cEther,
+    //     addresses.compound.cBat,
+    //     0.25
+    // )
+
+    // Clearing "dust" for collateral
+    // await clearCollateralDust(
+    //     'ETH',
+    //     'DAI',
+    //     addresses.compound.cEther,
+    //     addresses.compound.cDai,
+    //     0.5
+    // )
+
+    // await clearCollateralDust(
+    //     'DAI',
+    //     'ZRX',
+    //     addresses.compound.cDai,
+    //     addresses.compound.cZRX,
+    //     10
+    // )
+
+    // await clearCollateralDust(
+    //     'DAI',
+    //     'ETH',
+    //     addresses.compound.cDai,
+    //     addresses.compound.cEther,
+    //     10
+    // )
+
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.log('Due to AMM slippages, we recommend only swapping a maximum of ~97% of your portfolio')
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 
     // Swap debt

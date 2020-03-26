@@ -230,7 +230,8 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             borrow(newCTokenAddress, borrowAmount);
 
             // Converts old token to target token
-            _tokenToToken(oldTokenUnderlying, newTokenUnderlying, borrowAmount, oldTokenUnderlyingDustAmount);
+            _tokenToEth(newTokenUnderlying, borrowAmount, ethAmount);
+            _ethToToken(oldTokenUnderlying, ethAmount, oldTokenUnderlyingDustAmount);
         }
 
         // Repays borrowed
