@@ -12,12 +12,18 @@ import "../../lib/dapphub/Proxy.sol";
 
 import "../../lib/uniswap/UniswapLiteBase.sol";
 
+import "../../lib/makerdao/DssProxyActionsBase.sol";
+
+import "../../managers/makerdao/DedgeMakerManager.sol";
+
 import "../../registries/AddressRegistry.sol";
 import "../../registries/ActionRegistry.sol";
 
 import "../../interfaces/IERC20.sol";
 import "../../interfaces/compound/ICEther.sol";
 import "../../interfaces/compound/ICToken.sol";
+import "../../interfaces/makerdao/IDssProxyActions.sol";
+import "../../interfaces/compound/IComptroller.sol";
 
 contract DACProxy is
     DSProxy(address(1)),
@@ -33,12 +39,28 @@ contract DACProxy is
 
     function() external payable {}
 
+    struct GenericCallData {
+        uint actionId;
+        address actionRegistryAddress;
+        address addressRegistryAddress;
+    }
+
     struct SwapOperationCalldata {
         uint actionId;
         address actionRegistryAddress;
         address addressRegistryAddress;
         address oldCTokenAddress;
         address newCTokenAddress;
+    }
+
+    struct ImportMakerVaultCallData {
+        uint actionId;
+        address actionRegistryAddress;
+        address addressRegistryAddress;
+        uint cdpId;
+        address collateralCTokenAddress;
+        address collateralJoinAddress;
+        address dedgeMakerManagerAddress;
     }
 
     // For future lego building blocks :)
@@ -182,6 +204,75 @@ contract DACProxy is
         }
     }
 
+    // Import maker vault
+    function _importMakerVault(
+        address dedgeMakerManagerAddress,
+        address addressRegistryAddress,
+        uint cdpId,
+        address collateralCTokenAddress,
+        address collateralJoinAddress,
+        uint totalDebt
+    ) internal {
+        AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
+
+        DedgeMakerManager makerManager = DedgeMakerManager(address(uint160(dedgeMakerManagerAddress)));
+        address cdpManager = addressRegistry.DssCdpManagerAddress();
+        bytes32 ilk = ManagerLike(cdpManager).ilks(cdpId);
+        uint collateral = makerManager.getVaultCollateral(cdpManager, cdpId);
+
+        // Allows daiJoin to call transferFrom
+        IERC20(addressRegistry.DaiAddress()).approve(dedgeMakerManagerAddress, uint(-1));
+
+        // Joins the ETH/GEM/DAI market if they haven't already
+        address[] memory enterMarketsCToken = new address[](2);
+        enterMarketsCToken[0] = collateralCTokenAddress;
+        enterMarketsCToken[1] = addressRegistry.CDaiAddress();
+
+        uint[] memory enterMarketErrors = IComptroller(
+            addressRegistry.CompoundComptrollerAddress()
+        ).enterMarkets(enterMarketsCToken);
+
+        require(enterMarketErrors[0] == 0, "dacproxy-enter-gem-failed");
+        require(enterMarketErrors[1] == 0, "dacproxy-enter-dai-failed");
+
+        if (ilk == bytes32("ETH-A")) {
+            // Free ETH (Maker)
+            makerManager.wipeAllAndFreeETH(
+                cdpManager,
+                addressRegistry.EthJoinAddress(),
+                addressRegistry.DaiJoinAddress(),
+                cdpId,
+                collateral
+            );
+
+            // Supply ETH and Borrow DAI (Compound)
+            ICEther(addressRegistry.CEtherAddress()).mint.value(collateral)();
+            require(
+                ICToken(addressRegistry.CDaiAddress()).borrow(totalDebt) == 0,
+                "dacproxy-dai-borrow-fail"
+            );
+        } else {
+            // Free GEM (Maker)
+            makerManager.wipeAllAndFreeGem(
+                cdpManager,
+                collateralJoinAddress,
+                addressRegistry.DaiJoinAddress(),
+                cdpId,
+                collateral
+            );
+
+            // Supply GEM and Borrow DAI (Compound)
+            require(
+                ICToken(collateralCTokenAddress).mint(collateral) == 0,
+                "dacproxy-import-vault-supply-fail"
+            );
+            require(
+                ICToken(addressRegistry.CDaiAddress()).borrow(totalDebt) == 0,
+                "dacproxy-dai-borrow-fail"
+            );
+        }
+    }
+
     // This is for Aave flashloans
     function executeOperation(
         address _reserve,
@@ -191,12 +282,13 @@ contract DACProxy is
     ) external
         auth
     {
-        // Decode params
-        SwapOperationCalldata memory soCalldata = abi.decode(_params, (SwapOperationCalldata));
+        // Generic call data to differentiate between the
+        // different kind of actions to take
+        // Bit hacky but it gets past the "stack too deep" thingo
+        GenericCallData memory gData = abi.decode(_params, (GenericCallData));
 
         // Gets registries
-        ActionRegistry actionRegistry = ActionRegistry(soCalldata.actionRegistryAddress);
-        AddressRegistry addressRegistry = AddressRegistry(soCalldata.addressRegistryAddress);
+        ActionRegistry actionRegistry = ActionRegistry(gData.actionRegistryAddress);
 
         // Assumes that once the action(s) are performed
         // we will have totalDebt would of _reserve to repay
@@ -204,32 +296,58 @@ contract DACProxy is
         uint protocolFee = _fee.div(2);
         uint totalDebt = _amount.add(_fee).add(protocolFee);
 
-        // If we're swapping debt
-        if (soCalldata.actionId == actionRegistry.ACTION_SWAP_DEBT()) {
+        // If we're swapping debt or collateral
+        // the reserve is going to be ETH
+        if (gData.actionId == actionRegistry.ACTION_SWAP_DEBT() ||
+            gData.actionId == actionRegistry.ACTION_SWAP_COLLATERAL()
+        ) {
+            SwapOperationCalldata memory soCalldata = abi.decode(_params, (SwapOperationCalldata));
+            if (gData.actionId == actionRegistry.ACTION_SWAP_DEBT()) {
+                _swapDebt(
+                    AddressRegistry(soCalldata.addressRegistryAddress).CEtherAddress(),
+                    soCalldata.oldCTokenAddress,
+                    soCalldata.newCTokenAddress,
+                    _amount,
+                    totalDebt
+                );
+            }
+            else if (gData.actionId == actionRegistry.ACTION_SWAP_COLLATERAL()) {
+                _swapCollateral(
+                    AddressRegistry(soCalldata.addressRegistryAddress).CEtherAddress(),
+                    soCalldata.oldCTokenAddress,
+                    soCalldata.newCTokenAddress,
+                    _amount,
+                    _fee.add(protocolFee)
+                );
+            }
 
-            _swapDebt(
-                addressRegistry.CEtherAddress(),
-                soCalldata.oldCTokenAddress,
-                soCalldata.newCTokenAddress,
-                _amount,
+            // Payout fee
+            protocolFeePayoutAddress.call.value(protocolFee)("");
+        }
+        
+        // If we're importing a vault, the reserve is going to be dai
+        else if (gData.actionId == actionRegistry.ACTION_IMPORT_VAULT()) {
+            ImportMakerVaultCallData memory ivCalldata = abi.decode(_params, (ImportMakerVaultCallData));
+
+            _importMakerVault(
+                ivCalldata.dedgeMakerManagerAddress,
+                ivCalldata.addressRegistryAddress,
+                ivCalldata.cdpId,
+                ivCalldata.collateralCTokenAddress,
+                ivCalldata.collateralJoinAddress,
                 totalDebt
             );
-        } else if (soCalldata.actionId == actionRegistry.ACTION_SWAP_COLLATERAL()) {
-            _swapCollateral(
-                addressRegistry.CEtherAddress(),
-                soCalldata.oldCTokenAddress,
-                soCalldata.newCTokenAddress,
-                _amount,
-                _fee.add(protocolFee)
-            );
-        } else {
+
+            // Protocol fee
+            IERC20(_reserve).transfer(protocolFeePayoutAddress, protocolFee);
+        }
+
+        // Otherwise revert
+        else {
             revert("dacproxy-invalid-action");
         }
 
         // Repays aave
         transferFundsBackToPoolInternal(_reserve, _amount.add(_fee));
-
-        // Payout fee
-        protocolFeePayoutAddress.call.value(protocolFee)("");
     }
 }
