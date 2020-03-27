@@ -6,31 +6,31 @@ pragma solidity 0.5.16;
 pragma experimental ABIEncoderV2;
 
 
-import "../../lib/compound/CompoundBase.sol";
+import "../lib/compound/CompoundBase.sol";
 
-import "../../lib/dapphub/Guard.sol";
+import "../lib/dapphub/Guard.sol";
 
-import "../../lib/uniswap/UniswapLiteBase.sol";
+import "../lib/uniswap/UniswapLiteBase.sol";
 
-import "../../interfaces/aave/ILendingPoolAddressesProvider.sol";
-import "../../interfaces/aave/ILendingPool.sol";
-import "../../interfaces/aave/ILendingPoolParametersProvider.sol";
+import "../interfaces/aave/ILendingPoolAddressesProvider.sol";
+import "../interfaces/aave/ILendingPool.sol";
+import "../interfaces/aave/ILendingPoolParametersProvider.sol";
 
-import "../../interfaces/compound/ICompoundPriceOracle.sol";
-import "../../interfaces/compound/IComptroller.sol";
-import "../../interfaces/compound/ICEther.sol";
-import "../../interfaces/compound/ICToken.sol";
+import "../interfaces/compound/ICompoundPriceOracle.sol";
+import "../interfaces/compound/IComptroller.sol";
+import "../interfaces/compound/ICEther.sol";
+import "../interfaces/compound/ICToken.sol";
 
-import "../../interfaces/IERC20.sol";
+import "../interfaces/IERC20.sol";
 
-import "../../registries/AddressRegistry.sol";
-import "../../registries/ActionRegistry.sol";
+import "../registries/AddressRegistry.sol";
+import "../registries/ActionRegistry.sol";
 
-import "../../proxies/DACProxy.sol";
+import "../proxies/DACProxy.sol";
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
-contract DACManager is UniswapLiteBase, CompoundBase {
+contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
     using SafeMath for uint;
 
     struct SwapOperationCalldata {

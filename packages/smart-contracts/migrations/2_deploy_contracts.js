@@ -2,14 +2,14 @@ const fs = require("fs");
 const path = require("path");
 
 const DACProxyFactory = artifacts.require("DACProxyFactory");
-const DACManager = artifacts.require("DACManager");
+const DedgeCompoundManager = artifacts.require("DedgeCompoundManager");
 const DedgeMakerManager = artifacts.require("DedgeMakerManager");
 const AddressRegistry = artifacts.require("AddressRegistry");
 const ActionRegistry = artifacts.require("ActionRegistry");
 
 module.exports = async deployer => {
     await deployer.deploy(DACProxyFactory)
-    await deployer.deploy(DACManager)
+    await deployer.deploy(DedgeCompoundManager)
     await deployer.deploy(DedgeMakerManager)
     await deployer.deploy(AddressRegistry)
     await deployer.deploy(ActionRegistry)
@@ -17,7 +17,7 @@ module.exports = async deployer => {
     // Saves to a file if needed
     const data = JSON.stringify({
         dacProxyFactoryAddress: DACProxyFactory.address,
-        dacManagerAddress: DACManager.address,
+        dedgeCompoundManagerAddress: DedgeCompoundManager.address,
         dedgeMakerManagerAddress: DedgeMakerManager.address,
         addressRegistryAddress: AddressRegistry.address,
         actionRegistryAddress: ActionRegistry.address,

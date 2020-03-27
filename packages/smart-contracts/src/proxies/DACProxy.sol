@@ -1,31 +1,16 @@
 /*
     Main contract to handle Aave flashloans on Compound Finance.
-    (D)edge's (A)ave flashloans on (C)ompound finance Proxy.
+    (D)edge's (A)ave (C)ommon Proxy.
 */
 
 pragma solidity 0.5.16;
 pragma experimental ABIEncoderV2;
 
 import "../lib/BytesLib.sol";
-
 import "../lib/aave/FlashLoanReceiverBase.sol";
-
 import "../lib/dapphub/Proxy.sol";
 
-import "../lib/uniswap/UniswapLiteBase.sol";
-
-import "../lib/makerdao/DssProxyActionsBase.sol";
-
-import "../managers/makerdao/DedgeMakerManager.sol";
-
-import "../registries/AddressRegistry.sol";
-import "../registries/ActionRegistry.sol";
-
 import "../interfaces/IERC20.sol";
-import "../interfaces/compound/ICEther.sol";
-import "../interfaces/compound/ICToken.sol";
-import "../interfaces/makerdao/IDssProxyActions.sol";
-import "../interfaces/compound/IComptroller.sol";
 
 contract DACProxy is
     DSProxy(address(1)),

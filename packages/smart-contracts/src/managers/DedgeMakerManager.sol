@@ -3,33 +3,33 @@
 pragma solidity 0.5.16;
 pragma experimental ABIEncoderV2;
 
-import "../../lib/aave/FlashLoanReceiverBase.sol";
+import "../lib/aave/FlashLoanReceiverBase.sol";
 
-import "../../lib/makerdao/DssProxyActionsBase.sol";
+import "../lib/makerdao/DssProxyActionsBase.sol";
 
-import "../../lib/uniswap/UniswapBase.sol";
+import "../lib/uniswap/UniswapBase.sol";
 
-import "../../lib/dapphub/Guard.sol";
+import "../lib/dapphub/Guard.sol";
 
-import "../../proxies/DACProxy.sol";
+import "../proxies/DACProxy.sol";
 
 
-import "../../interfaces/aave/ILendingPoolAddressesProvider.sol";
-import "../../interfaces/aave/ILendingPool.sol";
+import "../interfaces/aave/ILendingPoolAddressesProvider.sol";
+import "../interfaces/aave/ILendingPool.sol";
 
-import "../../interfaces/uniswap/IUniswapExchange.sol";
-import "../../interfaces/uniswap/IUniswapFactory.sol";
+import "../interfaces/uniswap/IUniswapExchange.sol";
+import "../interfaces/uniswap/IUniswapFactory.sol";
 
-import "../../interfaces/IERC20.sol";
+import "../interfaces/IERC20.sol";
 
-import "../../interfaces/compound/IComptroller.sol";
-import "../../interfaces/compound/ICToken.sol";
-import "../../interfaces/compound/ICEther.sol";
+import "../interfaces/compound/IComptroller.sol";
+import "../interfaces/compound/ICToken.sol";
+import "../interfaces/compound/ICEther.sol";
 
-import "../../interfaces/makerdao/IDssProxyActions.sol";
+import "../interfaces/makerdao/IDssProxyActions.sol";
 
-import "../../registries/ActionRegistry.sol";
-import "../../registries/AddressRegistry.sol";
+import "../registries/ActionRegistry.sol";
+import "../registries/AddressRegistry.sol";
 
 
 contract DedgeMakerManager is DssProxyActionsBase {
