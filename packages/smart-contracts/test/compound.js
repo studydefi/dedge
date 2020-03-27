@@ -355,16 +355,6 @@ const main = async () => {
         //     address oldCTokenAddress;
         //     address newCTokenAddress;
         // }
-        const swapOperationCalldata = ethers.utils.defaultAbiCoder.encode(
-            [ "address", "address", "address" ],
-            [ addressRegistryAddress, fromAddress, toAddress ]
-        )
-
-        // struct SwapOperationCalldata {
-        //     address addressRegistryAddress;
-        //     address oldCTokenAddress;
-        //     address newCTokenAddress;
-        // }
     
         const swapOperationStructData = ethers.utils.defaultAbiCoder.encode(
             [ "address", "address", "address" ],
@@ -465,7 +455,7 @@ const main = async () => {
     await logBalances()
     await logUnderlyingBalances()
 
-    // Clearing "dust" for debt
+    // // Clearing "dust" for debt
     // await clearDebtDust(
     //     'DAI',
     //     'BAT',
@@ -490,7 +480,7 @@ const main = async () => {
     //     0.25
     // )
 
-    // Clearing "dust" for collateral
+    // // Clearing "dust" for collateral
     // await clearCollateralDust(
     //     'ETH',
     //     'DAI',
@@ -547,7 +537,7 @@ const main = async () => {
     }
 
     usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
-    const usdcCollateralLeft = 30
+    const usdcCollateralLeft = 200
     if (parseInt(ethers.utils.formatEther(usdcSupplyWei.toString())) !== usdcCollateralLeft) {
         await swapCollateral(
             'USDC',
@@ -585,7 +575,7 @@ const main = async () => {
     }
 
     let ethBorrowed = ethers.utils.formatEther(ethBorrowStorage.toString())
-    const ethDebtLeft = '0.1'
+    const ethDebtLeft = '0.5'
     if (parseFloat(ethBorrowed) > parseFloat(ethDebtLeft) + 0.1) {
         await swapDebt(
             'ETH',
