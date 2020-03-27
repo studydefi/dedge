@@ -2,9 +2,9 @@ pragma solidity 0.5.16;
 
 import "./DACProxy.sol";
 
-import "../../lib/dapphub/Guard.sol";
+import "../lib/dapphub/Guard.sol";
 
-import "../../interfaces/aave/ILendingPoolAddressesProvider.sol";
+import "../interfaces/aave/ILendingPoolAddressesProvider.sol";
 
 contract DACProxyFactory {
     event Created(address indexed sender, address indexed owner, address proxy, address cache);

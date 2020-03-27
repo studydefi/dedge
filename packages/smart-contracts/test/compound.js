@@ -12,13 +12,13 @@ const ComptrollerAbi = require('../build/IComptroller.json').abi
 
 const { 
     dacProxyFactoryAddress,
-    dacManagerAddress,
+    dedgeCompoundManagerAddress,
     addressRegistryAddress,
     actionRegistryAddress
 } = require("../build/DeployedAddresses.json");
 
 const dacProxyDef = require("../build/DACProxy.json");
-const dacManagerDef = require("../build/DACManager.json");
+const dedgeCompoundManagerDef = require("../build/DedgeCompoundManager.json");
 const addressRegistryDef = require("../build/AddressRegistry.json");
 const actionRegistryDef = require("../build/ActionRegistry.json");
 const dacProxyFactoryDef = require("../build/DACProxyFactory.json");
@@ -91,9 +91,9 @@ const dacProxyFactoryContract = new ethers.Contract(
     wallet
 )
 
-const dacManagerContract = new ethers.Contract(
-    dacManagerAddress,
-    dacManagerDef.abi,
+const dedgeCompoundManagerContract = new ethers.Contract(
+    dedgeCompoundManagerAddress,
+    dedgeCompoundManagerDef.abi,
     wallet
 )
 
@@ -132,7 +132,7 @@ const batContract = newERC20Contract(addresses.tokens.bat)
 const zrxContract = newERC20Contract(addresses.tokens.zrx)
 const usdcContract = newERC20Contract(addresses.tokens.usdc)
 
-const IDACManager = new ethers.utils.Interface(dacManagerDef.abi)
+const IDedgeCompoundManager = new ethers.utils.Interface(dedgeCompoundManagerDef.abi)
 
 const main = async () => {
     // Get/Create DACProxy
@@ -221,7 +221,7 @@ const main = async () => {
     if (marketsEntered.length == 0) {
         console.log("No markets entered, entering into Compound v2 market")
 
-        const marketEnterCalldata = IDACManager
+        const marketEnterCalldata = IDedgeCompoundManager
             .functions
             .enterMarketsAndApproveCTokens
             .encode([
@@ -237,7 +237,7 @@ const main = async () => {
 
         await tryAndWait(
             dacProxyContract.execute(
-                dacManagerAddress,
+                dedgeCompoundManagerAddress,
                 marketEnterCalldata,
                 {
                     gasLimit: 4000000
@@ -254,7 +254,7 @@ const main = async () => {
     if (parseInt(ethers.utils.formatEther(daiBalanceWei.toString())) < daiToBorrow) {
         console.log(`Attempting to supply ${ethToSupply} ETH and borrow ${daiToBorrow.toString()} DAI`)
 
-        const supplyEthAndBorrowCalldata = IDACManager
+        const supplyEthAndBorrowCalldata = IDedgeCompoundManager
             .functions
             .supplyETHAndBorrow
             .encode([
@@ -264,7 +264,7 @@ const main = async () => {
         
         await tryAndWait(
             dacProxyContract.execute(
-                dacManagerAddress,
+                dedgeCompoundManagerAddress,
                 supplyEthAndBorrowCalldata,
                 {
                     gasLimit: 4000000,
@@ -292,22 +292,41 @@ const main = async () => {
         const tokenBorrowWei = await CTokenContract.borrowBalanceStored(dacProxyAddress)
         const tokenDelta = tokenBorrowWei.sub(ethers.utils.parseUnits(debtLeft.toString(), decimalPlaces))
 
-        const swapDebtCallbackData = IDACManager
+        // struct SwapOperationCalldata {
+        //     address addressRegistryAddress;
+        //     address oldCTokenAddress;
+        //     address newCTokenAddress;
+        // }
+    
+        const swapOperationStructData = ethers.utils.defaultAbiCoder.encode(
+            [ "address", "address", "address" ],
+            [ addressRegistryAddress, fromAddress, toAddress ]
+        )
+
+        const executeOperationCalldataParams = IDedgeCompoundManager
             .functions
-            .swapDebt
+            .swapDebtPostLoan
             .encode([
-                actionRegistryAddress,
-                addressRegistryAddress,
+                0, 0, 0,    // Doesn't matter as the right data will be injected in later on
+                swapOperationStructData
+            ])
+        
+        const swapOperationCalldata = IDedgeCompoundManager
+            .functions
+            .swapOperation
+            .encode([
+                dedgeCompoundManagerAddress,
                 dacProxyAddress,
+                addressRegistryAddress,
                 fromAddress,
                 tokenDelta.toString(),
-                toAddress
+                executeOperationCalldataParams
             ])
 
         await tryAndWait(
             dacProxyContract.execute(
-                dacManagerAddress,
-                swapDebtCallbackData,
+                dedgeCompoundManagerAddress,
+                swapOperationCalldata,
                 {
                     gasLimit: 4000000,
                 }
@@ -327,25 +346,45 @@ const main = async () => {
             CTokenAbi,
             wallet
         )
+
         const tokenSupplyWei = await CTokenContract.balanceOfUnderlying(dacProxyAddress)
         const tokenDelta = tokenSupplyWei - ethers.utils.parseUnits(collateralLeft.toString(), decimalPlaces)
 
-        const swapCollateralCallbackData = IDACManager
+        // struct SwapOperationCalldata {
+        //     address addressRegistryAddress;
+        //     address oldCTokenAddress;
+        //     address newCTokenAddress;
+        // }
+    
+        const swapOperationStructData = ethers.utils.defaultAbiCoder.encode(
+            [ "address", "address", "address" ],
+            [ addressRegistryAddress, fromAddress, toAddress ]
+        )
+
+        const executeOperationCalldataParams = IDedgeCompoundManager
             .functions
-            .swapCollateral
+            .swapCollateralPostLoan
             .encode([
-                actionRegistryAddress,
-                addressRegistryAddress,
+                0, 0, 0,    // Doesn't matter as the right data will be injected in later on
+                swapOperationStructData
+            ])
+        
+        const swapOperationCalldata = IDedgeCompoundManager
+            .functions
+            .swapOperation
+            .encode([
+                dedgeCompoundManagerAddress,
                 dacProxyAddress,
+                addressRegistryAddress,
                 fromAddress,
                 tokenDelta.toString(),
-                toAddress
+                executeOperationCalldataParams
             ])
 
         await tryAndWait(
             dacProxyContract.execute(
-                dacManagerAddress,
-                swapCollateralCallbackData,
+                dedgeCompoundManagerAddress,
+                swapOperationCalldata,
                 {
                     gasLimit: 4000000,
                 }
@@ -361,7 +400,7 @@ const main = async () => {
         console.log(`Attempting to clear debt dust from ${fromToken} to ${toToken}`)
         console.log(`Want to move ${clearAmount} ${fromToken} to ${toToken}`)
 
-        const clearDustDebtCallback = IDACManager
+        const clearDustDebtCallback = IDedgeCompoundManager
             .functions
             .clearDebtDust
             .encode([
@@ -373,7 +412,7 @@ const main = async () => {
 
         await tryAndWait(
             dacProxyContract.execute(
-                dacManagerAddress,
+                dedgeCompoundManagerAddress,
                 clearDustDebtCallback,
                 {
                     gasLimit: 4000000
@@ -388,7 +427,7 @@ const main = async () => {
         console.log(`Attempting to clear collateral dust from ${fromToken} to ${toToken}`)
         console.log(`Want to move ${clearAmount} ${fromToken} to ${toToken}`)
 
-        const clearDustCollateralCallback = IDACManager
+        const clearDustCollateralCallback = IDedgeCompoundManager
             .functions
             .clearCollateralDust
             .encode([
@@ -400,7 +439,7 @@ const main = async () => {
 
         await tryAndWait(
             dacProxyContract.execute(
-                dacManagerAddress,
+                dedgeCompoundManagerAddress,
                 clearDustCollateralCallback,
                 {
                     gasLimit: 4000000
@@ -416,7 +455,7 @@ const main = async () => {
     await logBalances()
     await logUnderlyingBalances()
 
-    // Clearing "dust" for debt
+    // // Clearing "dust" for debt
     // await clearDebtDust(
     //     'DAI',
     //     'BAT',
@@ -441,7 +480,7 @@ const main = async () => {
     //     0.25
     // )
 
-    // Clearing "dust" for collateral
+    // // Clearing "dust" for collateral
     // await clearCollateralDust(
     //     'ETH',
     //     'DAI',
@@ -498,7 +537,7 @@ const main = async () => {
     }
 
     usdcSupplyWei = await cUsdcContract.balanceOfUnderlying(dacProxyAddress)
-    const usdcCollateralLeft = 30
+    const usdcCollateralLeft = 200
     if (parseInt(ethers.utils.formatEther(usdcSupplyWei.toString())) !== usdcCollateralLeft) {
         await swapCollateral(
             'USDC',
@@ -536,7 +575,7 @@ const main = async () => {
     }
 
     let ethBorrowed = ethers.utils.formatEther(ethBorrowStorage.toString())
-    const ethDebtLeft = '0.1'
+    const ethDebtLeft = '0.5'
     if (parseFloat(ethBorrowed) > parseFloat(ethDebtLeft) + 0.1) {
         await swapDebt(
             'ETH',
