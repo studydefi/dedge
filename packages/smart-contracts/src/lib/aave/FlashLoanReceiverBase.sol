@@ -6,7 +6,6 @@ import "../../interfaces/aave/IFlashLoanReceiver.sol";
 import "../../interfaces/aave/ILendingPoolAddressesProvider.sol";
 
 contract FlashLoanReceiverBase is IFlashLoanReceiver {
-    using SafeERC20 for IERC20;
     using SafeMath for uint256;
 
     address constant ETHADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
@@ -27,7 +26,7 @@ contract FlashLoanReceiverBase is IFlashLoanReceiver {
             return;
         }
 
-        IERC20(_reserve).safeTransfer(_destination, _amount);
+        IERC20(_reserve).transfer(_destination, _amount);
     }
 
     function getBalanceInternal(address _target, address _reserve) internal view returns(uint256) {

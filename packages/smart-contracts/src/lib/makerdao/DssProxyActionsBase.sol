@@ -73,9 +73,13 @@ contract Common {
 
     // Public functions
 
-    function daiJoin_join(address apt, address urn, uint wad) public {
-        // Gets DAI from the user's wallet
-        DaiJoinLike(apt).dai().transferFrom(msg.sender, address(this), wad);
+    function daiJoin_join(
+        address apt,
+        address urn,
+        uint wad
+    ) public {
+        // DAI Already flashloaned
+        // DaiJoinLike(apt).dai().transferFrom(dacProxyAddress, dedgeMakerManagerAddress, wad);
         // Approves adapter to take the DAI amount
         DaiJoinLike(apt).dai().approve(apt, wad);
         // Joins DAI into the vat
@@ -155,28 +159,6 @@ contract DssProxyActionsBase is Common {
         wad = mul(wad, RAY) < rad ? wad + 1 : wad;
     }
 
-    // Public functions
-    function ethJoin_join(address apt, address urn) public payable {
-        // Wraps ETH in WETH
-        GemJoinLike(apt).gem().deposit.value(msg.value)();
-        // Approves adapter to take the WETH amount
-        GemJoinLike(apt).gem().approve(address(apt), msg.value);
-        // Joins WETH collateral into the vat
-        GemJoinLike(apt).join(urn, msg.value);
-    }
-
-    function gemJoin_join(address apt, address urn, uint wad, bool transferFrom) public {
-        // Only executes for tokens that have approval/transferFrom implementation
-        if (transferFrom) {
-            // Gets token from the user's wallet
-            GemJoinLike(apt).gem().transferFrom(msg.sender, address(this), wad);
-            // Approves adapter to take the token amount
-            GemJoinLike(apt).gem().approve(apt, wad);
-        }
-        // Joins token collateral into the vat
-        GemJoinLike(apt).join(urn, wad);
-    }
-
     function open(
         address manager,
         bytes32 ilk,
@@ -201,15 +183,6 @@ contract DssProxyActionsBase is Common {
         uint wad
     ) public {
         ManagerLike(manager).flux(cdp, dst, wad);
-    }
-
-    function move(
-        address manager,
-        uint cdp,
-        address dst,
-        uint rad
-    ) public {
-        ManagerLike(manager).move(cdp, dst, rad);
     }
 
     function frob(
@@ -249,7 +222,7 @@ contract DssProxyActionsBase is Common {
         // Converts WETH to ETH
         GemJoinLike(ethJoin).gem().withdraw(wadC);
         // Sends ETH back to the user's wallet
-        msg.sender.transfer(wadC);
+        // msg.sender.transfer(wadC);
     }
 
     function wipeAllAndFreeGem(
@@ -266,20 +239,17 @@ contract DssProxyActionsBase is Common {
 
         // Joins DAI amount into the vat
         daiJoin_join(daiJoin, urn, _getWipeAllWad(vat, urn, urn, ilk));
-        
+        uint wad18 = convertTo18(gemJoin, wadC);
         // Paybacks debt to the CDP and unlocks token amount from it
         frob(
             manager,
             cdp,
-            -toInt(wadC),
+            -toInt(wad18),
             -int(art)
         );
         // Moves the amount from the CDP urn to proxy's address
-        flux(manager, cdp, address(this), wadC);
-
+        flux(manager, cdp, address(this), wad18);
         // Exits token amount to the user's wallet as a token
-        uint256 gemWadC = convertToGemUnits(gemJoin, wadC);
-        GemJoinLike(gemJoin).exit(msg.sender, gemWadC);
+        GemJoinLike(gemJoin).exit(address(this), wadC);
     }
-
 }
