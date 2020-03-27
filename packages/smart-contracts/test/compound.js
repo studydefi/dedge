@@ -292,22 +292,41 @@ const main = async () => {
         const tokenBorrowWei = await CTokenContract.borrowBalanceStored(dacProxyAddress)
         const tokenDelta = tokenBorrowWei.sub(ethers.utils.parseUnits(debtLeft.toString(), decimalPlaces))
 
-        const swapDebtCallbackData = IDACManager
+        // struct SwapOperationCalldata {
+        //     address addressRegistryAddress;
+        //     address oldCTokenAddress;
+        //     address newCTokenAddress;
+        // }
+    
+        const swapOperationStructData = ethers.utils.defaultAbiCoder.encode(
+            [ "address", "address", "address" ],
+            [ addressRegistryAddress, fromAddress, toAddress ]
+        )
+
+        const executeOperationCalldataParams = IDACManager
             .functions
-            .swapDebt
+            .swapDebtPostLoan
             .encode([
-                actionRegistryAddress,
-                addressRegistryAddress,
+                0, 0, 0,    // Doesn't matter as the right data will be injected in later on
+                swapOperationStructData
+            ])
+        
+        const swapOperationCalldata = IDACManager
+            .functions
+            .swapOperation
+            .encode([
+                dacManagerAddress,
                 dacProxyAddress,
+                addressRegistryAddress,
                 fromAddress,
                 tokenDelta.toString(),
-                toAddress
+                executeOperationCalldataParams
             ])
 
         await tryAndWait(
             dacProxyContract.execute(
                 dacManagerAddress,
-                swapDebtCallbackData,
+                swapOperationCalldata,
                 {
                     gasLimit: 4000000,
                 }
@@ -327,25 +346,55 @@ const main = async () => {
             CTokenAbi,
             wallet
         )
+
         const tokenSupplyWei = await CTokenContract.balanceOfUnderlying(dacProxyAddress)
         const tokenDelta = tokenSupplyWei - ethers.utils.parseUnits(collateralLeft.toString(), decimalPlaces)
 
-        const swapCollateralCallbackData = IDACManager
+        // struct SwapOperationCalldata {
+        //     address addressRegistryAddress;
+        //     address oldCTokenAddress;
+        //     address newCTokenAddress;
+        // }
+        const swapOperationCalldata = ethers.utils.defaultAbiCoder.encode(
+            [ "address", "address", "address" ],
+            [ addressRegistryAddress, fromAddress, toAddress ]
+        )
+
+        // struct SwapOperationCalldata {
+        //     address addressRegistryAddress;
+        //     address oldCTokenAddress;
+        //     address newCTokenAddress;
+        // }
+    
+        const swapOperationStructData = ethers.utils.defaultAbiCoder.encode(
+            [ "address", "address", "address" ],
+            [ addressRegistryAddress, fromAddress, toAddress ]
+        )
+
+        const executeOperationCalldataParams = IDACManager
             .functions
-            .swapCollateral
+            .swapCollateralPostLoan
             .encode([
-                actionRegistryAddress,
-                addressRegistryAddress,
+                0, 0, 0,    // Doesn't matter as the right data will be injected in later on
+                swapOperationStructData
+            ])
+        
+        const swapOperationCalldata = IDACManager
+            .functions
+            .swapOperation
+            .encode([
+                dacManagerAddress,
                 dacProxyAddress,
+                addressRegistryAddress,
                 fromAddress,
                 tokenDelta.toString(),
-                toAddress
+                executeOperationCalldataParams
             ])
 
         await tryAndWait(
             dacProxyContract.execute(
                 dacManagerAddress,
-                swapCollateralCallbackData,
+                swapOperationCalldata,
                 {
                     gasLimit: 4000000,
                 }

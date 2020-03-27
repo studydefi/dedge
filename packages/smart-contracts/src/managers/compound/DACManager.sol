@@ -26,14 +26,22 @@ import "../../interfaces/IERC20.sol";
 import "../../registries/AddressRegistry.sol";
 import "../../registries/ActionRegistry.sol";
 
-import "../../proxies/compound/DACProxy.sol";
+import "../../proxies/DACProxy.sol";
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract DACManager is UniswapLiteBase, CompoundBase {
     using SafeMath for uint;
 
-    function _guardPermit(address g, address src) internal {
+    struct SwapOperationCalldata {
+        address addressRegistryAddress;
+        address oldCTokenAddress;
+        address newCTokenAddress;
+    }
+
+    function _proxyGuardPermit(address payable proxyAddress, address src) internal {
+        address g = address(DACProxy(proxyAddress).authority());
+
         DSGuard(g).permit(
             bytes32(bytes20(address(src))),
             DSGuard(g).ANY(),
@@ -41,7 +49,9 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         );
     }
 
-    function _guardForbid(address g, address src) internal {
+    function _proxyGuardForbid(address payable proxyAddress, address src) internal {
+        address g = address(DACProxy(proxyAddress).authority());
+
         DSGuard(g).forbid(
             bytes32(bytes20(address(src))),
             DSGuard(g).ANY(),
@@ -49,35 +59,175 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         );
     }
 
-    struct SwapOperationCalldata {
-        uint actionId;
-        address actionRegistryAddress;
-        address addressRegistryAddress;
-        address oldCTokenAddress;
-        address newCTokenAddress;
+    function swapDebtPostLoan(
+        uint _loanAmount,
+        uint _aaveFee,
+        uint _protocolFee,
+        bytes calldata _data
+    ) external {
+        SwapOperationCalldata memory soCalldata = abi.decode(_data, (SwapOperationCalldata));
+
+        AddressRegistry addressRegistry = AddressRegistry(soCalldata.addressRegistryAddress);
+
+        address oldCTokenAddress = soCalldata.oldCTokenAddress;
+        address newCTokenAddress = soCalldata.newCTokenAddress;
+
+        uint debtAmount = _loanAmount.add(_aaveFee).add(_protocolFee);
+
+        // Note: debtAmount = loanAmount + fees
+        // 1. Has ETH from Aave flashloan
+        // 2. Converts ETH to oldCToken underlying
+        // 3. Repays oldCToken underlying
+        // 4. Calculates new amount to borrow from new token to repay debtAmount
+        // 5. Borrows from new token
+        // 6. Convert new token to ETH
+
+        // Steps 2 + 3
+        // Converts ETH to oldCToken underlying and repay
+        // Unless old target underlying is already ether
+        if (oldCTokenAddress == addressRegistry.CEtherAddress()) {
+            repayBorrow(oldCTokenAddress, _loanAmount);
+        } else {
+            // Gets old token underlying and amount
+            address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+
+            uint oldTokenUnderlyingAmount = _ethToToken(
+                oldTokenUnderlying,
+                _loanAmount
+            );
+
+            // Approves CToken proxy and repays them
+            IERC20(oldTokenUnderlying)
+                .approve(oldCTokenAddress, oldTokenUnderlyingAmount);
+
+            // Repays CToken
+            repayBorrow(oldCTokenAddress, oldTokenUnderlyingAmount);
+        }
+
+        // Steps 4, 5, 6
+        // Calculates new debt amount to borrow
+        // Unless new target underlying is already ether
+        if (newCTokenAddress == addressRegistry.CEtherAddress()) {
+            borrow(newCTokenAddress, debtAmount);
+        } else {
+            // Gets new token underlying
+            address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+
+            // Calculates amount of old token underlying that needs to be borrowed
+            // to repay debts
+            uint newTokenUnderlyingAmount = _getTokenToEthOutput(
+                newTokenUnderlying,
+                debtAmount
+            );
+
+            // Borrows new debt
+            borrow(newCTokenAddress, newTokenUnderlyingAmount);
+
+            // Converts to ether
+            // Note this part is a bit more strict as we need to have
+            // enough ETH to repay Aave
+            _tokenToEth(newTokenUnderlying, newTokenUnderlyingAmount, debtAmount);
+        }
     }
 
-    // Generic swap operation
-    function _swapOperation(
-        uint actionId,
-        address actionRegistryAddress,
-        address addressRegistryAddress,
+    function swapCollateralPostLoan(
+        uint _loanAmount,
+        uint _aaveFee,
+        uint _protocolFee,
+        bytes calldata _data
+    ) external {
+        SwapOperationCalldata memory soCalldata = abi.decode(_data, (SwapOperationCalldata));
+
+        AddressRegistry addressRegistry = AddressRegistry(soCalldata.addressRegistryAddress);
+
+        address oldCTokenAddress = soCalldata.oldCTokenAddress;
+        address newCTokenAddress = soCalldata.newCTokenAddress;
+
+        // 1. Has ETH from Aave flashloan
+        // 2. Converts ETH into newCToken underlying
+        // 3. Supplies newCToken underlying
+        // 4. Redeems oldCToken underlying
+        // 5. Converts outCToken underlying to ETH
+        // 6. Borrow <fee> ETH to repay aave
+
+        // Steps 2 + 3
+        // Converts ETH to newCToken underlying and supply
+        // Unless old target underlying is already ether
+        uint repayAmount = _loanAmount.sub(_aaveFee).sub(_protocolFee);
+
+        if (newCTokenAddress == addressRegistry.CEtherAddress()) {
+            supply(newCTokenAddress, repayAmount);
+        } else {
+            // Gets new token underlying and converts ETH into newCToken underlying
+            address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
+            uint newTokenUnderlyingAmount = _ethToToken(
+                newTokenUnderlying,
+                repayAmount
+            );
+
+            // Supplies new CTokens
+            supply(newCTokenAddress, newTokenUnderlyingAmount);
+        }
+
+        // Steps 4, 5
+        // Redeem CToken underlying
+        if (oldCTokenAddress == addressRegistry.CEtherAddress()) {
+            redeemUnderlying(oldCTokenAddress, _loanAmount);
+        } else {
+            // Gets old token underlying and amount to redeem (based on uniswap)
+            address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
+            uint oldTokenUnderlyingAmount = _getTokenToEthOutput(oldTokenUnderlying, _loanAmount);
+
+            // Redeems them
+            redeemUnderlying(oldCTokenAddress, oldTokenUnderlyingAmount);
+
+            // Converts them into ETH
+            _tokenToEth(oldTokenUnderlying, oldTokenUnderlyingAmount, _loanAmount);
+        }
+    }
+
+    /*
+    Main entry point for swapping collateral / debt
+
+    @params:
+
+        dedgeCompoundManagerAddress: Dedge Compound Manager address
+        dacProxyAddress: User's proxy address
+        addressRegistryAddress: AddressRegistry's Address
+        oldCTokenAddress: oldCToken address
+        oldTokenUnderlyingDelta: Amount of tokens to swap from old c token's underlying
+        executeOperationCalldataParams:
+            Abi-encoded `data` used by User's proxy's `execute(address, <data>)` function.
+            Used to delegatecall to another contract (i.e. this contract) in the context
+            of the proxy. This allows us to decouple the logic of handling flashloans
+            from the proxy contract. In this specific case, it is expecting the results
+            from: (from JS)
+
+            ```
+                const IDedgeCompoundManager = ethers.utils.Interface(DedgeCompoundManager.abi)
+
+                const executeOperationCalldataParams = IDedgeCompoundManager
+                    .functions
+                    .swapDebt OR .swapCollateral
+                    .encode([
+                        <parameters>
+                    ])
+            ```
+    */
+    function swapOperation(
+        address dedgeCompoundManagerAddress,
         address payable dacProxyAddress,
+        address addressRegistryAddress,
         address oldCTokenAddress,            // Old CToken address for [debt|collateral]
         uint oldTokenUnderlyingDelta,        // Amount of old tokens to swap to new tokens
-        address newCTokenAddress             // New  address for [debt|collateral] (must be a cToken address)
-    ) internal {
+        bytes calldata executeOperationCalldataParams
+    ) external {
         // Calling from dacProxy context (msg.sender is dacProxy)
         // 1. Get amount of ETH obtained by selling that from Uniswap
         // 2. Flashloans ETH to dacProxy
-        require(oldCTokenAddress != newCTokenAddress, "cmpd-old-new-debt-address-same");
-        
+
         // Gets registries
         AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
-        ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
-
-        // Get user guard
-        address guardAddress = address(DACProxy(dacProxyAddress).authority());
 
         // 1. Get amount of ETH needed
         // If the old target is ether than the ethDebtAmount is just the delta
@@ -93,15 +243,11 @@ contract DACManager is UniswapLiteBase, CompoundBase {
             );
         }
 
-        // 3. Flashloan ETH with relevant data
-        bytes memory data = abi.encode(
-            SwapOperationCalldata({
-                actionId: actionId,
-                actionRegistryAddress: actionRegistryAddress,
-                addressRegistryAddress: addressRegistryAddress,
-                oldCTokenAddress: oldCTokenAddress,
-                newCTokenAddress: newCTokenAddress
-            })
+        // Injects the target address into calldataParams
+        // so user proxy know which address it'll be calling `calldataParams` on
+        bytes memory addressAndExecuteOperationCalldataParams = abi.encodePacked(
+            abi.encode(dedgeCompoundManagerAddress),
+            executeOperationCalldataParams
         );
 
         ILendingPool lendingPool = ILendingPool(
@@ -111,75 +257,18 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         );
 
         // Approve lendingPool to call proxy
-        _guardPermit(guardAddress, address(lendingPool));
+        _proxyGuardPermit(dacProxyAddress, address(lendingPool));
 
+        // 3. Flashloan ETH with relevant data
         lendingPool.flashLoan(
             dacProxyAddress,
             addressRegistry.AaveEthAddress(),
             ethDebtAmount,
-            data
+            addressAndExecuteOperationCalldataParams
         );
 
         // Forbids lendingPool to call proxy
-        _guardForbid(guardAddress, address(lendingPool));
-    }
-
-    // Main entry point for swapping collateral
-    function swapCollateral(
-        address actionRegistryAddress,
-        address addressRegistryAddress,
-        address payable dacProxyAddress,
-        address oldCTokenAddress,            // Old CToken collateral address
-        uint oldTokenUnderlyingDelta, // Target collateral of the ctoken underlying debt
-        address newCTokenAddress             // New collateral address (must be a cToken address)
-    ) public payable {
-        ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
-
-        _swapOperation(
-            actionRegistry.ACTION_SWAP_COLLATERAL(),
-            actionRegistryAddress,
-            addressRegistryAddress,
-            dacProxyAddress,
-            oldCTokenAddress,
-            oldTokenUnderlyingDelta,
-            newCTokenAddress
-        );
-    }
-
-    // Main entry point for swapping debt
-    function swapDebt(
-        address actionRegistryAddress,
-        address addressRegistryAddress,
-        address payable dacProxyAddress,
-        address oldCTokenAddress,            // Old CToken debt address
-        uint oldTokenUnderlyingDelta, // Target debt of the ctoken underlying debt
-        address newCTokenAddress             // New debt address (must be a cToken address)
-    ) public payable {
-        ActionRegistry actionRegistry = ActionRegistry(actionRegistryAddress);
-
-        _swapOperation(
-            actionRegistry.ACTION_SWAP_DEBT(),
-            actionRegistryAddress,
-            addressRegistryAddress,
-            dacProxyAddress,
-            oldCTokenAddress,
-            oldTokenUnderlyingDelta,
-            newCTokenAddress
-        );
-    }
-
-    function clearDebtDust(
-        address addressRegistryAddress,
-        address oldCTokenAddress,
-        address newCTokenAddress
-    ) public payable {
-        // TODO: Change to borrow balance current
-        clearDebtDust(
-            addressRegistryAddress,
-            oldCTokenAddress,
-            ICToken(oldCTokenAddress).borrowBalanceStored(msg.sender),
-            newCTokenAddress
-        );
+        _proxyGuardForbid(dacProxyAddress, address(lendingPool));
     }
 
     // Clears dust debt by swapping old debt into new debt
@@ -249,20 +338,7 @@ contract DACManager is UniswapLiteBase, CompoundBase {
         }
 
         // Repays borrowed
-        repayBorrowed(oldCTokenAddress, oldTokenUnderlyingDustAmount);
-    }
-
-    function clearCollateralDust(
-        address addressRegistryAddress,
-        address oldCTokenAddress,
-        address newCTokenAddress
-    ) public payable {
-        clearCollateralDust(
-            addressRegistryAddress,
-            oldCTokenAddress,
-            ICToken(oldCTokenAddress).balanceOfUnderlying(msg.sender),
-            newCTokenAddress
-        );
+        repayBorrow(oldCTokenAddress, oldTokenUnderlyingDustAmount);
     }
 
     function clearCollateralDust(

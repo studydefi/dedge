@@ -85,7 +85,7 @@ contract CompoundBase {
         borrow(cToken, borrowAmount);
     }
 
-    function repayBorrowed(address cToken, uint amount) public payable {
+    function repayBorrow(address cToken, uint amount) public payable {
         if (cToken == CEtherAddress) {
             ICEther(cToken).repayBorrow.value(msg.value)();
         } else {
@@ -93,7 +93,7 @@ contract CompoundBase {
         }
     }
 
-    function repayBorrowedBehalf(address recipient, address cToken, uint amount) public payable {
+    function repayBorrowBehalf(address recipient, address cToken, uint amount) public payable {
         if (cToken == CEtherAddress) {
             ICEther(cToken).repayBorrowBehalf.value(msg.value)(recipient);
         } else {

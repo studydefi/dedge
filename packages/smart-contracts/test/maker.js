@@ -346,8 +346,6 @@ const main = async () => {
 
         
         // struct ImportMakerVaultCallData {
-        //     address dacProxyAddress;
-        //     address dedgeMakerManagerAddress;
         //     address addressRegistryAddress;
         //     uint cdpId;
         //     address collateralCTokenAddress;
@@ -359,10 +357,8 @@ const main = async () => {
             .utils
             .defaultAbiCoder
             .encode(
-                ["address", "address", "address", "uint", "address", "address", "uint8"],
+                ["address", "uint", "address", "address", "uint8"],
                 [
-                    dacProxyAddress,
-                    dedgeMakerManagerAddress,
                     addressRegistryAddress,
                     cdpId.toString(),
                     ilkCTokenEquilavent,

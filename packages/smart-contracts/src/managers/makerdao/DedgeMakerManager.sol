@@ -5,11 +5,14 @@ pragma experimental ABIEncoderV2;
 
 import "../../lib/aave/FlashLoanReceiverBase.sol";
 
-import "../../lib/dapphub/Guard.sol";
-
 import "../../lib/makerdao/DssProxyActionsBase.sol";
 
 import "../../lib/uniswap/UniswapBase.sol";
+
+import "../../lib/dapphub/Guard.sol";
+
+import "../../proxies/DACProxy.sol";
+
 
 import "../../interfaces/aave/ILendingPoolAddressesProvider.sol";
 import "../../interfaces/aave/ILendingPool.sol";
@@ -28,8 +31,6 @@ import "../../interfaces/makerdao/IDssProxyActions.sol";
 import "../../registries/ActionRegistry.sol";
 import "../../registries/AddressRegistry.sol";
 
-import "../../proxies/compound/DACProxy.sol";
-
 
 contract DedgeMakerManager is DssProxyActionsBase {
     function () external payable {}
@@ -37,8 +38,6 @@ contract DedgeMakerManager is DssProxyActionsBase {
     constructor () public {}
 
     struct ImportMakerVaultCallData {
-        address dacProxyAddress;
-        address dedgeMakerManagerAddress;
         address addressRegistryAddress;
         uint cdpId;
         address collateralCTokenAddress;
@@ -46,7 +45,10 @@ contract DedgeMakerManager is DssProxyActionsBase {
         uint8 collateralDecimals;
     }
 
-    function _guardPermit(address g, address src) internal {
+    // Helper functions
+    function _proxyGuardPermit(address payable proxyAddress, address src) internal {
+        address g = address(DACProxy(proxyAddress).authority());
+
         DSGuard(g).permit(
             bytes32(bytes20(address(src))),
             DSGuard(g).ANY(),
@@ -54,7 +56,9 @@ contract DedgeMakerManager is DssProxyActionsBase {
         );
     }
 
-    function _guardForbid(address g, address src) internal {
+    function _proxyGuardForbid(address payable proxyAddress, address src) internal {
+        address g = address(DACProxy(proxyAddress).authority());
+
         DSGuard(g).forbid(
             bytes32(bytes20(address(src))),
             DSGuard(g).ANY(),
@@ -62,12 +66,11 @@ contract DedgeMakerManager is DssProxyActionsBase {
         );
     }
 
-    // Helper functions
-    function _convert18ToDecimal(uint amount, uint8 decimals) public view returns (uint) {
+    function _convert18ToDecimal(uint amount, uint8 decimals) internal returns (uint) {
         return amount / (10 ** (18 - uint(decimals)));
     }
 
-    function _convert18ToGemUnits(address gemJoin, uint256 wad) public returns (uint) {
+    function _convert18ToGemUnits(address gemJoin, uint256 wad) internal returns (uint) {
         return wad / (10 ** (18 - GemJoinLike(gemJoin).dec()));
     }
 
@@ -130,19 +133,6 @@ contract DedgeMakerManager is DssProxyActionsBase {
         require(enterMarketErrors[0] == 0, "mkr-enter-gem-failed");
         require(enterMarketErrors[1] == 0, "mkr-enter-dai-failed");
 
-        // Approves this contract to xfer dai funds to wipe vault
-        require(
-            IERC20(addressRegistry.DaiAddress()).approve(
-                imvCalldata.dedgeMakerManagerAddress,
-                collateral18
-            ),
-            "dai-approve-failed"
-        );
-        uint allowance = IERC20(addressRegistry.DaiAddress()).allowance(
-            imvCalldata.dacProxyAddress,
-            imvCalldata.dedgeMakerManagerAddress
-        );
-
         if (ManagerLike(cdpManager).ilks(imvCalldata.cdpId) == bytes32("ETH-A")) {
             wipeAllAndFreeETH(
                 cdpManager,
@@ -204,7 +194,7 @@ contract DedgeMakerManager is DssProxyActionsBase {
         executeOperationCalldataParams:
             Abi-encoded `data` used by User's proxy's `execute(address, <data>)` function
             Used to delegatecall to another contract (i.e. this contract) in the context
-            of the user. This allows for better flexibility and decoupling of logic from
+            of the proxy. This allows for better flexibility and decoupling of logic from
             user's proxy. In this specific case, it is expecting the results from: (from JS)
 
             ```
@@ -228,7 +218,6 @@ contract DedgeMakerManager is DssProxyActionsBase {
 
         // Get cdpManager and proxy's guard address
         address cdpManager = addressRegistry.DssCdpManagerAddress();
-        address guardAddress = address(DACProxy(dacProxyAddress).authority());
 
         // Get Debt
         uint daiDebt = getVaultDebt(cdpManager, cdpId);
@@ -248,7 +237,7 @@ contract DedgeMakerManager is DssProxyActionsBase {
         );
 
         cdpAllow(addressRegistry.DssCdpManagerAddress(), cdpId, dedgeMakerManagerAddress, 1);
-        _guardPermit(guardAddress, address(lendingPool));
+        _proxyGuardPermit(dacProxyAddress, address(lendingPool));
 
         lendingPool.flashLoan(
             dacProxyAddress,
@@ -257,7 +246,7 @@ contract DedgeMakerManager is DssProxyActionsBase {
             addressAndExecuteOperationCalldataParams
         );
 
-        _guardForbid(guardAddress, address(lendingPool));
+        _proxyGuardForbid(dacProxyAddress, address(lendingPool));
         cdpAllow(addressRegistry.DssCdpManagerAddress(), cdpId, dedgeMakerManagerAddress, 0);
     }
 }
