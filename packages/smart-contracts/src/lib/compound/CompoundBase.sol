@@ -87,7 +87,7 @@ contract CompoundBase {
 
     function repayBorrow(address cToken, uint amount) public payable {
         if (cToken == CEtherAddress) {
-            ICEther(cToken).repayBorrow.value(msg.value)();
+            ICEther(cToken).repayBorrow.value(amount)();
         } else {
             require(ICToken(cToken).repayBorrow(amount) == 0, "cmpnd-mgr-ctoken-repay-failed");
         }
@@ -95,7 +95,7 @@ contract CompoundBase {
 
     function repayBorrowBehalf(address recipient, address cToken, uint amount) public payable {
         if (cToken == CEtherAddress) {
-            ICEther(cToken).repayBorrowBehalf.value(msg.value)(recipient);
+            ICEther(cToken).repayBorrowBehalf.value(amount)(recipient);
         } else {
             require(ICToken(cToken).repayBorrowBehalf(recipient, amount) == 0, "cmpnd-mgr-ctoken-repaybehalf-failed");
         }
