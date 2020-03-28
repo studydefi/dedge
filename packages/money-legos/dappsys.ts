@@ -1,9 +1,13 @@
-import dsProxyAbi from "../smart-contracts/test/abi/DSProxy.json";
+import dsProxyAbi from "./abi/dappsys/DSProxy.json";
+import dsProxyFactoryAbi from "./abi/dappsys/DSProxyFactory.json"
 
 const dappsys = {
-  dsproxy: {
+  dsProxy: {
     abi: dsProxyAbi,
   },
+  dsProxyFactory:{
+    abi: dsProxyFactoryAbi
+  }
 };
 
 export default dappsys;

@@ -1,13 +1,17 @@
-import uniswapFactoryDef from "../smart-contracts/build/IUniswapFactory.json";
-import uniswapExchangeDef from "../smart-contracts/build/IUniswapExchange.json";
+import networkdIds from "./networks";
+
+import uniswapFactoryAbi from "./abi/uniswap/Factory.json";
+import uniswapExchangeAbi from "./abi/uniswap/Exchange.json";
 
 const uniswap = {
   uniswapFactory: {
-    address: "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95",
-    abi: uniswapFactoryDef.abi,
+    address: {
+      [networkdIds.mainnet]: "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95"
+    },
+    abi: uniswapFactoryAbi,
   },
   uniswapExchange: {
-    abi: uniswapExchangeDef.abi,
+    abi: uniswapExchangeAbi,
   },
 };
 

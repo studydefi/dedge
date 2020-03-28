@@ -8,8 +8,7 @@ const wallet = new ethers.Wallet(
 const {
     dedgeMakerManagerAddress,
     dacProxyFactoryAddress,
-    addressRegistryAddress,
-    actionRegistryAddress
+    addressRegistryAddress
 } = require("../build/DeployedAddresses.json");
 
 
@@ -36,9 +35,7 @@ const tryAndWait = async (f) => {
 }
 
 const dacProxyDef = require("../build/DACProxy.json");
-const dacManagerDef = require("../build/DACManager.json");
 const addressRegistryDef = require("../build/AddressRegistry.json");
-const actionRegistryDef = require("../build/ActionRegistry.json");
 const dedgeMakerManagerDef = require("../build/DedgeMakerManager.json");
 const dacProxyFactoryDef = require("../build/DACProxyFactory.json");
 
