@@ -1,0 +1,287 @@
+{
+  "contractName": "ILendingPoolParametersProvider",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getFlashLoanFeesInBips",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"getFlashLoanFeesInBips\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{},\"title\":\"ILendingPoolAddressesProvider interface\"},\"userdoc\":{\"methods\":{},\"notice\":\"provides the interface to fetch the LendingPoolCore address\"}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol\":\"ILendingPoolParametersProvider\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol\":{\"keccak256\":\"0x90ace0fd5238a92b39b3fad095c046c2707c3027116c7d5f7e80863ca74eb00d\",\"urls\":[\"bzz-raw://068f20bedbbe8f4faff599106162f7c7ede426a689f22c16dc9643bd17268755\",\"dweb:/ipfs/QmVSCkLZ8JD17DvsWtYMBcuZdF3JZpZM9khMbvYFarYGTs\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity 0.5.16;\n\n/**\n@title ILendingPoolAddressesProvider interface\n@notice provides the interface to fetch the LendingPoolCore address\n */\n\ncontract ILendingPoolParametersProvider {\n    function getFlashLoanFeesInBips() public view returns (uint256, uint256);\n}\n",
+  "sourcePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol",
+  "ast": {
+    "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol",
+    "exportedSymbols": {
+      "ILendingPoolParametersProvider": [
+        669
+      ]
+    },
+    "id": 670,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 661,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".16"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:6"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title ILendingPoolAddressesProvider interface\n@notice provides the interface to fetch the LendingPoolCore address",
+        "fullyImplemented": false,
+        "id": 669,
+        "linearizedBaseContracts": [
+          669
+        ],
+        "name": "ILendingPoolParametersProvider",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 668,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFlashLoanFeesInBips",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 662,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "226:2:6"
+            },
+            "returnParameters": {
+              "id": 667,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 664,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 668,
+                  "src": "250:7:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 663,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "250:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 666,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 668,
+                  "src": "259:7:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 665,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "259:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "249:18:6"
+            },
+            "scope": 669,
+            "src": "195:73:6",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 670,
+        "src": "149:121:6"
+      }
+    ],
+    "src": "0:271:6"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol",
+    "exportedSymbols": {
+      "ILendingPoolParametersProvider": [
+        669
+      ]
+    },
+    "id": 670,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 661,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".16"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:6"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title ILendingPoolAddressesProvider interface\n@notice provides the interface to fetch the LendingPoolCore address",
+        "fullyImplemented": false,
+        "id": 669,
+        "linearizedBaseContracts": [
+          669
+        ],
+        "name": "ILendingPoolParametersProvider",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "id": 668,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFlashLoanFeesInBips",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 662,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "226:2:6"
+            },
+            "returnParameters": {
+              "id": 667,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 664,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 668,
+                  "src": "250:7:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 663,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "250:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 666,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 668,
+                  "src": "259:7:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 665,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "259:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "249:18:6"
+            },
+            "scope": 669,
+            "src": "195:73:6",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 670,
+        "src": "149:121:6"
+      }
+    ],
+    "src": "0:271:6"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.23",
+  "updatedAt": "2020-03-28T01:00:49.766Z",
+  "devdoc": {
+    "methods": {},
+    "title": "ILendingPoolAddressesProvider interface"
+  },
+  "userdoc": {
+    "methods": {},
+    "notice": "provides the interface to fetch the LendingPoolCore address"
+  }
+}
