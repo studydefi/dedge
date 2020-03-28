@@ -1,11 +1,10 @@
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "ethers";
-import { getLegos, networkIds } from "money-legos";
 
 import { dedgeHelpers } from "../helpers/index";
 
-import { wallet, provider, sleep, tryAndWait } from "./common";
+import { wallet, legos, newCTokenContract, sleep, tryAndWait } from "./common";
 
 import {
   dacProxyFactoryAddress,
@@ -15,8 +14,6 @@ import {
 
 import dacProxyDef from "../artifacts/DACProxy.json";
 import dacProxyFactoryDef from "../artifacts/DACProxyFactory.json";
-
-const legos = getLegos(networkIds.mainnet);
 
 chai.use(solidity);
 const { expect } = chai;
@@ -31,28 +28,18 @@ const uniswapFactoryContract = new ethers.Contract(
   wallet
 );
 
-// Helper functions
-const newERC20Contract = (addr: string): ethers.Contract => {
-  return new ethers.Contract(addr, legos.erc20.abi, wallet);
-};
-const newCTokenContract = (addr: string): ethers.Contract => {
-  return new ethers.Contract(addr, legos.compound.cTokenAbi, wallet);
-};
-
 const cEtherContract = new ethers.Contract(
   legos.compound.cEther.address,
   legos.compound.cEther.abi,
   wallet
 );
 
-const cDaiContract = newCTokenContract(legos.compound.cDai.address);
-const cBatContract = newCTokenContract(legos.compound.cBat.address);
+const cDaiContract = newCTokenContract(legos.compound.cDAI.address);
+const cBatContract = newCTokenContract(legos.compound.cBAT.address);
 const cUsdcContract = newCTokenContract(legos.compound.cUSDC.address);
 
-const batContract = newERC20Contract(legos.erc20.bat.address);
-
 // Uniswap helper functions
-const getTokenFromUniswap = async (
+const getTokenFromUniswapAndApproveProxyTransfer = async (
   makerDsProxyAddress: string, // Approve `transferFrom` from proxyAddress
   tokenAddress: string,
   ethersToSend: number = 3
@@ -96,7 +83,7 @@ const openVault = async (
   decimalPlaces = 18
 ): Promise<boolean> => {
   let openVaultCalldata;
-  if (ilk === legos.maker.ilks.eth_a.ilk) {
+  if (ilk === legos.maker.ilks.ethA.ilk) {
     openVaultCalldata = IDssProxyActions.functions.openLockETHAndDraw.encode([
       legos.maker.dssCdpManager.address,
       legos.maker.jug.address,
@@ -125,7 +112,7 @@ const openVault = async (
     {
       gasLimit: 4000000,
       value:
-        ilk === legos.maker.ilks.eth_a.ilk
+        ilk === legos.maker.ilks.ethA.ilk
           ? ethers.utils.parseEther(amount.toString())
           : "0x0"
     }
@@ -259,8 +246,8 @@ describe("DedgeMakerManager", () => {
   });
 
   it("Import MakerDAO Vault (ETH)", async () => {
-    const ilkJoinAddress = legos.maker.ilks.eth_a.join.address;
-    const ilk = legos.maker.ilks.eth_a.ilk;
+    const ilkJoinAddress = legos.maker.ilks.ethA.join.address;
+    const ilk = legos.maker.ilks.ethA.symbol;
     const ilkCTokenEquilavent = legos.compound.cEther.address;
     const ilkCTokenContract = cEtherContract;
 
@@ -274,13 +261,13 @@ describe("DedgeMakerManager", () => {
   });
 
   it("Import MakerDAO Vault (BAT)", async () => {
-    const ilkJoinAddress = legos.maker.ilks.bat_a.join.address;
-    const ilk = legos.maker.ilks.bat_a.ilk;
-    const ilkCTokenEquilavent = legos.compound.cBat.address;
+    const ilkJoinAddress = legos.maker.ilks.batA.join.address;
+    const ilk = legos.maker.ilks.batA.symbol;
+    const ilkCTokenEquilavent = legos.compound.cBAT.address;
     const ilkCTokenContract = cBatContract;
     const ilkCTokenUnderlying = legos.erc20.bat.address;
 
-    await getTokenFromUniswap(
+    await getTokenFromUniswapAndApproveProxyTransfer(
       makerDsProxyContract.address,
       ilkCTokenUnderlying,
       3 // Trade 3 ETH for BAT
@@ -301,13 +288,13 @@ describe("DedgeMakerManager", () => {
   });
 
   it("Import MakerDAO Vault (USDC)", async () => {
-    const ilkJoinAddress = legos.maker.ilks.usdc_a.join.address;
-    const ilk = legos.maker.ilks.usdc_a.ilk;
+    const ilkJoinAddress = legos.maker.ilks.usdcA.join.address;
+    const ilk = legos.maker.ilks.usdcA.symbol;
     const ilkCTokenEquilavent = legos.compound.cUSDC.address;
     const ilkCTokenContract = cUsdcContract;
     const ilkCTokenUnderlying = legos.erc20.usdc.address;
 
-    await getTokenFromUniswap(
+    await getTokenFromUniswapAndApproveProxyTransfer(
       makerDsProxyContract.address,
       ilkCTokenUnderlying,
       3 // Trade 3 ETH for USDC

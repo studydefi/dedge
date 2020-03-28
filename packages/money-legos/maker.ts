@@ -7,8 +7,8 @@ import dssCdpManagerAbi from "./abi/makerdao/DssCdpManager.json";
 import dssProxyActionsAbi from "./abi/makerdao/DssProxyActions.json";
 
 const ilks = {
-  bat_a: {
-    ilk: "BAT-A",
+  batA: {
+    symbol: "BAT-A",
     token: { address: erc20.bat.address },
     join: {
       address: {
@@ -16,8 +16,8 @@ const ilks = {
       }
     }
   },
-  eth_a: {
-    ilk: "ETH-A",
+  ethA: {
+    symbol: "ETH-A",
     token: {
       address: Object.keys(networkIds).reduce((acc, x) => {
         // @ts-ignore
@@ -31,8 +31,8 @@ const ilks = {
       }
     }
   },
-  usdc_a: {
-    ilk: "USDC-A",
+  usdcA: {
+    symbol: "USDC-A",
     token: { address: erc20.usdc.address },
     join: {
       address: {

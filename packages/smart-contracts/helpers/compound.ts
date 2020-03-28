@@ -17,7 +17,7 @@ const swapOperation = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: Number = 4000000
+  gasLimit: number = 4000000
 ): Promise<any> => {
   // struct SwapOperationCalldata {
   //     address addressRegistryAddress;
@@ -61,10 +61,11 @@ const swapDebt = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: Number = 4000000
+  gasLimit: number = 4000000
 ): Promise<any> => {
   return swapOperation(
-    IDedgeCompoundManager.functions.swapDebtPostLoan.encode,
+    (x: any[]): string =>
+      IDedgeCompoundManager.functions.swapDebtPostLoan.encode(x),
     dacProxy,
     dedgeCompoundManager,
     addressRegistry,
@@ -82,10 +83,11 @@ const swapCollateral = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: Number = 4000000
+  gasLimit: number = 4000000
 ): Promise<any> => {
   return swapOperation(
-    IDedgeCompoundManager.functions.swapCollateralPostLoan.encode,
+    (x: any[]): string =>
+      IDedgeCompoundManager.functions.swapCollateralPostLoan.encode(x),
     dacProxy,
     dedgeCompoundManager,
     addressRegistry,
