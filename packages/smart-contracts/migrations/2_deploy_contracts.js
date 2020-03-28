@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const DACProxyFactory = artifacts.require("DACProxyFactory");
+const DedgeGeneralManager = artifacts.require("DedgeGeneralManager");
 const DedgeCompoundManager = artifacts.require("DedgeCompoundManager");
 const DedgeMakerManager = artifacts.require("DedgeMakerManager");
 const AddressRegistry = artifacts.require("AddressRegistry");
@@ -9,6 +10,7 @@ const AddressRegistry = artifacts.require("AddressRegistry");
 module.exports = async deployer => {
     await deployer.deploy(DACProxyFactory)
     await deployer.deploy(DedgeCompoundManager)
+    await deployer.deploy(DedgeGeneralManager)
     await deployer.deploy(DedgeMakerManager)
     await deployer.deploy(AddressRegistry)
 
@@ -17,6 +19,7 @@ module.exports = async deployer => {
         dacProxyFactoryAddress: DACProxyFactory.address,
         dedgeCompoundManagerAddress: DedgeCompoundManager.address,
         dedgeMakerManagerAddress: DedgeMakerManager.address,
+        dedgeGeneralManagerAddress: DedgeGeneralManager.address,
         addressRegistryAddress: AddressRegistry.address,
     });
 
