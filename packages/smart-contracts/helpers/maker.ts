@@ -14,11 +14,11 @@ const importMakerVault = (
   dacProxy: ethers.Contract,
   dedgeMakerManager: Address,
   addressRegistry: Address,
-  cdpId: Number,
+  cdpId: number,
   ilkCTokenEquilavent: Address,
   ilkJoinAddress: Address,
-  decimalPlaces: Number = 18,
-  gasLimit: Number = 4000000
+  decimalPlaces: number = 18,
+  gasLimit: number = 4000000
 ): Promise<any> => {
   // struct ImportMakerVaultCallData {
   //     address addressRegistryAddress;
@@ -68,7 +68,7 @@ const dsProxyCdpAllowDacProxy = (
   dacProxy: Address, // Dedge's proxy contract
   dssCdpManager: Address, // DssCdpManager's address,
   dssProxyActions: Address, // Dss-ProxyAction's address
-  cdpId: Number
+  cdpId: number
 ): Promise<any> => {
   const allowDacProxyCallback = IDssProxyActions.functions.cdpAllow.encode([
     dssCdpManager,

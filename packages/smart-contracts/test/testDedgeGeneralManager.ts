@@ -5,7 +5,7 @@ import { getLegos, networkIds } from "money-legos";
 
 import { dedgeHelpers } from "../helpers/index";
 
-import { wallet, provider, getRandomAddress } from "./common";
+import { wallet, provider, getRandomAddress, sleep } from "./common";
 
 import {
   dacProxyFactoryAddress,
@@ -104,6 +104,8 @@ describe("DedgeGeneralManager", () => {
   });
 
   it("Test ETH Transfer", async () => {
+    await sleep(500);
+
     const initialBalance = await provider.getBalance(randomAddress);
 
     // Transfers some ETH from dacProxy to target address
