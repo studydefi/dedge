@@ -9,8 +9,7 @@ const IDssProxyActions = new ethers.utils.Interface(moneyLegos.maker.dssProxyAct
 const IDedgeMakerManager = new ethers.utils.Interface(dedgeMakerManagerDef.abi)
 
 const importMakerVault = (
-    dacProxyContract: ethers.Contract,
-    dacUserProxy: Address,
+    dacProxy: ethers.Contract,
     dedgeMakerManager: Address,
     addressRegistry: Address,
     cdpId: Number,
@@ -54,13 +53,13 @@ const importMakerVault = (
         .importMakerVault
         .encode([
             dedgeMakerManager,
-            dacUserProxy,
+            dacProxy.address,
             addressRegistry,
             cdpId,
             executeOperationCalldataParams
         ])
 
-    return dacProxyContract.execute(
+    return dacProxy.execute(
         dedgeMakerManager,
         importMakerVaultCallbackdata,
         { gasLimit }
