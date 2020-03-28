@@ -20,7 +20,6 @@ const {
 const dacProxyDef = require("../build/DACProxy.json");
 const dedgeCompoundManagerDef = require("../build/DedgeCompoundManager.json");
 const addressRegistryDef = require("../build/AddressRegistry.json");
-const actionRegistryDef = require("../build/ActionRegistry.json");
 const dacProxyFactoryDef = require("../build/DACProxyFactory.json");
 
 const sleep = (ms) => {
@@ -100,12 +99,6 @@ const dedgeCompoundManagerContract = new ethers.Contract(
 const addressRegistryContract = new ethers.Contract(
     addressRegistryAddress,
     addressRegistryDef.abi,
-    wallet
-)
-
-const actionRegistryContract = new ethers.Contract(
-    actionRegistryAddress,
-    actionRegistryDef.abi,
     wallet
 )
 
@@ -320,6 +313,7 @@ const main = async () => {
                 addressRegistryAddress,
                 fromAddress,
                 tokenDelta.toString(),
+                toAddress,
                 executeOperationCalldataParams
             ])
 
@@ -378,6 +372,7 @@ const main = async () => {
                 addressRegistryAddress,
                 fromAddress,
                 tokenDelta.toString(),
+                toAddress,
                 executeOperationCalldataParams
             ])
 

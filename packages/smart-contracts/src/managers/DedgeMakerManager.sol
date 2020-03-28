@@ -28,7 +28,6 @@ import "../interfaces/compound/ICEther.sol";
 
 import "../interfaces/makerdao/IDssProxyActions.sol";
 
-import "../registries/ActionRegistry.sol";
 import "../registries/AddressRegistry.sol";
 
 
