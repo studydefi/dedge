@@ -83,7 +83,7 @@ const openVault = async (
   decimalPlaces = 18
 ): Promise<boolean> => {
   let openVaultCalldata;
-  if (ilk === legos.maker.ilks.ethA.ilk) {
+  if (ilk === legos.maker.ilks.ethA.symbol) {
     openVaultCalldata = IDssProxyActions.functions.openLockETHAndDraw.encode([
       legos.maker.dssCdpManager.address,
       legos.maker.jug.address,
