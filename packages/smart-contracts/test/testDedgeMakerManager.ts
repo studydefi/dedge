@@ -49,6 +49,8 @@ const cDaiContract = newCTokenContract(legos.compound.cDai.address);
 const cBatContract = newCTokenContract(legos.compound.cBat.address);
 const cUsdcContract = newCTokenContract(legos.compound.cUSDC.address);
 
+const batContract = newERC20Contract(legos.erc20.bat.address);
+
 // Uniswap helper functions
 const getTokenFromUniswap = async (
   makerDsProxyAddress: string, // Approve `transferFrom` from proxyAddress
@@ -155,6 +157,77 @@ describe("DedgeMakerManager", () => {
   let makerDsProxyContract: ethers.Contract; // MakerDAO's proxy
   let dacProxyContract: ethers.Contract; // Our proxy
 
+  // Helper function
+  const openAllowAndImportVault = async (
+    ilk: string,
+    ilkJoinAddress: string,
+    ilkCTokenEquilavent: string,
+    ilkCTokenContract: ethers.Contract,
+    amount: number,
+    decimalPlaces: number = 18
+  ) => {
+    // Sleeps for 0.5 sec to avoid invalid nonce
+    await sleep(500);
+
+    // Get initial supply/borrow balance
+    const supplyInitial = await ilkCTokenContract.balanceOfUnderlying(
+      dacProxyContract.address
+    );
+    const borrowInitial = await cDaiContract.borrowBalanceStored(
+      dacProxyContract.address
+    );
+
+    // Creates a vault
+    await tryAndWait(
+      openVault(
+        makerDsProxyContract,
+        ilk,
+        ilkJoinAddress,
+        amount,
+        decimalPlaces
+      )
+    );
+
+    const cdpId = await makerDssCdpManagerContract.last(
+      makerDsProxyContract.address
+    );
+
+    // Grants user access to eth CDP
+    const cdpAllowTx = await dedgeHelpers.maker.dsProxyCdpAllowDacProxy(
+      makerDsProxyContract,
+      dacProxyContract.address,
+      legos.maker.dssCdpManager.address,
+      legos.maker.dssProxyActions.address,
+      cdpId
+    );
+    await cdpAllowTx.wait();
+
+    // Imports vault
+    await tryAndWait(
+      dedgeHelpers.maker.importMakerVault(
+        dacProxyContract,
+        dedgeMakerManagerAddress,
+        addressRegistryAddress,
+        cdpId,
+        ilkCTokenEquilavent,
+        ilkJoinAddress,
+        decimalPlaces
+      )
+    );
+
+    // Gets final balance
+    const supplyFinal = await ilkCTokenContract.balanceOfUnderlying(
+      dacProxyContract.address
+    );
+    const borrowFinal = await cDaiContract.borrowBalanceStored(
+      dacProxyContract.address
+    );
+
+    // Make sure supply / borrow was gt than initial
+    expect(supplyFinal.gt(supplyInitial)).eq(true);
+    expect(borrowFinal.gt(borrowInitial)).eq(true);
+  };
+
   before(async () => {
     // Builds DAC Proxy
     await dacProxyFactoryContract.build();
@@ -186,67 +259,70 @@ describe("DedgeMakerManager", () => {
   });
 
   it("Import MakerDAO Vault (ETH)", async () => {
-    // Sleeps for 0.5 sec to avoid invalid nonce
-    await sleep(500);
-
     const ilkJoinAddress = legos.maker.ilks.eth_a.join.address;
     const ilk = legos.maker.ilks.eth_a.ilk;
     const ilkCTokenEquilavent = legos.compound.cEther.address;
+    const ilkCTokenContract = cEtherContract;
 
-    // Get initial supply/borrow balance
-    const ethCompoundSupplyInitial = await cEtherContract.balanceOfUnderlying(
-      dacProxyContract.address
+    await openAllowAndImportVault(
+      ilk,
+      ilkJoinAddress,
+      ilkCTokenEquilavent,
+      ilkCTokenContract,
+      1 // Deposit 1 Ether
     );
-    const daiCompoundBorrowInitial = await cDaiContract.borrowBalanceStored(
-      dacProxyContract.address
-    );
+  });
 
-    // Creates a vault
-    await tryAndWait(
-      openVault(
-        makerDsProxyContract,
-        ilk,
-        ilkJoinAddress,
-        1 // Deposit 1 ETH
-      )
-    );
+  it("Import MakerDAO Vault (BAT)", async () => {
+    const ilkJoinAddress = legos.maker.ilks.bat_a.join.address;
+    const ilk = legos.maker.ilks.bat_a.ilk;
+    const ilkCTokenEquilavent = legos.compound.cBat.address;
+    const ilkCTokenContract = cBatContract;
+    const ilkCTokenUnderlying = legos.erc20.bat.address;
 
-    const cdpId = await makerDssCdpManagerContract.last(
-      makerDsProxyContract.address
-    );
-
-    // Grants user access to eth CDP
-    const cdpAllowTx = await dedgeHelpers.maker.dsProxyCdpAllowDacProxy(
-      makerDsProxyContract,
-      dacProxyContract.address,
-      legos.maker.dssCdpManager.address,
-      legos.maker.dssProxyActions.address,
-      cdpId
-    );
-    await cdpAllowTx.wait();
-
-    // Imports vault
-    await tryAndWait(
-      dedgeHelpers.maker.importMakerVault(
-        dacProxyContract,
-        dedgeMakerManagerAddress,
-        addressRegistryAddress,
-        cdpId,
-        ilkCTokenEquilavent,
-        ilkJoinAddress
-      )
+    await getTokenFromUniswap(
+      makerDsProxyContract.address,
+      ilkCTokenUnderlying,
+      3 // Trade 3 ETH for BAT
     );
 
-    // Gets final balance
-    const ethCompoundSupplyFinal = await cEtherContract.balanceOfUnderlying(
-      dacProxyContract.address
-    );
-    const daiCompoundBorrowFinal = await cDaiContract.borrowBalanceStored(
-      dacProxyContract.address
+    // Sleeps for 0.5 sec to avoid invalid nonce
+    await sleep(500);
+
+    await openAllowAndImportVault(
+      ilk,
+      ilkJoinAddress,
+      ilkCTokenEquilavent,
+      ilkCTokenContract,
+      2000 // Deposit 2000 BAT
     );
 
-    // Make sure supply / borrow was gt than initial
-    expect(ethCompoundSupplyFinal.gt(ethCompoundSupplyInitial)).eq(true);
-    expect(daiCompoundBorrowFinal.gt(daiCompoundBorrowInitial)).eq(true);
+    return true;
+  });
+
+  it("Import MakerDAO Vault (USDC)", async () => {
+    const ilkJoinAddress = legos.maker.ilks.usdc_a.join.address;
+    const ilk = legos.maker.ilks.usdc_a.ilk;
+    const ilkCTokenEquilavent = legos.compound.cUSDC.address;
+    const ilkCTokenContract = cUsdcContract;
+    const ilkCTokenUnderlying = legos.erc20.usdc.address;
+
+    await getTokenFromUniswap(
+      makerDsProxyContract.address,
+      ilkCTokenUnderlying,
+      3 // Trade 3 ETH for USDC
+    );
+
+    // Sleeps for 0.5 sec to avoid invalid nonce
+    await sleep(500);
+
+    await openAllowAndImportVault(
+      ilk,
+      ilkJoinAddress,
+      ilkCTokenEquilavent,
+      ilkCTokenContract,
+      200, // Deposit 200 USDC
+      6 // USDC decimal places
+    );
   });
 });
