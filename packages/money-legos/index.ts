@@ -22,13 +22,16 @@ const changeAddressValue = (networkId: Number, immutableObj: any): any => {
     for (var keys in obj) {
       //checking if the current value is an object itself
       if (isValidObject(obj[keys])) {
-        if (`${keys}` === "address" && obj[keys][`${networkId}`] !== undefined) {
+        if (
+          `${keys}` === "address" &&
+          obj[keys][`${networkId}`] !== undefined
+        ) {
           // else getting the value and replacing with specified network id
           const keyValue = obj[keys][`${networkId}`];
           obj[keys] = keyValue || null;
         } else if (!Array.isArray(obj[keys])) {
           // Don't wanna modify arrays
-          obj[keys] = changeAddressValue(networkId, obj[keys])
+          obj[keys] = changeAddressValue(networkId, obj[keys]);
         }
       }
     }
@@ -41,11 +44,11 @@ export const legos = {
   erc20,
   dappsys,
   uniswap,
-  compound,
+  compound
 };
 
 export const getLegos = (networkId: Number) => {
   return changeAddressValue(networkId, legos);
 };
 
-export { networkIds }
+export { networkIds };
