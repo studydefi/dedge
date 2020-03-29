@@ -24,16 +24,25 @@ contract CompoundBase {
         }
     }
 
+    function approveCToken(
+        address cToken,
+        uint amount
+    ) public {
+        // Approves CToken contract to call `transferFrom`
+        address underlying = ICToken(cToken).underlying();
+        require(
+            IERC20(underlying).approve(cToken, amount) == true,
+            "cmpnd-mgr-ctoken-approved-failed"
+        );
+    }
+
     function approveCTokens(
         address[] memory cTokens    // Tokens to approve
     ) public {
         for (uint i = 0; i < cTokens.length; i++) {
             // Don't need to approve ICEther
             if (cTokens[i] != CEtherAddress) {
-                address underlying = ICToken(cTokens[i]).underlying();
-
-                // Approves Compound CTokens
-                require(IERC20(underlying).approve(cTokens[i], uint256(-1)) == true, "cmpnd-mgr-ctoken-approved-failed");
+                approveCToken(cTokens[i], uint(-1));
             }
         }
     }
@@ -53,6 +62,9 @@ contract CompoundBase {
         if (cToken == CEtherAddress) {
             ICEther(CEtherAddress).mint.value(amount)();
         } else {
+            // Approves CToken contract to call `transferFrom`
+            approveCToken(cToken, amount);
+
             require(
               ICToken(cToken).mint(amount) == 0,
               "cmpnd-mgr-ctoken-supply-failed"
@@ -89,6 +101,7 @@ contract CompoundBase {
         if (cToken == CEtherAddress) {
             ICEther(cToken).repayBorrow.value(amount)();
         } else {
+            approveCToken(cToken, amount);
             require(ICToken(cToken).repayBorrow(amount) == 0, "cmpnd-mgr-ctoken-repay-failed");
         }
     }
@@ -97,6 +110,7 @@ contract CompoundBase {
         if (cToken == CEtherAddress) {
             ICEther(cToken).repayBorrowBehalf.value(amount)(recipient);
         } else {
+            approveCToken(cToken, amount);
             require(ICToken(cToken).repayBorrowBehalf(recipient, amount) == 0, "cmpnd-mgr-ctoken-repaybehalf-failed");
         }
     }

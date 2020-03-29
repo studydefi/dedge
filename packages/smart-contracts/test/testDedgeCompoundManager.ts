@@ -4,7 +4,13 @@ import { ethers } from "ethers";
 
 import { dedgeHelpers } from "../helpers/index";
 
-import { wallet, legos, sleep, tryAndWait, newCTokenContract } from "./common";
+import {
+  provider,
+  legos,
+  sleep,
+  tryAndWait,
+  newCTokenContract
+} from "./common";
 
 import {
   dacProxyFactoryAddress,
@@ -21,6 +27,12 @@ const { expect } = chai;
 
 const IDedgeCompoundManager = new ethers.utils.Interface(
   dedgeCompoundManagerDef.abi
+);
+
+// Have a unique wallet here to test the "buildAndEnterMarkets" functionality
+const wallet = new ethers.Wallet(
+  "0x646f1ce2fdad0e6deeeb5c7e8e5543bdde65e86029e2fd9fc169899c440a7913",
+  provider
 );
 
 describe("DedgeCompoundManager", () => {
@@ -141,8 +153,24 @@ describe("DedgeCompoundManager", () => {
   };
 
   before(async () => {
-    // Builds DAC Proxy
-    await dacProxyFactoryContract.build();
+    // Builds DAC Proxy And enters the compound market
+    const cTokensToEnter = [
+      legos.compound.cEther.address,
+      legos.compound.cSAI.address,
+      legos.compound.cDAI.address,
+      legos.compound.cREP.address,
+      legos.compound.cUSDC.address,
+      legos.compound.cBAT.address,
+      legos.compound.cZRX.address,
+      legos.compound.cWBTC.address
+    ];
+
+    await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
+      dacProxyFactoryContract,
+      dedgeCompoundManagerAddress,
+      cTokensToEnter
+    );
+
     const dacProxyAddress = await dacProxyFactoryContract.proxies(
       wallet.address
     );
@@ -150,30 +178,6 @@ describe("DedgeCompoundManager", () => {
       dacProxyAddress,
       dacProxyDef.abi,
       wallet
-    );
-
-    // Enters the market
-    const marketEnterCalldata = IDedgeCompoundManager.functions.enterMarketsAndApproveCTokens.encode(
-      [
-        [
-          legos.compound.cDAI.address,
-          legos.compound.cEther.address,
-          legos.compound.cUSDC.address,
-          legos.compound.cREP.address,
-          legos.compound.cZRX.address,
-          legos.compound.cBAT.address
-        ]
-      ]
-    );
-
-    await tryAndWait(
-      dacProxyContract.execute(
-        dedgeCompoundManagerAddress,
-        marketEnterCalldata,
-        {
-          gasLimit: 4000000
-        }
-      )
     );
 
     // Supplies 10 ETH and borrows 500 DAI from compound via ds-proxy

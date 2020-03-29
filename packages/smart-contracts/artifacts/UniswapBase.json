@@ -484,7 +484,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 6909,
+                              "referencedDeclaration": 7011,
                               "src": "743:3:23",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -885,7 +885,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 6909,
+                              "referencedDeclaration": 7011,
                               "src": "1017:3:23",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -1577,7 +1577,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 6909,
+                              "referencedDeclaration": 7011,
                               "src": "1371:3:23",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -3397,7 +3397,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 6909,
+                              "referencedDeclaration": 7011,
                               "src": "743:3:23",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -3798,7 +3798,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 6909,
+                              "referencedDeclaration": 7011,
                               "src": "1017:3:23",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -4490,7 +4490,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 6909,
+                              "referencedDeclaration": 7011,
                               "src": "1371:3:23",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -5924,7 +5924,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-28T01:01:39.173Z",
+  "updatedAt": "2020-03-29T06:38:08.229Z",
   "devdoc": {
     "methods": {}
   },

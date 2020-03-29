@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { BigNumber } from "ethers/utils/bignumber";
 
 import dedgeMakerManagerDef from "../artifacts/DedgeMakerManager.json";
 import { legos } from "money-legos";
@@ -9,6 +10,28 @@ const IDssProxyActions = new ethers.utils.Interface(
   legos.maker.dssProxyActions.abi
 );
 const IDedgeMakerManager = new ethers.utils.Interface(dedgeMakerManagerDef.abi);
+
+const getVaultIds = async (
+  userProxy: Address,
+  dssCdpManager: ethers.Contract
+): Promise<number[]> => {
+  const cdpCountBN: BigNumber = await dssCdpManager.count(userProxy);
+  const cdpCount: number = parseInt(cdpCountBN.toString(), 10);
+
+  // Get last vault to get the 2nd last vault, and so on
+  const cdpIds = [];
+  let lastCdpId: BigNumber = await dssCdpManager.last(userProxy);
+  cdpIds.push(parseInt(lastCdpId.toString(), 10));
+
+  // Vault Id is stored in a linked-list like fashion
+  for (let i = 1; i < cdpCount; i++) {
+    const linkedListRet = await dssCdpManager.list(lastCdpId.toString());
+    lastCdpId = linkedListRet.prev.toString();
+    cdpIds.push(parseInt(lastCdpId.toString(), 10));
+  }
+
+  return cdpIds;
+};
 
 const importMakerVault = (
   dacProxy: ethers.Contract,
@@ -64,7 +87,7 @@ const importMakerVault = (
 };
 
 const dsProxyCdpAllowDacProxy = (
-  dsProxy: ethers.Contract, // MakerDAO's proxy contract
+  dsProxy: ethers.Contract, // MakerDAO's / InstaDapp's proxy contract
   dacProxy: Address, // Dedge's proxy contract
   dssCdpManager: Address, // DssCdpManager's address,
   dssProxyActions: Address, // Dss-ProxyAction's address
@@ -84,5 +107,6 @@ const dsProxyCdpAllowDacProxy = (
 
 export default {
   importMakerVault,
-  dsProxyCdpAllowDacProxy
+  dsProxyCdpAllowDacProxy,
+  getVaultIds
 };

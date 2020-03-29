@@ -251,6 +251,11 @@ describe("DedgeMakerManager", () => {
     const ilkCTokenEquilavent = legos.compound.cEther.address;
     const ilkCTokenContract = cEtherContract;
 
+    const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
+      dacProxyContract.address,
+      makerDssCdpManagerContract
+    );
+
     await openAllowAndImportVault(
       ilk,
       ilkJoinAddress,
@@ -258,6 +263,13 @@ describe("DedgeMakerManager", () => {
       ilkCTokenContract,
       1 // Deposit 1 Ether
     );
+
+    const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
+      dacProxyContract.address,
+      makerDssCdpManagerContract
+    );
+
+    expect(finalVaultCount.length).gt(initialVaultCount.length);
   });
 
   it("Import MakerDAO Vault (BAT)", async () => {
@@ -276,6 +288,11 @@ describe("DedgeMakerManager", () => {
     // Sleeps for 0.5 sec to avoid invalid nonce
     await sleep(500);
 
+    const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
+      dacProxyContract.address,
+      makerDssCdpManagerContract
+    );
+
     await openAllowAndImportVault(
       ilk,
       ilkJoinAddress,
@@ -284,7 +301,12 @@ describe("DedgeMakerManager", () => {
       2000 // Deposit 2000 BAT
     );
 
-    return true;
+    const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
+      dacProxyContract.address,
+      makerDssCdpManagerContract
+    );
+
+    expect(finalVaultCount.length).gt(initialVaultCount.length);
   });
 
   it("Import MakerDAO Vault (USDC)", async () => {
@@ -311,5 +333,17 @@ describe("DedgeMakerManager", () => {
       200, // Deposit 200 USDC
       6 // USDC decimal places
     );
+
+    const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
+      dacProxyContract.address,
+      makerDssCdpManagerContract
+    );
+
+    const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
+      dacProxyContract.address,
+      makerDssCdpManagerContract
+    );
+
+    expect(finalVaultCount.length).gt(initialVaultCount.length);
   });
 });
