@@ -205,77 +205,77 @@ describe("DedgeCompoundManager", () => {
     );
   });
 
-  // it("Swapping Debt (Borrow) DAI -> BAT", async () => {
-  //   await sleep(500);
+  it("Swapping Debt (Borrow) DAI -> BAT", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cDAI.address;
-  //   const newCTokenAddress = legos.compound.cBAT.address;
+    const oldCTokenAddress = legos.compound.cDAI.address;
+    const newCTokenAddress = legos.compound.cBAT.address;
 
-  //   await swapDebt(oldCTokenAddress, newCTokenAddress);
-  // });
+    await swapDebt(oldCTokenAddress, newCTokenAddress);
+  });
 
-  // it("Swapping Debt (Borrow) BAT -> ETH", async () => {
-  //   await sleep(500);
+  it("Swapping Debt (Borrow) BAT -> ETH", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cBAT.address;
-  //   const newCTokenAddress = legos.compound.cEther.address;
+    const oldCTokenAddress = legos.compound.cBAT.address;
+    const newCTokenAddress = legos.compound.cEther.address;
 
-  //   await swapDebt(oldCTokenAddress, newCTokenAddress);
-  // });
+    await swapDebt(oldCTokenAddress, newCTokenAddress);
+  });
 
-  // it("Swapping Debt (Borrow) ETH -> DAI", async () => {
-  //   await sleep(500);
+  it("Swapping Debt (Borrow) ETH -> DAI", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cEther.address;
-  //   const newCTokenAddress = legos.compound.cDAI.address;
+    const oldCTokenAddress = legos.compound.cEther.address;
+    const newCTokenAddress = legos.compound.cDAI.address;
 
-  //   await swapDebt(oldCTokenAddress, newCTokenAddress);
-  // });
+    await swapDebt(oldCTokenAddress, newCTokenAddress);
+  });
 
-  // it("Swapping Collateral (Supply) ETH -> USDC", async () => {
-  //   await sleep(500);
+  it("Swapping Collateral (Supply) ETH -> USDC", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cEther.address;
-  //   const newCTokenAddress = legos.compound.cUSDC.address;
+    const oldCTokenAddress = legos.compound.cEther.address;
+    const newCTokenAddress = legos.compound.cUSDC.address;
 
-  //   await swapCollateral(oldCTokenAddress, newCTokenAddress);
-  // });
+    await swapCollateral(oldCTokenAddress, newCTokenAddress);
+  });
 
-  // it("Swapping Collateral (Supply) USDC -> REP", async () => {
-  //   await sleep(500);
+  it("Swapping Collateral (Supply) USDC -> REP", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cUSDC.address;
-  //   const newCTokenAddress = legos.compound.cREP.address;
+    const oldCTokenAddress = legos.compound.cUSDC.address;
+    const newCTokenAddress = legos.compound.cREP.address;
 
-  //   await swapCollateral(oldCTokenAddress, newCTokenAddress);
-  // });
+    await swapCollateral(oldCTokenAddress, newCTokenAddress);
+  });
 
-  // it("Swapping Collateral (Supply) REP -> ETHER", async () => {
-  //   await sleep(500);
+  it("Swapping Collateral (Supply) REP -> ETHER", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cREP.address;
-  //   const newCTokenAddress = legos.compound.cEther.address;
+    const oldCTokenAddress = legos.compound.cREP.address;
+    const newCTokenAddress = legos.compound.cEther.address;
 
-  //   await swapCollateral(oldCTokenAddress, newCTokenAddress);
-  // });
+    await swapCollateral(oldCTokenAddress, newCTokenAddress);
+  });
 
-  // it("Clearing Collateral (Supply) Dust USDC -> ETHER", async () => {
-  //   await sleep(500);
+  it("Clearing Collateral (Supply) Dust USDC -> ETHER", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cUSDC.address;
-  //   const newCTokenAddress = legos.compound.cEther.address;
+    const oldCTokenAddress = legos.compound.cUSDC.address;
+    const newCTokenAddress = legos.compound.cEther.address;
 
-  //   await clearDustCollateral(oldCTokenAddress, newCTokenAddress);
-  // });
+    await clearDustCollateral(oldCTokenAddress, newCTokenAddress);
+  });
 
-  // it("Clearing Collateral (Supply) Dust REP -> ETHER", async () => {
-  //   await sleep(500);
+  it("Clearing Collateral (Supply) Dust REP -> ETHER", async () => {
+    await sleep(500);
 
-  //   const oldCTokenAddress = legos.compound.cREP.address;
-  //   const newCTokenAddress = legos.compound.cEther.address;
+    const oldCTokenAddress = legos.compound.cREP.address;
+    const newCTokenAddress = legos.compound.cEther.address;
 
-  //   await clearDustCollateral(oldCTokenAddress, newCTokenAddress);
-  // });
+    await clearDustCollateral(oldCTokenAddress, newCTokenAddress);
+  });
 
   it("supplyThroughProxy (ETH)", async () => {
     const targetCTokenAddress = legos.compound.cEther.address;
@@ -305,7 +305,7 @@ describe("DedgeCompoundManager", () => {
   it("supplyThroughProxy (DAI)", async () => {
     const targetCTokenAddress = legos.compound.cDAI.address;
     const targetCTokenUnderlying = legos.erc20.dai.address;
-    const targetAmount = ethers.utils.parseUnits("1");
+    const targetAmount = ethers.utils.parseUnits("50");
 
     await getTokenFromUniswapAndApproveProxyTransfer(
       dacProxyContract.address,
