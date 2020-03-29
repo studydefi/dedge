@@ -44,9 +44,9 @@ const FromInstaDapp = () => {
           />
 
           <Box p={4} mb={3}>
-            <Heading.h3>Import from MakerDAO</Heading.h3>
+            <Heading.h3>Import from InstaDapp</Heading.h3>
             <Box>
-              <Field label="Your MakerDAO Vaults (2)">
+              <Field label="Your InstaDapp Vaults (2)">
               <Select required>
                 <option value="1324">Vault #1324</option>
                 <option value="2532">Vault #2532</option>

@@ -6,7 +6,9 @@ import Connection from "./Connection";
 import legos from "../../money-legos";
 import DACProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
 
-const CONTRACTS = {};
+const CONTRACTS = {
+  makerProxyRegistry: legos.maker.proxyRegistry
+};
 
 const DEDGE_CONTRACTS = {
   dacProxyFactory: DACProxyFactory,
