@@ -112,7 +112,7 @@ const openVault = async (
     {
       gasLimit: 4000000,
       value:
-        ilk === legos.maker.ilks.ethA.ilk
+        ilk === legos.maker.ilks.ethA.symbol
           ? ethers.utils.parseEther(amount.toString())
           : "0x0"
     }
