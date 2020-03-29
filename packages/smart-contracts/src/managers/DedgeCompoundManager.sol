@@ -219,18 +219,11 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         address addressRegistryAddress,
         address oldCTokenAddress,            // Old CToken address for [debt|collateral]
         uint oldTokenUnderlyingDelta,        // Amount of old tokens to swap to new tokens
-        address newCTokenAddress,            // New CToken address for [debt|collateral]
         bytes calldata executeOperationCalldataParams
     ) external {
         // Calling from dacProxy context (msg.sender is dacProxy)
         // 1. Get amount of ETH obtained by selling that from Uniswap
         // 2. Flashloans ETH to dacProxy
-
-        // Enters markets for both CTokens
-        address[] memory enterMarketCTokens = new address[](2);
-        enterMarketCTokens[0] = oldCTokenAddress;
-        enterMarketCTokens[1] = newCTokenAddress;
-        enterMarkets(enterMarketCTokens);
 
         // Gets registries
         AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);

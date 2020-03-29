@@ -5,6 +5,8 @@ import dedgeCompoundManagerDef from "../artifacts/DedgeCompoundManager.json";
 
 import { Address, EncoderFunction } from "./types";
 
+import axios from "axios";
+
 const IDedgeCompoundManager = new ethers.utils.Interface(
   dedgeCompoundManagerDef.abi
 );
@@ -44,7 +46,6 @@ const swapOperation = (
       addressRegistry,
       oldCToken,
       oldTokenUnderlyingDeltaWei.toString(),
-      newCToken,
       executeOperationCalldataParams
     ]
   );
@@ -98,7 +99,42 @@ const swapCollateral = (
   );
 };
 
+const getAccountInformation = async (address: Address): Promise<any> => {
+  // Get account information
+  const compoundResp = await axios.get(
+    `https://api.compound.finance/api/v2/account?addresses[]=${address}`
+  );
+
+  // Get total borrow / supply in ETH
+  const accountInformation = compoundResp.data.accounts[0];
+  const borrowedValueInEth = parseFloat(
+    accountInformation.total_borrow_value_in_eth.value
+  );
+  const supplyValueInEth = parseFloat(
+    accountInformation.total_collateral_value_in_eth.value
+  );
+
+  const currentBorrowPercentage = borrowedValueInEth / supplyValueInEth;
+
+  // Get eth price
+  const coingeckoResp = await axios.get(
+    "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+  );
+
+  const ethInUSD = parseFloat(coingeckoResp.data.ethereum.usd);
+
+  // Convert to USD
+  return {
+    borrowBalanceUSD: borrowedValueInEth * ethInUSD,
+    supplyBalanceUSD: supplyValueInEth * ethInUSD,
+    currentBorrowPercentage,
+    ethInUSD,
+    liquidationPriceUSD: currentBorrowPercentage * ethInUSD
+  };
+};
+
 export default {
   swapCollateral,
-  swapDebt
+  swapDebt,
+  getAccountInformation
 };
