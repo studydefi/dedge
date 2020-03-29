@@ -7,6 +7,7 @@ import networkIds from './networks'
 
 
 const compound = {
+  cTokenAbi: CTokenAbi,
   comptroller: {
     address: {
       [networkIds.mainnet]: "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b",
@@ -25,19 +26,19 @@ const compound = {
     },
     abi: CEtherAbi,
   },
-  cDai: {
+  cDAI: {
     address: {
       [networkIds.mainnet]: "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643",
     },
     abi: CTokenAbi,
   },
-  cSai: {
+  cSAI: {
     address: {
       [networkIds.mainnet]: "0xf5dce57282a584d2746faf1593d3121fcac444dc",
     },
     abi: CTokenAbi,
   },
-  cBat: {
+  cBAT: {
     address: {
       [networkIds.mainnet]: "0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e",
     },

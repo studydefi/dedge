@@ -15,3 +15,12 @@ npx ganache-cli -f https://mainnet.infura.io/v3/<project_id> -i 1583817378
 ```bash
 npx truffle migrate --reset --network development
 ```
+
+# Testing
+Run `ganache-cli` in the separate terminal with the following parameters:
+```
+ganache-cli -f <FORK_URL> -i 5777 -d
+```
+
+Run `npm run test` in another terminal, with the optional parameters in your environment:
+- `PROVIDER_URL`: JSON RPC Provider URL (e.g. `ganache-cli`, defaults to `http://localhost:8545`)

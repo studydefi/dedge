@@ -4,13 +4,13 @@ import uniswapFactoryAbi from "./abi/uniswap/Factory.json";
 import uniswapExchangeAbi from "./abi/uniswap/Exchange.json";
 
 const uniswap = {
-  uniswapFactory: {
+  factory: {
     address: {
       [networkdIds.mainnet]: "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95"
     },
     abi: uniswapFactoryAbi,
   },
-  uniswapExchange: {
+  exchange: {
     abi: uniswapExchangeAbi,
   },
 };

@@ -298,14 +298,14 @@
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/registries/AddressRegistry.sol",
     "exportedSymbols": {
       "AddressRegistry": [
-        6561
+        6966
       ]
     },
-    "id": 6562,
+    "id": 6967,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 6503,
+        "id": 6908,
         "literals": [
           "solidity",
           "0.5",
@@ -320,19 +320,19 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 6561,
+        "id": 6966,
         "linearizedBaseContracts": [
-          6561
+          6966
         ],
         "name": "AddressRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 6506,
+            "id": 6911,
             "name": "AaveLendingPoolAddressProviderAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "68:97:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -341,7 +341,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6504,
+              "id": 6909,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "68:7:30",
@@ -354,7 +354,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832346134326644323843393736413631446635443030443035393943333463346639303734386338",
-              "id": 6505,
+              "id": 6910,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -373,10 +373,10 @@
           },
           {
             "constant": false,
-            "id": 6509,
+            "id": 6914,
             "name": "AaveEthAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "171:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -385,7 +385,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6507,
+              "id": 6912,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "171:7:30",
@@ -398,7 +398,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307845656565654565656545654565654565456545656545454565656565456565656565656545456545",
-              "id": 6508,
+              "id": 6913,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -417,10 +417,10 @@
           },
           {
             "constant": false,
-            "id": 6512,
+            "id": 6917,
             "name": "UniswapFactoryAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "267:81:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -429,7 +429,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6510,
+              "id": 6915,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "267:7:30",
@@ -442,7 +442,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307863306134376446653033344234303042343762446144354665634461323632316465366334643935",
-              "id": 6511,
+              "id": 6916,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -461,10 +461,10 @@
           },
           {
             "constant": false,
-            "id": 6515,
+            "id": 6920,
             "name": "CompoundPriceOracleAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "371:86:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -473,7 +473,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6513,
+              "id": 6918,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "371:7:30",
@@ -486,7 +486,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831443861456463394539323437333044443366393634314344623444314239324238343862346264",
-              "id": 6514,
+              "id": 6919,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -505,10 +505,10 @@
           },
           {
             "constant": false,
-            "id": 6518,
+            "id": 6923,
             "name": "CompoundComptrollerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "463:86:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -517,7 +517,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6516,
+              "id": 6921,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "463:7:30",
@@ -530,7 +530,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833643938313932313041333162343936316233304546353462453261654437394239633943643342",
-              "id": 6517,
+              "id": 6922,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -549,10 +549,10 @@
           },
           {
             "constant": false,
-            "id": 6521,
+            "id": 6926,
             "name": "CEtherAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "555:73:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -561,7 +561,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6519,
+              "id": 6924,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "555:7:30",
@@ -574,7 +574,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307834446463324431393339343839323644303266394231664539653164616130373138323730454435",
-              "id": 6520,
+              "id": 6925,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -593,10 +593,10 @@
           },
           {
             "constant": false,
-            "id": 6524,
+            "id": 6929,
             "name": "CUSDCAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "634:72:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -605,7 +605,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6522,
+              "id": 6927,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "634:7:30",
@@ -618,7 +618,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833394141333963303231646662614538666143353435393336363933614339313764354537353633",
-              "id": 6523,
+              "id": 6928,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -637,10 +637,10 @@
           },
           {
             "constant": false,
-            "id": 6527,
+            "id": 6932,
             "name": "CDaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "712:71:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -649,7 +649,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6525,
+              "id": 6930,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "712:7:30",
@@ -662,7 +662,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835643361353336453444364462443631313463633145616433353737376241423934384533363433",
-              "id": 6526,
+              "id": 6931,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -681,10 +681,10 @@
           },
           {
             "constant": false,
-            "id": 6530,
+            "id": 6935,
             "name": "CSaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "789:71:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -693,7 +693,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6528,
+              "id": 6933,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "789:7:30",
@@ -706,7 +706,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307846354443653537323832413538344432373436466146313539336433313231466361633434346443",
-              "id": 6529,
+              "id": 6934,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -725,10 +725,10 @@
           },
           {
             "constant": false,
-            "id": 6533,
+            "id": 6938,
             "name": "DaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "883:70:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -737,7 +737,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6531,
+              "id": 6936,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "883:7:30",
@@ -750,7 +750,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307836423137353437344538393039344334344461393862393534456564654143343935323731643046",
-              "id": 6532,
+              "id": 6937,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -769,10 +769,10 @@
           },
           {
             "constant": false,
-            "id": 6536,
+            "id": 6941,
             "name": "BatAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "959:70:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -781,7 +781,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6534,
+              "id": 6939,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "959:7:30",
@@ -794,7 +794,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307830443837373546363438343330363739413730394539386432623043623632353064323838374546",
-              "id": 6535,
+              "id": 6940,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -813,10 +813,10 @@
           },
           {
             "constant": false,
-            "id": 6539,
+            "id": 6944,
             "name": "UsdcAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1035:71:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -825,7 +825,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6537,
+              "id": 6942,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1035:7:30",
@@ -838,7 +838,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841306238363939316336323138623336633164313944346132653945623063453336303665423438",
-              "id": 6538,
+              "id": 6943,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -857,10 +857,10 @@
           },
           {
             "constant": false,
-            "id": 6542,
+            "id": 6947,
             "name": "EthJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1244:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -869,7 +869,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6540,
+              "id": 6945,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1244:7:30",
@@ -882,7 +882,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832463062323366353337333432353242646132323737333537653937653135313764364230343241",
-              "id": 6541,
+              "id": 6946,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -901,10 +901,10 @@
           },
           {
             "constant": false,
-            "id": 6545,
+            "id": 6950,
             "name": "UsdcJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1324:75:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -913,7 +913,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6543,
+              "id": 6948,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1324:7:30",
@@ -926,7 +926,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841313931653537386136373336313637333236643035633131394345306339303834394538344237",
-              "id": 6544,
+              "id": 6949,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -945,10 +945,10 @@
           },
           {
             "constant": false,
-            "id": 6548,
+            "id": 6953,
             "name": "BatJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1405:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -957,7 +957,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6546,
+              "id": 6951,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1405:7:30",
@@ -970,7 +970,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833443042313931324236363131346434303936463438413843456533413536433233313737326341",
-              "id": 6547,
+              "id": 6952,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -989,10 +989,10 @@
           },
           {
             "constant": false,
-            "id": 6551,
+            "id": 6956,
             "name": "DaiJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1485:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1001,7 +1001,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6549,
+              "id": 6954,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1485:7:30",
@@ -1014,7 +1014,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307839373539413641633930393737623933423538353437623441373163373833313766333931413238",
-              "id": 6550,
+              "id": 6955,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1033,10 +1033,10 @@
           },
           {
             "constant": false,
-            "id": 6554,
+            "id": 6959,
             "name": "JugAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1565:70:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1045,7 +1045,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6552,
+              "id": 6957,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1565:7:30",
@@ -1058,7 +1058,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831396330393736663539304436373730374536323339374338373832396438393644633066314631",
-              "id": 6553,
+              "id": 6958,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1077,10 +1077,10 @@
           },
           {
             "constant": false,
-            "id": 6557,
+            "id": 6962,
             "name": "DssProxyActionsAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1641:82:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1089,7 +1089,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6555,
+              "id": 6960,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1641:7:30",
@@ -1102,7 +1102,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307838326563443133354463653635466263364462644430653432333745304146393346464435303338",
-              "id": 6556,
+              "id": 6961,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1121,10 +1121,10 @@
           },
           {
             "constant": false,
-            "id": 6560,
+            "id": 6965,
             "name": "DssCdpManagerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1729:80:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1133,7 +1133,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6558,
+              "id": 6963,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1729:7:30",
@@ -1146,7 +1146,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835656633306239393836333435323439626333326438393238423765653634444539343335453339",
-              "id": 6559,
+              "id": 6964,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1164,7 +1164,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 6562,
+        "scope": 6967,
         "src": "25:1787:30"
       }
     ],
@@ -1174,14 +1174,14 @@
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/registries/AddressRegistry.sol",
     "exportedSymbols": {
       "AddressRegistry": [
-        6561
+        6966
       ]
     },
-    "id": 6562,
+    "id": 6967,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 6503,
+        "id": 6908,
         "literals": [
           "solidity",
           "0.5",
@@ -1196,19 +1196,19 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 6561,
+        "id": 6966,
         "linearizedBaseContracts": [
-          6561
+          6966
         ],
         "name": "AddressRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 6506,
+            "id": 6911,
             "name": "AaveLendingPoolAddressProviderAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "68:97:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1217,7 +1217,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6504,
+              "id": 6909,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "68:7:30",
@@ -1230,7 +1230,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832346134326644323843393736413631446635443030443035393943333463346639303734386338",
-              "id": 6505,
+              "id": 6910,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1249,10 +1249,10 @@
           },
           {
             "constant": false,
-            "id": 6509,
+            "id": 6914,
             "name": "AaveEthAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "171:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1261,7 +1261,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6507,
+              "id": 6912,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "171:7:30",
@@ -1274,7 +1274,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307845656565654565656545654565654565456545656545454565656565456565656565656545456545",
-              "id": 6508,
+              "id": 6913,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1293,10 +1293,10 @@
           },
           {
             "constant": false,
-            "id": 6512,
+            "id": 6917,
             "name": "UniswapFactoryAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "267:81:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1305,7 +1305,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6510,
+              "id": 6915,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "267:7:30",
@@ -1318,7 +1318,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307863306134376446653033344234303042343762446144354665634461323632316465366334643935",
-              "id": 6511,
+              "id": 6916,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1337,10 +1337,10 @@
           },
           {
             "constant": false,
-            "id": 6515,
+            "id": 6920,
             "name": "CompoundPriceOracleAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "371:86:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1349,7 +1349,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6513,
+              "id": 6918,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "371:7:30",
@@ -1362,7 +1362,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831443861456463394539323437333044443366393634314344623444314239324238343862346264",
-              "id": 6514,
+              "id": 6919,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1381,10 +1381,10 @@
           },
           {
             "constant": false,
-            "id": 6518,
+            "id": 6923,
             "name": "CompoundComptrollerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "463:86:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1393,7 +1393,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6516,
+              "id": 6921,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "463:7:30",
@@ -1406,7 +1406,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833643938313932313041333162343936316233304546353462453261654437394239633943643342",
-              "id": 6517,
+              "id": 6922,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1425,10 +1425,10 @@
           },
           {
             "constant": false,
-            "id": 6521,
+            "id": 6926,
             "name": "CEtherAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "555:73:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1437,7 +1437,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6519,
+              "id": 6924,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "555:7:30",
@@ -1450,7 +1450,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307834446463324431393339343839323644303266394231664539653164616130373138323730454435",
-              "id": 6520,
+              "id": 6925,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1469,10 +1469,10 @@
           },
           {
             "constant": false,
-            "id": 6524,
+            "id": 6929,
             "name": "CUSDCAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "634:72:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1481,7 +1481,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6522,
+              "id": 6927,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "634:7:30",
@@ -1494,7 +1494,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833394141333963303231646662614538666143353435393336363933614339313764354537353633",
-              "id": 6523,
+              "id": 6928,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1513,10 +1513,10 @@
           },
           {
             "constant": false,
-            "id": 6527,
+            "id": 6932,
             "name": "CDaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "712:71:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1525,7 +1525,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6525,
+              "id": 6930,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "712:7:30",
@@ -1538,7 +1538,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835643361353336453444364462443631313463633145616433353737376241423934384533363433",
-              "id": 6526,
+              "id": 6931,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1557,10 +1557,10 @@
           },
           {
             "constant": false,
-            "id": 6530,
+            "id": 6935,
             "name": "CSaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "789:71:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1569,7 +1569,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6528,
+              "id": 6933,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "789:7:30",
@@ -1582,7 +1582,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307846354443653537323832413538344432373436466146313539336433313231466361633434346443",
-              "id": 6529,
+              "id": 6934,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1601,10 +1601,10 @@
           },
           {
             "constant": false,
-            "id": 6533,
+            "id": 6938,
             "name": "DaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "883:70:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1613,7 +1613,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6531,
+              "id": 6936,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "883:7:30",
@@ -1626,7 +1626,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307836423137353437344538393039344334344461393862393534456564654143343935323731643046",
-              "id": 6532,
+              "id": 6937,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1645,10 +1645,10 @@
           },
           {
             "constant": false,
-            "id": 6536,
+            "id": 6941,
             "name": "BatAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "959:70:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1657,7 +1657,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6534,
+              "id": 6939,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "959:7:30",
@@ -1670,7 +1670,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307830443837373546363438343330363739413730394539386432623043623632353064323838374546",
-              "id": 6535,
+              "id": 6940,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1689,10 +1689,10 @@
           },
           {
             "constant": false,
-            "id": 6539,
+            "id": 6944,
             "name": "UsdcAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1035:71:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1701,7 +1701,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6537,
+              "id": 6942,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1035:7:30",
@@ -1714,7 +1714,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841306238363939316336323138623336633164313944346132653945623063453336303665423438",
-              "id": 6538,
+              "id": 6943,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1733,10 +1733,10 @@
           },
           {
             "constant": false,
-            "id": 6542,
+            "id": 6947,
             "name": "EthJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1244:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1745,7 +1745,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6540,
+              "id": 6945,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1244:7:30",
@@ -1758,7 +1758,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832463062323366353337333432353242646132323737333537653937653135313764364230343241",
-              "id": 6541,
+              "id": 6946,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1777,10 +1777,10 @@
           },
           {
             "constant": false,
-            "id": 6545,
+            "id": 6950,
             "name": "UsdcJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1324:75:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1789,7 +1789,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6543,
+              "id": 6948,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1324:7:30",
@@ -1802,7 +1802,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841313931653537386136373336313637333236643035633131394345306339303834394538344237",
-              "id": 6544,
+              "id": 6949,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1821,10 +1821,10 @@
           },
           {
             "constant": false,
-            "id": 6548,
+            "id": 6953,
             "name": "BatJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1405:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1833,7 +1833,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6546,
+              "id": 6951,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1405:7:30",
@@ -1846,7 +1846,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833443042313931324236363131346434303936463438413843456533413536433233313737326341",
-              "id": 6547,
+              "id": 6952,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1865,10 +1865,10 @@
           },
           {
             "constant": false,
-            "id": 6551,
+            "id": 6956,
             "name": "DaiJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1485:74:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1877,7 +1877,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6549,
+              "id": 6954,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1485:7:30",
@@ -1890,7 +1890,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307839373539413641633930393737623933423538353437623441373163373833313766333931413238",
-              "id": 6550,
+              "id": 6955,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1909,10 +1909,10 @@
           },
           {
             "constant": false,
-            "id": 6554,
+            "id": 6959,
             "name": "JugAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1565:70:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1921,7 +1921,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6552,
+              "id": 6957,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1565:7:30",
@@ -1934,7 +1934,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831396330393736663539304436373730374536323339374338373832396438393644633066314631",
-              "id": 6553,
+              "id": 6958,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1953,10 +1953,10 @@
           },
           {
             "constant": false,
-            "id": 6557,
+            "id": 6962,
             "name": "DssProxyActionsAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1641:82:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1965,7 +1965,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6555,
+              "id": 6960,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1641:7:30",
@@ -1978,7 +1978,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307838326563443133354463653635466263364462644430653432333745304146393346464435303338",
-              "id": 6556,
+              "id": 6961,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1997,10 +1997,10 @@
           },
           {
             "constant": false,
-            "id": 6560,
+            "id": 6965,
             "name": "DssCdpManagerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6561,
+            "scope": 6966,
             "src": "1729:80:30",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2009,7 +2009,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6558,
+              "id": 6963,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "1729:7:30",
@@ -2022,7 +2022,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835656633306239393836333435323439626333326438393238423765653634444539343335453339",
-              "id": 6559,
+              "id": 6964,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -2040,7 +2040,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 6562,
+        "scope": 6967,
         "src": "25:1787:30"
       }
     ],
@@ -2050,17 +2050,9 @@
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
-  "networks": {
-    "5777": {
-      "events": {},
-      "links": {},
-      "address": "0x090e35EFd22D492bF67396CC93C6D26AE3c18D94",
-      "transactionHash": "0x4d06befc8cdd39f49eadbf483331be9f655e8e9f2523efe3cf22a691fc2c67ed"
-    }
-  },
+  "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-28T01:04:46.941Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-03-29T11:42:49.990Z",
   "devdoc": {
     "methods": {}
   },
