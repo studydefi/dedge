@@ -11,7 +11,8 @@ const IDedgeCompoundManager = new ethers.utils.Interface(
 const buildAndEnterMarkets = (
   dacProxyFactory: ethers.Contract,
   dedgeCompoundManager: Address,
-  cTokensToEnter: Address[]
+  cTokensToEnter: Address[],
+  gasLimit: number = 4000000
 ): Promise<any> => {
   const enterMarketsCallbackData = IDedgeCompoundManager.functions.enterMarkets.encode(
     [cTokensToEnter]
@@ -19,7 +20,10 @@ const buildAndEnterMarkets = (
 
   return dacProxyFactory["buildAndEnterMarkets(address,bytes)"](
     dedgeCompoundManager,
-    enterMarketsCallbackData
+    enterMarketsCallbackData,
+    {
+      gasLimit
+    }
   );
 };
 
@@ -27,7 +31,8 @@ const buildAndEnterMarketsOwner = (
   owner: Address,
   dacProxyFactory: ethers.Contract,
   dedgeCompoundManager: Address,
-  cTokensToEnter: Address[]
+  cTokensToEnter: Address[],
+  gasLimit: number = 4000000
 ): Promise<any> => {
   const enterMarketsCallbackData = IDedgeCompoundManager.functions.enterMarkets.encode(
     [cTokensToEnter]
@@ -36,7 +41,10 @@ const buildAndEnterMarketsOwner = (
   return dacProxyFactory["buildAndEnterMarkets(address,address,bytes)"](
     owner,
     dedgeCompoundManager,
-    enterMarketsCallbackData
+    enterMarketsCallbackData,
+    {
+      gasLimit
+    }
   );
 };
 

@@ -13,6 +13,19 @@ contract CompoundBase {
     address constant CompoundComptrollerAddress = 0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B;
     address constant CEtherAddress = 0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5;
 
+    function _transferFrom(
+        address sender,
+        address recipient,
+        address cToken,
+        uint amount
+    ) internal {
+        address underlying = ICToken(cToken).underlying();
+        require(
+            IERC20(underlying).transferFrom(sender, recipient, amount),
+            "cmpnd-mgr-transfer-from-failed"
+        );
+    }
+
     function enterMarkets(
         address[] memory cTokens   // Address of the Compound derivation token (e.g. cDAI)
     ) public {
@@ -121,5 +134,66 @@ contract CompoundBase {
 
     function redeemUnderlying(address cToken, uint redeemTokens) public payable {
         require(ICToken(cToken).redeemUnderlying(redeemTokens) == 0, "cmpnd-mgr-ctoken-redeem-underlying-failed");
+    }
+
+    // -- Helper functions so proxy doesn't hold any funds, all funds borrowed
+    // or redeemed gets sent to user
+    function supplyThroughProxy(
+        address cToken,
+        uint amount
+    ) public payable {
+        // If cToken isn't an ether address, we need to transferFrom
+        // If this fails, users needs to execute `approve(spender, amount)` to this proxy
+        if (cToken != CEtherAddress) {
+            _transferFrom(msg.sender, address(this), cToken, amount);
+        }
+        supply(cToken, amount);
+    }
+
+    function repayBorrowThroughProxy(address cToken, uint amount) public payable {
+        if (cToken != CEtherAddress) {
+            _transferFrom(msg.sender, address(this), cToken, amount);
+        }
+        repayBorrow(cToken, amount);
+    }
+
+    function repayBorrowBehalfThroughProxy(address recipient, address cToken, uint amount) public payable {
+        if (cToken != CEtherAddress) {
+            _transferFrom(msg.sender, address(this), cToken, amount);
+        }
+        repayBorrowBehalf(recipient, cToken, amount);
+    }
+
+    function borrowThroughProxy(address cToken, uint amount) public {
+        borrow(cToken, amount);
+        if (cToken == CEtherAddress) {
+            msg.sender.call.value(amount)("");
+        } else {
+            IERC20(ICToken(cToken).underlying()).transfer(msg.sender, amount);
+        }
+    }
+
+    function redeemThroughProxy(
+        address cToken,
+        uint amount
+    ) public payable {
+        redeem(cToken, amount);
+        if (cToken == CEtherAddress) {
+            msg.sender.call.value(amount)("");
+        } else {
+            IERC20(ICToken(cToken).underlying()).transfer(msg.sender, amount);
+        }
+    }
+
+    function redeemUnderlyingThroughProxy(
+        address cToken,
+        uint amount
+    ) public payable {
+        redeemUnderlying(cToken, amount);
+        if (cToken == CEtherAddress) {
+            msg.sender.call.value(amount)("");
+        } else {
+            IERC20(ICToken(cToken).underlying()).transfer(msg.sender, amount);
+        }
     }
 }

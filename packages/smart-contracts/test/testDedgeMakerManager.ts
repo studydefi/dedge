@@ -4,7 +4,14 @@ import { ethers } from "ethers";
 
 import { dedgeHelpers } from "../helpers/index";
 
-import { wallet, legos, newCTokenContract, sleep, tryAndWait } from "./common";
+import {
+  wallet,
+  legos,
+  newCTokenContract,
+  sleep,
+  tryAndWait,
+  getTokenFromUniswapAndApproveProxyTransfer
+} from "./common";
 
 import {
   dacProxyFactoryAddress,
@@ -22,12 +29,6 @@ const IDssProxyActions = new ethers.utils.Interface(
   legos.maker.dssProxyActions.abi
 );
 
-const uniswapFactoryContract = new ethers.Contract(
-  legos.uniswap.factory.address,
-  legos.uniswap.factory.abi,
-  wallet
-);
-
 const cEtherContract = new ethers.Contract(
   legos.compound.cEther.address,
   legos.compound.cEther.abi,
@@ -37,42 +38,6 @@ const cEtherContract = new ethers.Contract(
 const cDaiContract = newCTokenContract(legos.compound.cDAI.address);
 const cBatContract = newCTokenContract(legos.compound.cBAT.address);
 const cUsdcContract = newCTokenContract(legos.compound.cUSDC.address);
-
-// Uniswap helper functions
-const getTokenFromUniswapAndApproveProxyTransfer = async (
-  makerDsProxyAddress: string, // Approve `transferFrom` from proxyAddress
-  tokenAddress: string,
-  ethersToSend: number = 3
-) => {
-  const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
-    tokenAddress
-  );
-  const uniswapExchangeContract = new ethers.Contract(
-    uniswapExchangeAddress,
-    legos.uniswap.exchange.abi,
-    wallet
-  );
-
-  await uniswapExchangeContract.ethToTokenSwapInput(
-    1, // min token retrieve amount
-    2525644800, // random timestamp in the future (year 2050)
-    {
-      gasLimit: 4000000,
-      value: ethers.utils.parseEther(ethersToSend.toString())
-    }
-  );
-
-  const tokenContract = new ethers.Contract(
-    tokenAddress,
-    legos.erc20.abi,
-    wallet
-  );
-
-  await tokenContract.approve(
-    makerDsProxyAddress,
-    "0xffffffffffffffffffffffffffffffff"
-  );
-};
 
 // Maker helper functions
 const openVault = async (
@@ -252,7 +217,7 @@ describe("DedgeMakerManager", () => {
     const ilkCTokenContract = cEtherContract;
 
     const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
-      dacProxyContract.address,
+      makerDsProxyContract.address,
       makerDssCdpManagerContract
     );
 
@@ -265,7 +230,7 @@ describe("DedgeMakerManager", () => {
     );
 
     const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
-      dacProxyContract.address,
+      makerDsProxyContract.address,
       makerDssCdpManagerContract
     );
 
@@ -289,7 +254,7 @@ describe("DedgeMakerManager", () => {
     await sleep(500);
 
     const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
-      dacProxyContract.address,
+      makerDsProxyContract.address,
       makerDssCdpManagerContract
     );
 
@@ -302,7 +267,7 @@ describe("DedgeMakerManager", () => {
     );
 
     const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
-      dacProxyContract.address,
+      makerDsProxyContract.address,
       makerDssCdpManagerContract
     );
 
@@ -325,6 +290,11 @@ describe("DedgeMakerManager", () => {
     // Sleeps for 0.5 sec to avoid invalid nonce
     await sleep(500);
 
+    const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
+      makerDsProxyContract.address,
+      makerDssCdpManagerContract
+    );
+
     await openAllowAndImportVault(
       ilk,
       ilkJoinAddress,
@@ -334,13 +304,8 @@ describe("DedgeMakerManager", () => {
       6 // USDC decimal places
     );
 
-    const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
-      dacProxyContract.address,
-      makerDssCdpManagerContract
-    );
-
     const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
-      dacProxyContract.address,
+      makerDsProxyContract.address,
       makerDssCdpManagerContract
     );
 

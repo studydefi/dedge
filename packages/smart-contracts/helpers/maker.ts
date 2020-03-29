@@ -18,6 +18,10 @@ const getVaultIds = async (
   const cdpCountBN: BigNumber = await dssCdpManager.count(userProxy);
   const cdpCount: number = parseInt(cdpCountBN.toString(), 10);
 
+  if (cdpCount === 0) {
+    return [];
+  }
+
   // Get last vault to get the 2nd last vault, and so on
   const cdpIds = [];
   let lastCdpId: BigNumber = await dssCdpManager.last(userProxy);
@@ -91,7 +95,8 @@ const dsProxyCdpAllowDacProxy = (
   dacProxy: Address, // Dedge's proxy contract
   dssCdpManager: Address, // DssCdpManager's address,
   dssProxyActions: Address, // Dss-ProxyAction's address
-  cdpId: number
+  cdpId: number,
+  gasLimit: number = 4000000
 ): Promise<any> => {
   const allowDacProxyCallback = IDssProxyActions.functions.cdpAllow.encode([
     dssCdpManager,
@@ -101,7 +106,7 @@ const dsProxyCdpAllowDacProxy = (
   ]);
 
   return dsProxy.execute(dssProxyActions, allowDacProxyCallback, {
-    gasLimit: 4000000
+    gasLimit
   });
 };
 

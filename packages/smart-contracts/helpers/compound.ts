@@ -135,5 +135,6 @@ const getAccountInformation = async (address: Address): Promise<any> => {
 
 export default {
   swapCollateral,
-  swapDebt
+  swapDebt,
+  getAccountInformation
 };

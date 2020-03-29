@@ -49,3 +49,45 @@ export const tryAndWait = async (f: any) => {
     }
   }
 };
+
+export const getTokenFromUniswapAndApproveProxyTransfer = async (
+  proxyAddress: string, // Approve `transferFrom` from proxyAddress
+  tokenAddress: string,
+  ethersToSend: number = 3,
+  selectedWallet: ethers.Wallet = wallet
+) => {
+  const uniswapFactoryContract = new ethers.Contract(
+    legos.uniswap.factory.address,
+    legos.uniswap.factory.abi,
+    selectedWallet
+  );
+
+  const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
+    tokenAddress
+  );
+  const uniswapExchangeContract = new ethers.Contract(
+    uniswapExchangeAddress,
+    legos.uniswap.exchange.abi,
+    selectedWallet
+  );
+
+  await uniswapExchangeContract.ethToTokenSwapInput(
+    1, // min token retrieve amount
+    2525644800, // random timestamp in the future (year 2050)
+    {
+      gasLimit: 4000000,
+      value: ethers.utils.parseEther(ethersToSend.toString())
+    }
+  );
+
+  const tokenContract = new ethers.Contract(
+    tokenAddress,
+    legos.erc20.abi,
+    selectedWallet
+  );
+
+  await tokenContract.approve(
+    proxyAddress,
+    "0xffffffffffffffffffffffffffffffff"
+  );
+};

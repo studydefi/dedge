@@ -10321,7 +10321,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "7161:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -10438,7 +10438,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "7274:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -11969,7 +11969,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "8274:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -12086,7 +12086,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "8393:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -22644,7 +22644,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "7161:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -22761,7 +22761,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "7274:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -24292,7 +24292,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "8274:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -24409,7 +24409,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7097,
+                            "referencedDeclaration": 7059,
                             "src": "8393:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4390",
@@ -24731,7 +24731,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T06:38:08.132Z",
+  "updatedAt": "2020-03-29T06:39:34.217Z",
   "devdoc": {
     "methods": {}
   },
