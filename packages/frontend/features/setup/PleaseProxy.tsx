@@ -17,12 +17,8 @@ const Logo = styled(LogoText)`
   font-size: 72px;
 `;
 
-const ErrorText = styled(Text)`
-  color: red;
-`;
-
 const PleaseProxy = () => {
-  const { proxyAddress } = DACProxy.useContainer()
+  const { createProxy } = DACProxy.useContainer();
   return (
     <Container pt="1">
       <CardContainer>
@@ -39,8 +35,7 @@ const PleaseProxy = () => {
             In order to get started, you must have a smart wallet with us so we
             could execute transactions on your behalf while being non-custodial.
           </Text>
-          <Button>Create Dedge Smart Wallet</Button>
-        {/* {error && <ErrorText>{error.message}</ErrorText>} */}
+          <Button onClick={createProxy}>Create Dedge Smart Wallet</Button>
         </Box>
       </CardContainer>
     </Container>

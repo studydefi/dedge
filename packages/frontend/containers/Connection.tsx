@@ -8,6 +8,7 @@ type Signer = ethers.Signer;
 function useConnection() {
   const [provider, setProvider] = useState<Provider | null>(null);
   const [signer, setSigner] = useState<Signer | null>(null);
+  const [network, setNetwork] = useState<any>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
@@ -19,6 +20,7 @@ function useConnection() {
     // get provider and signer
     const provider = new ethers.providers.Web3Provider(window.ethereum as any);
     const signer = provider.getSigner();
+    const network = await provider.getNetwork();
 
     // get address
     await provider.send("eth_requestAccounts", null);
@@ -26,6 +28,7 @@ function useConnection() {
 
     setProvider(provider);
     setSigner(signer);
+    setNetwork(network);
     setAddress(address);
   };
 
@@ -38,7 +41,7 @@ function useConnection() {
     }
   };
 
-  return { provider, signer, address, connect, error };
+  return { provider, signer, network, address, connect, error };
 }
 
 const ConnectionContainer = createContainer(useConnection);

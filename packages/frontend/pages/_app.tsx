@@ -3,6 +3,7 @@ import { BaseStyles, theme } from "rimble-ui";
 import { ThemeProvider, withTheme } from "styled-components";
 
 import Connection from "../containers/Connection";
+import Contracts from "../containers/Contracts";
 import DACProxy from "../containers/DACProxy";
 
 const customTheme = {
@@ -12,7 +13,9 @@ const customTheme = {
 
 const WithProviders = ({ children }) => (
   <Connection.Provider>
-    <DACProxy.Provider>{children}</DACProxy.Provider>
+    <Contracts.Provider>
+      <DACProxy.Provider>{children}</DACProxy.Provider>
+    </Contracts.Provider>
   </Connection.Provider>
 );
 
