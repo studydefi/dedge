@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
     "plugins": [
       { 
         "name": "typescript-tslint-plugin",
@@ -16,5 +17,6 @@
     "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
     "resolveJsonModule": true
   },
+  "include": ["./helpers/*.ts"],
   "exclude": ["node_modules"]
 }
