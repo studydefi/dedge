@@ -1,5 +1,6 @@
 import { Box, Text, Heading, Card } from "rimble-ui";
 import styled from "styled-components";
+import BorrowBalances from "../../containers/CompoundPositions";
 
 const Container = styled(Box)`
   display: flex;
@@ -9,7 +10,7 @@ const Container = styled(Box)`
 
 const DataContainer = styled(Box)`
   text-align: center;
-`
+`;
 
 const Balances = () => {
   return (
@@ -30,4 +31,4 @@ const Balances = () => {
   );
 };
 
-export default Balances
+export default Balances;

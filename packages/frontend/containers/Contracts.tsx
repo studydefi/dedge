@@ -8,6 +8,9 @@ import DACProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
 
 const CONTRACTS = {
   makerProxyRegistry: legos.maker.proxyRegistry,
+  cEther: legos.compound.cEther,
+  cBat: legos.compound.cBAT,
+  cDai: legos.compound.cDAI,
 };
 
 const DEDGE_CONTRACTS = {

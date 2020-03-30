@@ -5,6 +5,7 @@ import { ThemeProvider, withTheme } from "styled-components";
 import Connection from "../containers/Connection";
 import Contracts from "../containers/Contracts";
 import DACProxy from "../containers/DACProxy";
+import BorrowBalances from "../containers/CompoundPositions";
 
 const customTheme = {
   ...theme,
@@ -15,7 +16,9 @@ const WithProviders = ({ children }) => (
   <Connection.Provider>
     <ToastMessage.Provider ref={node => (window.toastProvider = node)} />
     <Contracts.Provider>
-      <DACProxy.Provider>{children}</DACProxy.Provider>
+      <DACProxy.Provider>
+        <BorrowBalances.Provider>{children}</BorrowBalances.Provider>
+      </DACProxy.Provider>
     </Contracts.Provider>
   </Connection.Provider>
 );
