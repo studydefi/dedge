@@ -1,11 +1,18 @@
 import { Box, Card, Field, Input, Button } from "rimble-ui";
+import styled from "styled-components";
 
 import Select from "../../components/Select";
+import DACProxyContainer from "../../containers/DACProxy";
+
+const Container = styled(Box)`
+  box-shadow: 2px 2px rgba(255, 0, 0, 0.5), 1px -2px rgba(0, 0, 255, 0.5),
+    -1px 0px rgba(250, 180, 40, 0.5);
+`;
 
 const SwapOptions = () => {
-  // console.log()
+  const { proxy } = DACProxyContainer.useContainer();
   return (
-    <Card>
+    <Container p="3">
       <Box>
         <Field label="I would like to swap" width="100%">
           <Select required>
@@ -51,8 +58,10 @@ const SwapOptions = () => {
         </Field>
       </Box>
 
-      <Button width="100%">Swap</Button>
-    </Card>
+      <Button width="100%" disabled={!proxy}>
+        Swap
+      </Button>
+    </Container>
   );
 };
 export default SwapOptions;

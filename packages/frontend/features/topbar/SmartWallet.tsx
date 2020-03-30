@@ -11,6 +11,7 @@ const Container = styled(Box)`
 const Popup = styled(Card)`
   position: absolute;
   right: 0;
+  z-index: 1;
 `;
 
 const Label = styled(Text)`

@@ -1,17 +1,13 @@
-import {
-  Box,
-  Modal,
-  Button,
-  Heading,
-  Card,
-} from "rimble-ui";
+import { Box, Modal, Button, Heading, Card } from "rimble-ui";
 
 import { useState } from "react";
 import Select from "../../components/Select";
 import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
 import useMakerVaults from "./useMakerVaults";
+import DACProxyContainer from "../../containers/DACProxy";
 
 const ImportButton = () => {
+  const { proxy } = DACProxyContainer.useContainer();
   const { vaults } = useMakerVaults();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,9 +23,11 @@ const ImportButton = () => {
 
   const importVault = () => {};
 
+  const buttonDisabled = !proxy || vaults.length !== 0;
+
   return (
     <Box>
-      <Button onClick={openModal} disabled={vaults.length !== 0}>
+      <Button onClick={openModal} disabled={buttonDisabled}>
         From MakerDAO
       </Button>
 

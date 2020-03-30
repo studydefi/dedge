@@ -1,9 +1,8 @@
 import { Box, Text, Heading, Card } from "rimble-ui";
 import styled from "styled-components";
 
-const Container = styled(Card)`
+const Container = styled(Box)`
   display: flex;
-  height: 100%;
   align-items: center;
   justify-content: space-between;
 `;

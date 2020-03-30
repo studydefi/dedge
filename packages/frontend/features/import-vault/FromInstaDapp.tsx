@@ -25,7 +25,7 @@ const FromInstaDapp = () => {
 
   return (
     <Box>
-      <Button onClick={openModal}>
+      <Button onClick={openModal} disabled>
         From InstaDapp
       </Button>
 
