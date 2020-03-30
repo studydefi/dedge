@@ -1,14 +1,9 @@
-import { ethers } from "ethers";
 import { getLegos, networkIds } from "money-legos";
 import {
   wallet,
   newERC20Contract,
   getTokenFromUniswapAndApproveProxyTransfer
 } from "dedge-smart-contracts/test/common";
-
-import {
-  dedgeHelpers
-} from "dedge-smart-contracts/helpers"
 
 const legos = getLegos(networkIds.mainnet);
 const erc20Tokens = Object.keys(legos.erc20).filter(x => x !== 'abi')
