@@ -1,4 +1,4 @@
-import { Box, Flex, Flash } from "rimble-ui";
+import { Box, Text, Flex, Flash } from "rimble-ui";
 import styled from "styled-components";
 
 import SwapOptions from "../swap-tokens/SwapOptions";
@@ -34,16 +34,18 @@ const Dashboard = () => (
         <LogoText>Swap debt AND collateral on Compound!</LogoText>
       </Box>
       <Box>
-        e.g. Take advantage of a bear market by having your debt
-        go down with it.
+        <Text fontWeight={"bold"}>e.g. Take advantage of a bear market by having your debt go down with
+        it.</Text>
       </Box>
-    </Flash>
-    <Flash variant="warning">
-      Please note that this is beta software, use at your own risk. For more
-      details, refer to our{" "}
-      <Flash.Link target="_blank" rel="noopener noreferrer">
-        FAQ
-      </Flash.Link>.
+      <hr/>
+      <Box>
+        Please note that this is beta software, use at your own risk. For more
+        details, refer to our{" "}
+        <Flash.Link target="_blank" rel="noopener noreferrer">
+          FAQ
+        </Flash.Link>
+        .
+      </Box>
     </Flash>
     <Contents py="4">
       <SwapOptions />
