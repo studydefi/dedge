@@ -14,6 +14,7 @@ const CONTRACTS = {
   makerProxyRegistry: legos.maker.proxyRegistry,
   makerProxyActions: legos.maker.dssProxyActions,
   makerCdpManager: legos.maker.dssCdpManager,
+  instaDappProxyRegistry: legos.instadapp.instaRegistry,
   cEther: legos.compound.cEther,
   cBat: legos.compound.cBAT,
   cDai: legos.compound.cDAI,

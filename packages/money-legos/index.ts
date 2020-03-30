@@ -3,6 +3,7 @@ import erc20 from "./erc20";
 import dappsys from "./dappsys";
 import uniswap from "./uniswap";
 import compound from "./compound";
+import instadapp from "./instadapp";
 import networkIds from "./networks";
 
 const isValidObject = (obj) =>
@@ -44,7 +45,8 @@ export const legos = {
   erc20,
   dappsys,
   uniswap,
-  compound
+  compound,
+  instadapp
 };
 
 export const getLegos = (networkId) => {
