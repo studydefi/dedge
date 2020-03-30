@@ -2,7 +2,7 @@ import { createContainer } from "unstated-next";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-import legos from "../../money-legos";
+import { legos } from "money-legos";
 import Connection from "./Connection";
 import Contracts from "./Contracts";
 

@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
 import Connection from "./Connection";
-import legos from "../../money-legos";
+import { legos } from "money-legos";
 import DACProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
 
 const CONTRACTS = {
-  makerProxyRegistry: legos.maker.proxyRegistry
+  makerProxyRegistry: legos.maker.proxyRegistry,
 };
 
 const DEDGE_CONTRACTS = {
@@ -36,6 +36,7 @@ function useContracts() {
     // deployed contracts can just reference off the legos
     for (const name in CONTRACTS) {
       const { address, abi } = CONTRACTS[name];
+
       const instance = new ethers.Contract(address[1], abi, signer);
       contractInstances[name] = instance;
     }
