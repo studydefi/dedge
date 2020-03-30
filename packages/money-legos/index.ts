@@ -5,14 +5,14 @@ import uniswap from "./uniswap";
 import compound from "./compound";
 import networkIds from "./networks";
 
-const isValidObject = (obj: any): boolean =>
+const isValidObject = (obj) =>
   typeof obj === "object" && obj !== null;
 
 // Recursively goes through each field, and changes the address value to the specific value
 // i.e. compound.cDai.address.mainnet = 0x...
 //      becomes:
 //      compound.cDai.address = 0x....
-const changeAddressValue = (networkId: Number, immutableObj: any): any => {
+const changeAddressValue = (networkId, immutableObj) => {
   let obj = immutableObj;
 
   if (isValidObject(immutableObj)) {
@@ -47,7 +47,7 @@ export const legos = {
   compound
 };
 
-export const getLegos = (networkId: Number) => {
+export const getLegos = (networkId) => {
   return changeAddressValue(networkId, legos);
 };
 
