@@ -91,3 +91,55 @@ export const getTokenFromUniswapAndApproveProxyTransfer = async (
     "0xffffffffffffffffffffffffffffffff"
   );
 };
+
+export const openVault = async (
+  dsProxyContract: ethers.Contract,
+  ilk: string,
+  ilkJoinAddress: string,
+  amount: number,
+  decimalPlaces = 18
+): Promise<boolean> => {
+  const IDssProxyActions = new ethers.utils.Interface(
+    legos.maker.dssProxyActions.abi
+  );
+  
+  let openVaultCalldata;
+  
+  if (ilk === legos.maker.ilks.ethA.symbol) {
+    openVaultCalldata = IDssProxyActions.functions.openLockETHAndDraw.encode([
+      legos.maker.dssCdpManager.address,
+      legos.maker.jug.address,
+      ilkJoinAddress,
+      legos.maker.daiJoin.address,
+      ethers.utils.formatBytes32String(ilk),
+      ethers.utils.parseEther("20.0") // Wanna Draw 20 DAI (minimum 20 DAI)
+    ]);
+  } else {
+    // Open Vault with ERC-20 collateral
+    openVaultCalldata = IDssProxyActions.functions.openLockGemAndDraw.encode([
+      legos.maker.dssCdpManager.address,
+      legos.maker.jug.address,
+      ilkJoinAddress,
+      legos.maker.daiJoin.address,
+      ethers.utils.formatBytes32String(ilk),
+      ethers.utils.parseUnits(amount.toString(), decimalPlaces),
+      ethers.utils.parseEther("20.0"), // Wanna Draw 20 DAI (minimum 20 DAI)
+      true
+    ]);
+  }
+
+  const openVaultTx = await dsProxyContract.execute(
+    legos.maker.dssProxyActions.address,
+    openVaultCalldata,
+    {
+      gasLimit: 4000000,
+      value:
+        ilk === legos.maker.ilks.ethA.symbol
+          ? ethers.utils.parseEther(amount.toString())
+          : "0x0"
+    }
+  );
+  await openVaultTx.wait();
+
+  return true;
+};
