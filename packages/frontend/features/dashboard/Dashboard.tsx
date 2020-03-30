@@ -34,10 +34,12 @@ const Dashboard = () => (
         <LogoText>Swap debt AND collateral on Compound!</LogoText>
       </Box>
       <Box>
-        <Text fontWeight={"bold"}>e.g. Take advantage of a bear market by having your debt go down with
-        it.</Text>
+        <Text fontWeight={"bold"}>
+          e.g. Take advantage of a bear market by having your debt go down with
+          it.
+        </Text>
       </Box>
-      <hr/>
+      <hr />
       <Box>
         Please note that this is beta software, use at your own risk. For more
         details, refer to our{" "}

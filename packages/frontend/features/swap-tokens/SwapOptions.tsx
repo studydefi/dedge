@@ -1,4 +1,4 @@
-import { Box, Card, Field, Input, Button } from "rimble-ui";
+import { Box, Text, Field, Input, Button, Tooltip } from "rimble-ui";
 import styled from "styled-components";
 
 import Select from "../../components/Select";
@@ -58,9 +58,15 @@ const SwapOptions = () => {
         </Field>
       </Box>
 
-      <Button width="100%" disabled={!proxy}>
-        Swap
-      </Button>
+      {!proxy ? (
+          <Box>
+            <Button width="100%" disabled>
+              Swap
+            </Button>
+          </Box>
+      ) : (
+        <Button width="100%">Swap</Button>
+      )}
     </Container>
   );
 };
