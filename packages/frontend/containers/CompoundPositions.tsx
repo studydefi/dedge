@@ -14,7 +14,7 @@ function useCompoundPositions() {
   const { proxyAddress } = DACProxyContainer.useContainer();
 
   const getBalances = async () => {
-    const { cEther, cBat, cDai } = contracts;
+    const { cEther, cBat, cDai, cUsdc } = contracts;
 
     console.log("fetching Compound balances")
 
@@ -22,11 +22,13 @@ function useCompoundPositions() {
     const bEth = await cEther.borrowBalanceStored(proxyAddress);
     const bBat = await cBat.borrowBalanceStored(proxyAddress);
     const bDai = await cDai.borrowBalanceStored(proxyAddress);
+    const bUsdc = await cUsdc.borrowBalanceStored(proxyAddress);
 
     // supply balances
     const sEth = await cEther.balanceOfUnderlying(proxyAddress);
     const sBat = await cBat.balanceOfUnderlying(proxyAddress);
     const sDai = await cDai.balanceOfUnderlying(proxyAddress);
+    const sUsdc = await cUsdc.balanceOfUnderlying(proxyAddress);
 
     const process = (x, u = 18) =>
       ethers.utils.formatUnits(x.toString(), u).toString();
@@ -35,6 +37,7 @@ function useCompoundPositions() {
       eth: { supply: process(sEth), borrow: process(bEth) },
       bat: { supply: process(sBat), borrow: process(bBat) },
       dai: { supply: process(sDai), borrow: process(bDai) },
+      usdc: { supply: process(sUsdc, 6), borrow: process(bUsdc, 6) },
     });
   };
 

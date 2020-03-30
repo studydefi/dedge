@@ -21,13 +21,26 @@ const useSwapOperation = () => {
     );
   };
 
+  const swapCollateral = async (fromCToken, toCToken, fromCTokenUnderlyingDelta) => {
+    const { dedgeCompoundManager, dedgeAddressRegistry } = contracts;
+
+    await dedgeHelpers.compound.swapCollateral(
+      proxy,
+      dedgeCompoundManager.address,
+      dedgeAddressRegistry.address,
+      fromCToken,
+      fromCTokenUnderlyingDelta,
+      toCToken,
+    );
+  };
+
   // useEffect(() => {
   //   console.log("contracts", contracts);
   //   if (proxy) {
   //   }
   // }, [proxy, contracts]);
 
-  return { swapDebt };
+  return { swapDebt, swapCollateral };
 };
 
 export default useSwapOperation;

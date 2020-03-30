@@ -15,13 +15,15 @@ const Container = styled(Box)`
 const SwapOptions = () => {
   const { proxy } = DACProxyContainer.useContainer();
   const { contracts } = ContractsContainer.useContainer();
-  const { swapDebt } = useSwapOperation();
+  const { swapDebt, swapCollateral } = useSwapOperation();
 
   const swap = () => {
-    const { cEther, cDai } = contracts;
+    const { cEther, cDai, cBat } = contracts;
     const amount = ethers.utils.parseEther("100");
-    swapDebt(cDai.address, cEther.address, amount);
+    // swapDebt(cDai.address, cEther.address, amount);
+    swapCollateral(cEther.address, cBat.address, ethers.utils.parseEther("1"))
   };
+  
   return (
     <Container p="3">
       <Box>

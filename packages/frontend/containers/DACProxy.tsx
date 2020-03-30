@@ -6,6 +6,8 @@ import { legos } from "money-legos";
 import Connection from "./Connection";
 import Contracts from "./Contracts";
 
+import { dedgeHelpers } from "../../smart-contracts/dist/helpers";
+
 function useDACProxy() {
   const { signer } = Connection.useContainer();
   const { contracts } = Contracts.useContainer();
@@ -24,19 +26,42 @@ function useDACProxy() {
 
   // create a proxy for user
   const createProxy = async () => {
-    const tx = await contracts.dacProxyFactory.build();
+    const {
+      cEther,
+      cDai,
+      cRep,
+      cZrx,
+      cBat,
+      cUsdc,
+      cWbtc,
+      dacProxyFactory,
+      dedgeCompoundManager
+    } = contracts;
+    const tx = await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
+      dacProxyFactory,
+      dedgeCompoundManager.address,
+      [
+        cEther.address,
+        cDai.address,
+        cRep.address,
+        cZrx.address,
+        cBat.address,
+        cUsdc.address,
+        cWbtc.address,
+      ]
+    );
 
     window.toastProvider.addMessage("Creating Smart Wallet...", {
       secondaryMessage: "Check progress on Etherscan",
       actionHref: `https://etherscan.io/tx/${tx.hash}`,
       actionText: "Check",
-      variant: "processing",
+      variant: "processing"
     });
 
     const receipt = await tx.wait();
 
     window.toastProvider.addMessage("Smart Wallet created", {
-      variant: "success",
+      variant: "success"
     });
 
     fetchProxyAddress();
@@ -62,7 +87,7 @@ function useDACProxy() {
     proxyAddress,
     createProxy,
     proxy,
-    fetchProxyAddress,
+    fetchProxyAddress
   };
 }
 

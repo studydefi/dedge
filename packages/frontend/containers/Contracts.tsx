@@ -8,18 +8,26 @@ import { legos } from "money-legos";
 import DACProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
 import dedgeCompoundManager from "../../smart-contracts/build/DedgeCompoundManager.json";
 import dedgeAddressRegistry from "../../smart-contracts/build/AddressRegistry.json";
+import dedgeMakerManager from "../../smart-contracts/build/DedgeMakerManager.json";
 
 const CONTRACTS = {
   makerProxyRegistry: legos.maker.proxyRegistry,
+  makerProxyActions: legos.maker.dssProxyActions,
+  makerCdpManager: legos.maker.dssCdpManager,
   cEther: legos.compound.cEther,
   cBat: legos.compound.cBAT,
   cDai: legos.compound.cDAI,
+  cUsdc: legos.compound.cUSDC,
+  cRep: legos.compound.cREP,
+  cZrx: legos.compound.cZRX,
+  cWbtc: legos.compound.cWBTC
 };
 
 const DEDGE_CONTRACTS = {
   dacProxyFactory: DACProxyFactory,
   dedgeCompoundManager,
   dedgeAddressRegistry,
+  dedgeMakerManager
 };
 
 type Contracts = Record<string, ethers.Contract>;
