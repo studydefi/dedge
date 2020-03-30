@@ -24,7 +24,21 @@ function useDACProxy() {
 
   // create a proxy for user
   const createProxy = async () => {
-    await contracts.dacProxyFactory.build();
+    const tx = await contracts.dacProxyFactory.build();
+
+    window.toastProvider.addMessage("Creating Smart Wallet...", {
+      secondaryMessage: "Check progress on Etherscan",
+      actionHref: `https://etherscan.io/tx/${tx.hash}`,
+      actionText: "Check",
+      variant: "processing",
+    });
+
+    const receipt = await tx.wait();
+
+    window.toastProvider.addMessage("Smart Wallet created", {
+      variant: "success",
+    });
+
     fetchProxyAddress();
   };
 

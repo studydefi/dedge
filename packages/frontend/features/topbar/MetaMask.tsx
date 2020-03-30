@@ -22,12 +22,23 @@ const Address = styled(Text)`
   font-size: 12px;
 `;
 
-const Connection = () => {
-  const { address } = ConnectionContainer.useContainer();
+const MetaMask = () => {
+  const { address, connect } = ConnectionContainer.useContainer();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+
+  if (!address) {
+    return (
+      <Container ml="2">
+        <MetaMaskButton.Outline size="small" onClick={connect}>
+          Connect with MetaMask
+        </MetaMaskButton.Outline>
+      </Container>
+    );
+  }
+
   return (
-    <Container>
+    <Container ml="2">
       <MetaMaskButton.Outline size="small" onClick={toggle}>
         Connected
       </MetaMaskButton.Outline>
@@ -41,4 +52,4 @@ const Connection = () => {
   );
 };
 
-export default Connection;
+export default MetaMask;

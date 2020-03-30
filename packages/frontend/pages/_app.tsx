@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import { BaseStyles, theme } from "rimble-ui";
+import { BaseStyles, theme, ToastMessage } from "rimble-ui";
 import { ThemeProvider, withTheme } from "styled-components";
 
 import Connection from "../containers/Connection";
@@ -13,6 +13,7 @@ const customTheme = {
 
 const WithProviders = ({ children }) => (
   <Connection.Provider>
+    <ToastMessage.Provider ref={node => (window.toastProvider = node)} />
     <Contracts.Provider>
       <DACProxy.Provider>{children}</DACProxy.Provider>
     </Contracts.Provider>

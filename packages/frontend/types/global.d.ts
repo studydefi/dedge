@@ -7,5 +7,6 @@ interface Provider extends EventEmitter {
 declare global {
   interface Window {
     ethereum: Provider | undefined;
+    toastProvider: any;
   }
 }

@@ -13,7 +13,7 @@ import useMakerVaults from "./useMakerVaults";
 
 const ImportButton = () => {
   const { vaults } = useMakerVaults();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = e => {
     e.preventDefault();

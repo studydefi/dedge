@@ -4,6 +4,7 @@ import styled from "styled-components";
 const Container = styled(Link)`
   color: inherit;
   text-decoration: inherit;
+  align-self: flex-start;
 
   &:hover {
     color: inherit;

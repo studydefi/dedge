@@ -2,7 +2,8 @@ import { Box, Link, Heading, Flex, MetaMaskButton } from "rimble-ui";
 import styled from "styled-components";
 
 import Logo from "../../components/Logo";
-import Connection from "./Connection";
+import MetaMask from "./MetaMask";
+import SmartWallet from "./SmartWallet";
 
 const Container = styled(Flex)`
   // background: yellow;
@@ -10,10 +11,18 @@ const Container = styled(Flex)`
   justify-content: space-between;
 `;
 
+const Left = styled(Flex)``;
+const Right = styled(Flex)``;
+
 const Topbar = () => (
   <Container px="4" py="2">
-    <Logo />
-    <Connection />
+    <Left>
+      <Logo />
+    </Left>
+    <Right>
+      <SmartWallet />
+      <MetaMask />
+    </Right>
   </Container>
 );
 
