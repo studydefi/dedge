@@ -16,8 +16,6 @@ function useCompoundPositions() {
   const getBalances = async () => {
     const { cEther, cBat, cDai } = contracts;
 
-    console.log("fetching balance for", proxyAddress);
-
     // borrow balances
     const bEth = await cEther.borrowBalanceStored(proxyAddress);
     const bBat = await cBat.borrowBalanceStored(proxyAddress);

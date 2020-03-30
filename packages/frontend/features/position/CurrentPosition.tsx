@@ -26,7 +26,6 @@ const CurrentPosition = () => {
   const { proxy } = DACProxyContainer.useContainer();
   const { compoundPositions } = CompoundPositions.useContainer();
 
-  console.log(compoundPositions);
   const positionsArr = Object.entries(compoundPositions);
   if (Object.keys(compoundPositions).length === 0) {
     return (

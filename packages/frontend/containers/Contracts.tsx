@@ -4,7 +4,10 @@ import { ethers } from "ethers";
 
 import Connection from "./Connection";
 import { legos } from "money-legos";
+
 import DACProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
+import dedgeCompoundManager from "../../smart-contracts/build/DedgeCompoundManager.json";
+import dedgeAddressRegistry from "../../smart-contracts/build/AddressRegistry.json";
 
 const CONTRACTS = {
   makerProxyRegistry: legos.maker.proxyRegistry,
@@ -15,6 +18,8 @@ const CONTRACTS = {
 
 const DEDGE_CONTRACTS = {
   dacProxyFactory: DACProxyFactory,
+  dedgeCompoundManager,
+  dedgeAddressRegistry,
 };
 
 type Contracts = Record<string, ethers.Contract>;

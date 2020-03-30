@@ -3,6 +3,9 @@ import styled from "styled-components";
 
 import Select from "../../components/Select";
 import DACProxyContainer from "../../containers/DACProxy";
+import useSwapOperation from "./useSwapOperation";
+import ContractsContainer from "../../containers/Contracts";
+import { ethers } from "ethers";
 
 const Container = styled(Box)`
   box-shadow: 2px 2px rgba(255, 0, 0, 0.5), 1px -2px rgba(0, 0, 255, 0.5),
@@ -11,6 +14,14 @@ const Container = styled(Box)`
 
 const SwapOptions = () => {
   const { proxy } = DACProxyContainer.useContainer();
+  const { contracts } = ContractsContainer.useContainer();
+  const { swapDebt } = useSwapOperation();
+
+  const swap = () => {
+    const { cEther, cDai } = contracts;
+    const amount = ethers.utils.parseEther("100");
+    swapDebt(cDai.address, cEther.address, amount);
+  };
   return (
     <Container p="3">
       <Box>
@@ -59,13 +70,15 @@ const SwapOptions = () => {
       </Box>
 
       {!proxy ? (
-          <Box>
-            <Button width="100%" disabled>
-              Swap
-            </Button>
-          </Box>
+        <Box>
+          <Button width="100%" disabled>
+            Swap
+          </Button>
+        </Box>
       ) : (
-        <Button width="100%">Swap</Button>
+        <Button width="100%" onClick={swap}>
+          Swap
+        </Button>
       )}
     </Container>
   );
