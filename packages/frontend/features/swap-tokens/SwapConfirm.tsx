@@ -4,6 +4,7 @@ import { Box, Modal, Text, Button, Heading, Card, EthAddress } from "rimble-ui";
 import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
 
 import CoinsContainer from "../../containers/Coins";
+import useSwap from "./useSwap";
 
 const SwapConfirm = ({
   thingToSwap,
@@ -18,6 +19,12 @@ const SwapConfirm = ({
   const closeModal = () => setIsOpen(false);
 
   const { COINS } = CoinsContainer.useContainer();
+  const { swapFunction } = useSwap(
+    thingToSwap,
+    fromTokenStr,
+    toTokenStr,
+    amountToSwap,
+  );
 
   const fromToken = COINS[fromTokenStr];
   const toToken = COINS[toTokenStr];
@@ -48,7 +55,7 @@ const SwapConfirm = ({
 
           <ModalBottom>
             <Button.Outline onClick={closeModal}>Close</Button.Outline>
-            <Button ml={3} onClick={() => {}}>
+            <Button ml={3} onClick={swapFunction}>
               Perform Swap
             </Button>
           </ModalBottom>

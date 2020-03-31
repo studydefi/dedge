@@ -7,6 +7,7 @@ import SwapConfirm from "./SwapConfirm";
 import DACProxyContainer from "../../containers/DACProxy";
 import { useState } from "react";
 import useSwap from "./useSwap";
+import CoinsContainer from "../../containers/Coins";
 
 const Container = styled(Box)`
   box-shadow: 2px 2px rgba(255, 0, 0, 0.5), 1px -2px rgba(0, 0, 255, 0.5),
@@ -15,25 +16,15 @@ const Container = styled(Box)`
 
 const SwapOptions = () => {
   const { proxy } = DACProxyContainer.useContainer();
+  const { stableCoins, volatileCoins } = CoinsContainer.useContainer();
 
   const [thingToSwap, setThingToSwap] = useState("debt");
   const [fromTokenStr, setFromTokenStr] = useState("dai");
   const [toTokenStr, setToTokenStr] = useState("eth");
   const [amountToSwap, setAmountToSwap] = useState("");
 
-  const { swapFunction } = useSwap(
-    thingToSwap,
-    fromTokenStr,
-    toTokenStr,
-    amountToSwap,
-  );
-
-  const swap = () => {
-    console.log(
-      `I want to swap ${amountToSwap} ${fromTokenStr} of my ${thingToSwap} to ${toTokenStr}`,
-    );
-    swapFunction();
-  };
+  const disableConfirm =
+    !proxy || fromTokenStr === toTokenStr || amountToSwap === "";
 
   return (
     <Container p="3">
@@ -58,12 +49,24 @@ const SwapOptions = () => {
             onChange={e => setFromTokenStr(e.target.value)}
           >
             <optgroup label="Volatile Crypto">
-              <option value="eth">Ethereum</option>
-              <option value="bat">Basic Attention Token</option>
+              {volatileCoins.map(coin => {
+                const { key, name } = coin;
+                return (
+                  <option key={key} value={key}>
+                    {name}
+                  </option>
+                );
+              })}
             </optgroup>
             <optgroup label="Stablecoin">
-              <option value="dai">DAI</option>
-              <option value="usdc">USD Coin</option>
+              {stableCoins.map(coin => {
+                const { key, name } = coin;
+                return (
+                  <option key={key} value={key}>
+                    {name}
+                  </option>
+                );
+              })}
             </optgroup>
           </Select>
         </Field>
@@ -77,12 +80,24 @@ const SwapOptions = () => {
             onChange={e => setToTokenStr(e.target.value)}
           >
             <optgroup label="Volatile Crypto">
-              <option value="eth">Ethereum</option>
-              <option value="bat">Basic Attention Token</option>
+              {volatileCoins.map(coin => {
+                const { key, name } = coin;
+                return (
+                  <option key={key} value={key} disabled={key === fromTokenStr}>
+                    {name}
+                  </option>
+                );
+              })}
             </optgroup>
             <optgroup label="Stablecoin">
-              <option value="dai">DAI</option>
-              <option value="usdc">USD Coin</option>
+              {stableCoins.map(coin => {
+                const { key, name } = coin;
+                return (
+                  <option key={key} value={key} disabled={key === fromTokenStr}>
+                    {name}
+                  </option>
+                );
+              })}
             </optgroup>
           </Select>
         </Field>
@@ -93,7 +108,7 @@ const SwapOptions = () => {
           <Input
             type="number"
             required={true}
-            placeholder="1.0"
+            placeholder="1337"
             value={amountToSwap}
             onChange={e => setAmountToSwap(e.target.value.toString())}
           />
@@ -105,7 +120,7 @@ const SwapOptions = () => {
         fromTokenStr={fromTokenStr}
         toTokenStr={toTokenStr}
         amountToSwap={amountToSwap}
-        disabled={!proxy}
+        disabled={disableConfirm}
       />
     </Container>
   );
