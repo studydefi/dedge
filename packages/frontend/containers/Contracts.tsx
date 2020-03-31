@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import Connection from "./Connection";
 import { legos } from "money-legos";
 
-import DACProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
+import dacProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
 import dedgeCompoundManager from "../../smart-contracts/build/DedgeCompoundManager.json";
 import dedgeAddressRegistry from "../../smart-contracts/build/AddressRegistry.json";
 import dedgeMakerManager from "../../smart-contracts/build/DedgeMakerManager.json";
@@ -21,14 +21,14 @@ const CONTRACTS = {
   cUsdc: legos.compound.cUSDC,
   cRep: legos.compound.cREP,
   cZrx: legos.compound.cZRX,
-  cWbtc: legos.compound.cWBTC
+  cWbtc: legos.compound.cWBTC,
 };
 
 const DEDGE_CONTRACTS = {
-  dacProxyFactory: DACProxyFactory,
+  dacProxyFactory,
   dedgeCompoundManager,
   dedgeAddressRegistry,
-  dedgeMakerManager
+  dedgeMakerManager,
 };
 
 type Contracts = Record<string, ethers.Contract>;
@@ -44,6 +44,12 @@ function useContracts() {
     for (const name in DEDGE_CONTRACTS) {
       const artifact = DEDGE_CONTRACTS[name];
       const { chainId } = network;
+
+      if (!artifact.networks[chainId]) {
+        throw Error(
+          `The contract ${name} is not deployed on network ${chainId}`,
+        );
+      }
 
       const address = artifact.networks[chainId].address;
       const instance = new ethers.Contract(address, artifact.abi, signer);
