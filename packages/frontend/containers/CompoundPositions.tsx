@@ -3,22 +3,14 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import ContractsContainer from "./Contracts";
 import DACProxyContainer from "./DACProxy";
-
-const COINS = {
-  eth: { name: "Ether", symbol: "ETH", icon: "Eth" },
-  bat: { name: "Basic Attention Token", symbol: "BAT", icon: "Bat" },
-  dai: { name: "Dai", symbol: "DAI", icon: "Dai" },
-  usdc: { name: "USD Coin", symbol: "USDC", icon: "Usd" },
-  rep: { name: "Augur", symbol: "REP", icon: "Rep" },
-  zrx: { name: "0x", symbol: "ZRX", icon: "Zrx" },
-  wbtc: { name: "Wrapped BTC", symbol: "WBTC", icon: "Btc" },
-};
+import CoinsContainer from "./Coins";
 
 function useCompoundPositions() {
   const [compoundPositions, setCompoundPositions] = useState({});
 
   const { contracts } = ContractsContainer.useContainer();
   const { proxyAddress } = DACProxyContainer.useContainer();
+  const { COINS } = CoinsContainer.useContainer();
 
   const getBalances = async () => {
     const { cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc } = contracts;

@@ -2,6 +2,8 @@ import { Box, Text, Field, Input, Button, Tooltip } from "rimble-ui";
 import styled from "styled-components";
 
 import Select from "../../components/Select";
+import SwapConfirm from "./SwapConfirm";
+
 import DACProxyContainer from "../../containers/DACProxy";
 import { useState } from "react";
 import useSwap from "./useSwap";
@@ -19,13 +21,18 @@ const SwapOptions = () => {
   const [toTokenStr, setToTokenStr] = useState("eth");
   const [amountToSwap, setAmountToSwap] = useState("");
 
-  const { swapFunction } = useSwap(thingToSwap, fromTokenStr, toTokenStr, amountToSwap);
+  const { swapFunction } = useSwap(
+    thingToSwap,
+    fromTokenStr,
+    toTokenStr,
+    amountToSwap,
+  );
 
   const swap = () => {
     console.log(
       `I want to swap ${amountToSwap} ${fromTokenStr} of my ${thingToSwap} to ${toTokenStr}`,
     );
-    swapFunction()
+    swapFunction();
   };
 
   return (
@@ -93,17 +100,13 @@ const SwapOptions = () => {
         </Field>
       </Box>
 
-      {!proxy ? (
-        <Box>
-          <Button width="100%" disabled>
-            Swap
-          </Button>
-        </Box>
-      ) : (
-        <Button width="100%" onClick={swap}>
-          Swap
-        </Button>
-      )}
+      <SwapConfirm
+        thingToSwap={thingToSwap}
+        fromTokenStr={fromTokenStr}
+        toTokenStr={toTokenStr}
+        amountToSwap={amountToSwap}
+        disabled={!proxy}
+      />
     </Container>
   );
 };

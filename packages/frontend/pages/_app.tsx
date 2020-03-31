@@ -6,6 +6,7 @@ import Connection from "../containers/Connection";
 import Contracts from "../containers/Contracts";
 import DACProxy from "../containers/DACProxy";
 import BorrowBalances from "../containers/CompoundPositions";
+import CoinsContainer from "../containers/Coins";
 
 const customTheme = {
   ...theme,
@@ -13,14 +14,16 @@ const customTheme = {
 };
 
 const WithProviders = ({ children }) => (
-  <Connection.Provider>
-    <ToastMessage.Provider ref={node => (window.toastProvider = node)} />
-    <Contracts.Provider>
-      <DACProxy.Provider>
-        <BorrowBalances.Provider>{children}</BorrowBalances.Provider>
-      </DACProxy.Provider>
-    </Contracts.Provider>
-  </Connection.Provider>
+  <CoinsContainer.Provider>
+    <Connection.Provider>
+      <ToastMessage.Provider ref={node => (window.toastProvider = node)} />
+      <Contracts.Provider>
+        <DACProxy.Provider>
+          <BorrowBalances.Provider>{children}</BorrowBalances.Provider>
+        </DACProxy.Provider>
+      </Contracts.Provider>
+    </Connection.Provider>
+  </CoinsContainer.Provider>
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
