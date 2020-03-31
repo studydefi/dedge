@@ -2,17 +2,7 @@ import { Box, Text, Heading, Flex, Table, Button, Loader } from "rimble-ui";
 import styled from "styled-components";
 import DACProxyContainer from "../../containers/DACProxy";
 import CompoundPositions from "../../containers/CompoundPositions";
-
-// import Logo from "../../components/Logo";
-// import Connection from "../common/Connection";
-// import SwapOptions from "../swap-tokens/SwapOptions";
-// import Balances from "./Balances";
-
-// const Container = styled(Flex)`
-//   // background: yellow;
-//   height: 100%;
-//   flex-direction: column;
-// `;
+import DummyPositions from "./DummyPositions";
 
 const LoaderContainer = styled(Box)`
   background: white;
@@ -27,6 +17,11 @@ const CurrentPosition = () => {
   const { compoundPositions } = CompoundPositions.useContainer();
 
   const positionsArr = Object.entries(compoundPositions);
+
+  if (!proxy) {
+    return <DummyPositions />;
+  }
+
   if (Object.keys(compoundPositions).length === 0) {
     return (
       <>
