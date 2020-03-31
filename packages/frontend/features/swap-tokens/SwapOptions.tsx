@@ -8,6 +8,7 @@ import DACProxyContainer from "../../containers/DACProxy";
 import { useState } from "react";
 import useSwap from "./useSwap";
 import CoinsContainer from "../../containers/Coins";
+import useIsAmountAvailable from "./useIsAmountAvailable";
 
 const Container = styled(Box)`
   box-shadow: 2px 2px rgba(255, 0, 0, 0.5), 1px -2px rgba(0, 0, 255, 0.5),
@@ -23,8 +24,17 @@ const SwapOptions = () => {
   const [toTokenStr, setToTokenStr] = useState("eth");
   const [amountToSwap, setAmountToSwap] = useState("");
 
+  const { isAmountAvailable } = useIsAmountAvailable(
+    amountToSwap,
+    fromTokenStr,
+    thingToSwap,
+  );
+
   const disableConfirm =
-    !proxy || fromTokenStr === toTokenStr || amountToSwap === "";
+    !proxy || // not connected or no smart wallet
+    fromTokenStr === toTokenStr || // same token
+    amountToSwap === "" || // no amount specified
+    !isAmountAvailable; // amount not available
 
   return (
     <Container p="3">

@@ -19,7 +19,10 @@ const NameWrapper = styled(Flex)`
 const NumberWrapper = ({ value, symbol }) => {
   const short = parseFloat(value).toPrecision(8);
   return (
-    <Box title={`${value} ${symbol}`} color={value === "0.0" && "lightgrey"}>
+    <Box
+      title={`${value} ${symbol}`}
+      color={value === "0.0" ? "lightgrey" : "unset"}
+    >
       {short} {symbol}
     </Box>
   );
