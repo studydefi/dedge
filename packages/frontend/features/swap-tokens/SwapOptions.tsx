@@ -6,7 +6,6 @@ import SwapConfirm from "./SwapConfirm";
 
 import DACProxyContainer from "../../containers/DACProxy";
 import { useState } from "react";
-import useSwap from "./useSwap";
 import CoinsContainer from "../../containers/Coins";
 import useIsAmountAvailable from "./useIsAmountAvailable";
 

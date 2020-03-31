@@ -7,6 +7,7 @@ import CoinsContainer from "./Coins";
 
 function useCompoundPositions() {
   const [compoundPositions, setCompoundPositions] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const { contracts } = ContractsContainer.useContainer();
   const { proxyAddress } = DACProxyContainer.useContainer();
@@ -16,6 +17,7 @@ function useCompoundPositions() {
     const { cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc } = contracts;
 
     console.log("fetching Compound balances");
+    setLoading(true);
 
     // borrow balances
     const bEth = await cEther.borrowBalanceStored(proxyAddress);
@@ -51,6 +53,7 @@ function useCompoundPositions() {
       zrx: { ...COINS.zrx, supply: process(sZrx), borrow: process(bZrx) },
       wbtc: { ...COINS.wbtc, supply: process(sWbtc), borrow: process(bWbtc) },
     });
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -59,7 +62,7 @@ function useCompoundPositions() {
     }
   }, [contracts, proxyAddress]);
 
-  return { compoundPositions };
+  return { compoundPositions, loading, getBalances };
 }
 
 const CompoundPositions = createContainer(useCompoundPositions);
