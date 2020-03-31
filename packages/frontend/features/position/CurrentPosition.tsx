@@ -62,7 +62,7 @@ const CurrentPosition = () => {
         {positionsArr.map(([key, val]) => {
           const { supply, borrow } = val as any;
           return (
-            <tr>
+            <tr key={key}>
               <td>Ethereum</td>
               <td>4% / 7%</td>
               <td>
