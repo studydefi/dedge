@@ -9,6 +9,9 @@ const COINS = {
   bat: { name: "Basic Attention Token", symbol: "BAT", icon: "Bat" },
   dai: { name: "Dai", symbol: "DAI", icon: "Dai" },
   usdc: { name: "USD Coin", symbol: "USDC", icon: "Usd" },
+  rep: { name: "Augur", symbol: "REP", icon: "Rep" },
+  zrx: { name: "0x", symbol: "ZRX", icon: "Zrx" },
+  wbtc: { name: "Wrapped BTC", symbol: "WBTC", icon: "Btc" },
 };
 
 function useCompoundPositions() {
@@ -18,7 +21,7 @@ function useCompoundPositions() {
   const { proxyAddress } = DACProxyContainer.useContainer();
 
   const getBalances = async () => {
-    const { cEther, cBat, cDai, cUsdc } = contracts;
+    const { cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc } = contracts;
 
     console.log("fetching Compound balances");
 
@@ -27,12 +30,18 @@ function useCompoundPositions() {
     const bBat = await cBat.borrowBalanceStored(proxyAddress);
     const bDai = await cDai.borrowBalanceStored(proxyAddress);
     const bUsdc = await cUsdc.borrowBalanceStored(proxyAddress);
+    const bRep = await cRep.borrowBalanceStored(proxyAddress);
+    const bZrx = await cZrx.borrowBalanceStored(proxyAddress);
+    const bWbtc = await cWbtc.borrowBalanceStored(proxyAddress);
 
     // supply balances
     const sEth = await cEther.balanceOfUnderlying(proxyAddress);
     const sBat = await cBat.balanceOfUnderlying(proxyAddress);
     const sDai = await cDai.balanceOfUnderlying(proxyAddress);
     const sUsdc = await cUsdc.balanceOfUnderlying(proxyAddress);
+    const sRep = await cRep.balanceOfUnderlying(proxyAddress);
+    const sZrx = await cZrx.balanceOfUnderlying(proxyAddress);
+    const sWbtc = await cWbtc.balanceOfUnderlying(proxyAddress);
 
     const process = (x, u = 18) =>
       ethers.utils.formatUnits(x.toString(), u).toString();
@@ -46,6 +55,9 @@ function useCompoundPositions() {
         supply: process(sUsdc, 6),
         borrow: process(bUsdc, 6),
       },
+      rep: { ...COINS.rep, supply: process(sRep), borrow: process(bRep) },
+      zrx: { ...COINS.zrx, supply: process(sZrx), borrow: process(bZrx) },
+      wbtc: { ...COINS.wbtc, supply: process(sWbtc), borrow: process(bWbtc) },
     });
   };
 
