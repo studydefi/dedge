@@ -8,6 +8,8 @@ import CoinsContainer from "./Coins";
 function useCompoundPositions() {
   const [compoundPositions, setCompoundPositions] = useState({});
   const [loading, setLoading] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(null);
+  const [lastRefresh, setLastRefresh] = useState(null);
 
   const { contracts } = ContractsContainer.useContainer();
   const { proxyAddress } = DACProxyContainer.useContainer();
@@ -18,6 +20,7 @@ function useCompoundPositions() {
 
     console.log("fetching Compound balances");
     setLoading(true);
+    clearTimeout(timeoutId);
 
     // borrow balances
     const bEth = await cEther.borrowBalanceStored(proxyAddress);
@@ -54,6 +57,10 @@ function useCompoundPositions() {
       wbtc: { ...COINS.wbtc, supply: process(sWbtc), borrow: process(bWbtc) },
     });
     setLoading(false);
+
+    setLastRefresh(new Date()); // save the time of last refresh
+    const myTimeoutId = setTimeout(getBalances, 30000); // every 30 seconds get balances again
+    setTimeoutId(myTimeoutId); // save timeout id so we can cancel if manual refresh
   };
 
   useEffect(() => {
@@ -62,7 +69,7 @@ function useCompoundPositions() {
     }
   }, [contracts, proxyAddress]);
 
-  return { compoundPositions, loading, getBalances };
+  return { compoundPositions, loading, getBalances, lastRefresh };
 }
 
 const CompoundPositions = createContainer(useCompoundPositions);
