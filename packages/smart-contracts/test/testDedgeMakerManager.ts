@@ -36,6 +36,11 @@ const cDaiContract = newCTokenContract(legos.compound.cDAI.address);
 const cBatContract = newCTokenContract(legos.compound.cBAT.address);
 const cUsdcContract = newCTokenContract(legos.compound.cUSDC.address);
 
+// Importing the vault results in withdrawing the internal funds
+// and sending the vault to the ONE_ADDRESS
+// (this is because address(0) is not allowed)
+const ONE_ADDRESS = '0x0000000000000000000000000000000000000001'
+
 
 describe("DedgeMakerManager", () => {
   const dacProxyFactoryContract = new ethers.Contract(
@@ -132,7 +137,7 @@ describe("DedgeMakerManager", () => {
 
   before(async () => {
     // Builds DAC Proxy
-    await dacProxyFactoryContract.build();
+    await dacProxyFactoryContract.build({ gasLimit: 4000000 });
     const dacProxyAddress = await dacProxyFactoryContract.proxies(
       wallet.address
     );
@@ -150,7 +155,7 @@ describe("DedgeMakerManager", () => {
       wallet.address
     );
     if (dsProxyAddress === "0x0000000000000000000000000000000000000000") {
-      await makerProxyRegistryContract.build();
+      await makerProxyRegistryContract.build({ gasLimit: 4000000 });
       dsProxyAddress = await makerProxyRegistryContract.proxies(wallet.address);
     }
     makerDsProxyContract = new ethers.Contract(
@@ -167,7 +172,7 @@ describe("DedgeMakerManager", () => {
     const ilkCTokenContract = cEtherContract;
 
     const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
-      makerDsProxyContract.address,
+      ONE_ADDRESS,
       makerDssCdpManagerContract
     );
 
@@ -180,7 +185,7 @@ describe("DedgeMakerManager", () => {
     );
 
     const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
-      makerDsProxyContract.address,
+      ONE_ADDRESS,
       makerDssCdpManagerContract
     );
 
@@ -204,7 +209,7 @@ describe("DedgeMakerManager", () => {
     await sleep(500);
 
     const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
-      makerDsProxyContract.address,
+      ONE_ADDRESS,
       makerDssCdpManagerContract
     );
 
@@ -217,7 +222,7 @@ describe("DedgeMakerManager", () => {
     );
 
     const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
-      makerDsProxyContract.address,
+      ONE_ADDRESS,
       makerDssCdpManagerContract
     );
 
@@ -241,7 +246,7 @@ describe("DedgeMakerManager", () => {
     await sleep(500);
 
     const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
-      makerDsProxyContract.address,
+      ONE_ADDRESS,
       makerDssCdpManagerContract
     );
 
@@ -255,7 +260,7 @@ describe("DedgeMakerManager", () => {
     );
 
     const finalVaultCount = await dedgeHelpers.maker.getVaultIds(
-      makerDsProxyContract.address,
+      ONE_ADDRESS,
       makerDssCdpManagerContract
     );
 

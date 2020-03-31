@@ -167,6 +167,14 @@ contract DssProxyActionsBase is Common {
         cdp = ManagerLike(manager).open(ilk, usr);
     }
 
+    function give(
+        address manager,
+        uint cdp,
+        address usr
+    ) public {
+        ManagerLike(manager).give(cdp, usr);
+    }
+
     function cdpAllow(
         address manager,
         uint cdp,

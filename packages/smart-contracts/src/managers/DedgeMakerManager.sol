@@ -245,7 +245,9 @@ contract DedgeMakerManager is DssProxyActionsBase {
             addressAndExecuteOperationCalldataParams
         );
 
+        // Once we're done with the vault, give it away (its empty anyway)
+        give(addressRegistry.DssCdpManagerAddress(), cdpId, address(1));
+        // Lending pool can't call our proxy address anymore
         _proxyGuardForbid(dacProxyAddress, address(lendingPool));
-        cdpAllow(addressRegistry.DssCdpManagerAddress(), cdpId, dedgeMakerManagerAddress, 0);
     }
 }
