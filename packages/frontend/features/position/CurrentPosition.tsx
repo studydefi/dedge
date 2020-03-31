@@ -35,8 +35,6 @@ const CurrentPosition = () => {
     return <DummyPositions />;
   }
 
-  console.log(positionsArr);
-
   return (
     <Table fontSize="0">
       <thead>
