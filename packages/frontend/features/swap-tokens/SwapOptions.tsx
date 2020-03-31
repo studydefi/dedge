@@ -3,10 +3,8 @@ import styled from "styled-components";
 
 import Select from "../../components/Select";
 import DACProxyContainer from "../../containers/DACProxy";
-import useSwapOperation from "./useSwapOperation";
-import ContractsContainer from "../../containers/Contracts";
-import { ethers } from "ethers";
 import { useState } from "react";
+import useSwap from "./useSwap";
 
 const Container = styled(Box)`
   box-shadow: 2px 2px rgba(255, 0, 0, 0.5), 1px -2px rgba(0, 0, 255, 0.5),
@@ -20,16 +18,14 @@ const SwapOptions = () => {
   const [fromTokenStr, setFromTokenStr] = useState("dai");
   const [toTokenStr, setToTokenStr] = useState("eth");
   const [amountToSwap, setAmountToSwap] = useState("");
+
+  const { swapFunction } = useSwap(thingToSwap, fromTokenStr, toTokenStr, amountToSwap);
+
   const swap = () => {
     console.log(
       `I want to swap ${amountToSwap} ${fromTokenStr} of my ${thingToSwap} to ${toTokenStr}`,
     );
-    // const { contracts } = ContractsContainer.useContainer();
-    // const { swapDebt, swapCollateral } = useSwapOperation();
-    // const { cEther, cDai, cBat } = contracts;
-    // const amount = ethers.utils.parseEther("100");
-    // swapDebt(cDai.address, cEther.address, amount);
-    // swapCollateral(cEther.address, cBat.address, ethers.utils.parseEther("1"))
+    swapFunction()
   };
 
   return (
@@ -92,7 +88,7 @@ const SwapOptions = () => {
             required={true}
             placeholder="1.0"
             value={amountToSwap}
-            onChange={e => setAmountToSwap(e.target.value)}
+            onChange={e => setAmountToSwap(e.target.value.toString())}
           />
         </Field>
       </Box>

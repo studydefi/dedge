@@ -3,15 +3,20 @@ import DACProxyContainer from "../../containers/DACProxy";
 import { useEffect } from "react";
 
 import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
+import { Address, Wei } from "../../types";
 
 const useSwapOperation = () => {
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
 
-  const swapDebt = async (fromCToken, toCToken, fromCTokenUnderlyingDelta) => {
+  const swapDebt = async (
+    fromCToken: Address,
+    toCToken: Address,
+    fromCTokenUnderlyingDelta: Wei,
+  ) => {
     const { dedgeCompoundManager, dedgeAddressRegistry } = contracts;
 
-    await dedgeHelpers.compound.swapDebt(
+    return dedgeHelpers.compound.swapDebt(
       proxy,
       dedgeCompoundManager.address,
       dedgeAddressRegistry.address,
@@ -21,10 +26,14 @@ const useSwapOperation = () => {
     );
   };
 
-  const swapCollateral = async (fromCToken, toCToken, fromCTokenUnderlyingDelta) => {
+  const swapCollateral = async (
+    fromCToken: Address,
+    toCToken: Address,
+    fromCTokenUnderlyingDelta: Wei,
+  ) => {
     const { dedgeCompoundManager, dedgeAddressRegistry } = contracts;
 
-    await dedgeHelpers.compound.swapCollateral(
+    return dedgeHelpers.compound.swapCollateral(
       proxy,
       dedgeCompoundManager.address,
       dedgeAddressRegistry.address,
@@ -33,12 +42,6 @@ const useSwapOperation = () => {
       toCToken,
     );
   };
-
-  // useEffect(() => {
-  //   console.log("contracts", contracts);
-  //   if (proxy) {
-  //   }
-  // }, [proxy, contracts]);
 
   return { swapDebt, swapCollateral };
 };
