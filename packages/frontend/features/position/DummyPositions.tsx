@@ -1,6 +1,14 @@
-import { Box, Icon, Text, Heading, Flex, Table, Button, Loader } from "rimble-ui";
+import {
+  Box,
+  Icon,
+  Text,
+  Heading,
+  Flex,
+  Table,
+  Button,
+  Loader,
+} from "rimble-ui";
 import { Star } from "@rimble/icons";
-
 
 import styled from "styled-components";
 
@@ -16,47 +24,57 @@ const positionsArr = [
   {
     name: "Ether",
     apr: "—% / —%",
-    supplied: "—      ETH",
-    borrowed: "—      ETH",
+    supply: "—      ETH",
+    borrow: "—      ETH",
     icon: "Eth",
   },
   {
     name: "Basic Attention Token",
     apr: "—% / —%",
-    supplied: "—      BAT",
-    borrowed: "—      BAT",
+    supply: "—      BAT",
+    borrow: "—      BAT",
+    icon: "Bat",
   },
   {
     name: "Dai",
     apr: "—% / —%",
-    supplied: "—      DAI",
-    borrowed: "—      DAI",
+    supply: "—      DAI",
+    borrow: "—      DAI",
+    icon: "Dai",
   },
   {
     name: "USD Coin",
     apr: "—% / —%",
-    supplied: "—      USDC",
-    borrowed: "—      USDC",
+    supply: "—      USDC",
+    borrow: "—      USDC",
+    icon: "Usd",
   },
   {
     name: "Augur",
     apr: "—% / —%",
-    supplied: "—      REP",
-    borrowed: "—      REP",
+    supply: "—      REP",
+    borrow: "—      REP",
+    icon: "Rep",
   },
   {
     name: "0x",
     apr: "—% / —%",
-    supplied: "—      ZRX",
-    borrowed: "—      ZRX",
+    supply: "—      ZRX",
+    borrow: "—      ZRX",
+    icon: "Zrx",
   },
   {
     name: "Wrapped BTC",
     apr: "—% / —%",
-    supplied: "—      WBTC",
-    borrowed: "—      WBTC",
+    supply: "—      WBTC",
+    borrow: "—      WBTC",
+    icon: "Btc",
   },
 ];
+
+const NameWrapper = styled(Flex)`
+  align-items: center;
+`;
 
 const DummyPositions = () => {
   return (
@@ -65,9 +83,9 @@ const DummyPositions = () => {
         <thead>
           <tr>
             <th>Token</th>
-            <th>APR (s/b)</th>
-            <th>Supplied</th>
-            <th>Borrowed</th>
+            <th title="Supply / Borrow">APY (s/b)</th>
+            <th>supplied</th>
+            <th>borrowed</th>
             <th>Options</th>
           </tr>
         </thead>
@@ -76,11 +94,17 @@ const DummyPositions = () => {
             return (
               <tr key={item.name}>
                 <td>
-                  <Icon name="Star" /> {item.name}
+                  <NameWrapper>
+                    <Icon name={item.icon} /> <Box ml="2">{item.name}</Box>
+                  </NameWrapper>
                 </td>
                 <td>{item.apr}</td>
-                <td>{item.supplied}</td>
-                <td>{item.borrowed}</td>
+                <td>
+                  <Box width="95px">{item.supply}</Box>
+                </td>
+                <td>
+                  <Box width="95px">{item.borrow}</Box>
+                </td>
                 <td>
                   <Button.Outline
                     icon="MoreHoriz"

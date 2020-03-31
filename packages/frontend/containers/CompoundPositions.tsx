@@ -4,8 +4,12 @@ import { ethers } from "ethers";
 import ContractsContainer from "./Contracts";
 import DACProxyContainer from "./DACProxy";
 
-type Provider = ethers.providers.Provider;
-type Signer = ethers.Signer;
+const COINS = {
+  eth: { name: "Ether", symbol: "ETH", icon: "Eth" },
+  bat: { name: "Basic Attention Token", symbol: "BAT", icon: "Bat" },
+  dai: { name: "Dai", symbol: "DAI", icon: "Dai" },
+  usdc: { name: "USD Coin", symbol: "USDC", icon: "Usd" },
+};
 
 function useCompoundPositions() {
   const [compoundPositions, setCompoundPositions] = useState({});
@@ -16,7 +20,7 @@ function useCompoundPositions() {
   const getBalances = async () => {
     const { cEther, cBat, cDai, cUsdc } = contracts;
 
-    console.log("fetching Compound balances")
+    console.log("fetching Compound balances");
 
     // borrow balances
     const bEth = await cEther.borrowBalanceStored(proxyAddress);
@@ -34,10 +38,14 @@ function useCompoundPositions() {
       ethers.utils.formatUnits(x.toString(), u).toString();
 
     setCompoundPositions({
-      eth: { supply: process(sEth), borrow: process(bEth) },
-      bat: { supply: process(sBat), borrow: process(bBat) },
-      dai: { supply: process(sDai), borrow: process(bDai) },
-      usdc: { supply: process(sUsdc, 6), borrow: process(bUsdc, 6) },
+      eth: { ...COINS.eth, supply: process(sEth), borrow: process(bEth) },
+      bat: { ...COINS.bat, supply: process(sBat), borrow: process(bBat) },
+      dai: { ...COINS.dai, supply: process(sDai), borrow: process(bDai) },
+      usdc: {
+        ...COINS.usdc,
+        supply: process(sUsdc, 6),
+        borrow: process(bUsdc, 6),
+      },
     });
   };
 
