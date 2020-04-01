@@ -22,6 +22,30 @@ function useCompoundPositions() {
     setLoading(true);
     clearTimeout(timeoutId);
 
+    // weird bug where this fails if nothing is supplied yet
+    try {
+      const sDai = await cDai.balanceOfUnderlying(proxyAddress);
+    } catch (error) {
+      // we just assume its all zero balances
+      setCompoundPositions({
+        eth: { ...COINS.eth, supply: "0", borrow: "0" },
+        bat: { ...COINS.bat, supply: "0", borrow: "0" },
+        dai: { ...COINS.dai, supply: "0", borrow: "0" },
+        usdc: { ...COINS.usdc, supply: "0", borrow: "0" },
+        rep: { ...COINS.rep, supply: "0", borrow: "0" },
+        zrx: { ...COINS.zrx, supply: "0", borrow: "0" },
+        wbtc: { ...COINS.wbtc, supply: "0", borrow: "0" },
+      });
+      setLoading(false);
+
+      setLastRefresh(new Date()); // save the time of last refresh
+      const myTimeoutId = setTimeout(getBalances, 30000); // every 30 seconds get balances again
+      setTimeoutId(myTimeoutId); // save timeout id so we can cancel if manual refresh
+      
+      // quit early
+      return;
+    }
+
     // borrow balances
     const bEth = await cEther.borrowBalanceStored(proxyAddress);
     const bBat = await cBat.borrowBalanceStored(proxyAddress);
@@ -65,7 +89,11 @@ function useCompoundPositions() {
 
   useEffect(() => {
     if (hasProxy) {
-      getBalances();
+      try {
+        getBalances();
+      } catch (error) {
+        throw Error("Error retreiving Compound balances");
+      }
     }
   }, [contracts, proxyAddress]);
 
