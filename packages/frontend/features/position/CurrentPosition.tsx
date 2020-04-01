@@ -23,7 +23,7 @@ const NumberWrapper = ({ value, symbol }) => {
   return (
     <Box
       title={`${value} ${symbol}`}
-      color={value === "0.0" ? "lightgrey" : "unset"}
+      color={value === "0.0" || value === "0" ? "lightgrey" : "unset"}
     >
       {short} {symbol}
     </Box>
