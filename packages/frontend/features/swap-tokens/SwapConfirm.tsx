@@ -12,6 +12,7 @@ const SwapConfirm = ({
   toTokenStr,
   amountToSwap,
   disabled,
+  outline
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,11 +30,13 @@ const SwapConfirm = ({
   const fromToken = COINS[fromTokenStr];
   const toToken = COINS[toTokenStr];
 
+  const MyButton = outline ? Button.Outline : Button
+
   return (
     <Box>
-      <Button width="100%" onClick={openModal} disabled={disabled}>
+      <MyButton width="100%" onClick={openModal} disabled={disabled}>
         Confirm
-      </Button>
+      </MyButton>
 
       <Modal isOpen={isOpen}>
         <Card width={"640px"} p={0}>

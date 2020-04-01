@@ -19,27 +19,32 @@ const NameWrapper = styled(Flex)`
 `;
 
 const NumberWrapper = ({ value, symbol }) => {
-  const short = parseFloat(value).toPrecision(8);
+  const short = parseFloat(value).toPrecision(6);
   return (
     <Box
       title={`${value} ${symbol}`}
-      color={value === "0.0" ? "lightgrey" : "unset"}
+      color={value === "0.0" || value === "0" ? "lightgrey" : "unset"}
     >
       {short} {symbol}
     </Box>
   );
 };
 
+const rateToPercent = (rate, decimals = 2) => {
+  return (rate * 100).toFixed(decimals);
+};
+
 const CurrentPosition = () => {
-  const { proxy } = DACProxyContainer.useContainer();
-  const { compoundPositions } = CompoundPositions.useContainer();
+  const { hasProxy } = DACProxyContainer.useContainer();
+  const { compoundPositions, compoundApy } = CompoundPositions.useContainer();
 
   const positionsArr = Object.entries(compoundPositions);
+  const apyArr = Object.entries(compoundApy);
 
-  if (!proxy || Object.keys(compoundPositions).length === 0) {
+  if (!hasProxy || apyArr.length === 0) {
     return (
       <>
-        <Controls notConnected={!proxy} />
+        <Controls notConnected={!hasProxy} />
         <DummyPositions />
       </>
     );
@@ -61,6 +66,10 @@ const CurrentPosition = () => {
         <tbody>
           {positionsArr.map(([key, item]) => {
             const { supply, borrow, name, symbol, icon } = item as any;
+            const rates : any = apyArr.filter(
+              x => x[0] === symbol.toLowerCase(),
+            )[0][1];
+
             return (
               <tr key={key}>
                 <td>
@@ -68,7 +77,10 @@ const CurrentPosition = () => {
                     <Icon name={icon} /> <Box ml="2">{name}</Box>
                   </NameWrapper>
                 </td>
-                <td>4% / 7%</td>
+                <td>
+                  {rateToPercent(rates.supplyRate)}% /{" "}
+                  {rateToPercent(rates.borrowRate)}%
+                </td>
                 <td>
                   <NumberWrapper value={supply} symbol={symbol} />
                 </td>
@@ -80,7 +92,7 @@ const CurrentPosition = () => {
                     icon="MoreHoriz"
                     size="small"
                     icononly
-                    disabled={!proxy}
+                    disabled={!hasProxy}
                   />
                 </td>
               </tr>

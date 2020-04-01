@@ -23,26 +23,28 @@ const Address = styled(Text)`
   font-size: 12px;
 `;
 
-const MetaMask = () => {
+const MetaMask = ({ size = "small", outline = true }) => {
   const { address, connect } = ConnectionContainer.useContainer();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
+  const MyButton = outline ? MetaMaskButton.Outline : MetaMaskButton;
+
   if (!address) {
     return (
       <Container ml="2">
-        <MetaMaskButton.Outline size="small" onClick={connect}>
+        <MyButton size={size} onClick={connect}>
           Connect with MetaMask
-        </MetaMaskButton.Outline>
+        </MyButton>
       </Container>
     );
   }
 
   return (
     <Container ml="2">
-      <MetaMaskButton.Outline size="small" onClick={toggle}>
+      <MyButton size={size} onClick={toggle}>
         Connected
-      </MetaMaskButton.Outline>
+      </MyButton>
       {isOpen && (
         <Popup p="2" mt="1">
           <Label mb="1">Current Account</Label>

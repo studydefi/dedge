@@ -1,4 +1,4 @@
-import { Box, Card, Text, Button, Tooltip } from "rimble-ui";
+import { Box, Flex, Card, Text, Button, Tooltip, Loader } from "rimble-ui";
 import { useState } from "react";
 import styled from "styled-components";
 import ConnectionContainer from "../../containers/Connection";
@@ -24,35 +24,52 @@ const Address = styled(Text)`
   font-size: 12px;
 `;
 
-const SmartWallet = () => {
+const SmartWallet = ({ size = "small", outline = true }) => {
   const { address } = ConnectionContainer.useContainer();
-  const { proxy, proxyAddress, createProxy } = DACProxyContainer.useContainer();
+  const {
+    proxy,
+    proxyAddress,
+    createProxy,
+    loading,
+    hasProxy,
+  } = DACProxyContainer.useContainer();
 
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+
+  const MyButton = outline ? Button.Outline : Button;
 
   if (!address) {
     return (
       <Container>
         <Tooltip message="Please first connect to MetaMask" placement="bottom">
-          <Button.Outline size="small" disabled>
+          <MyButton size={size} disabled>
             Smart Wallet: No Network
-          </Button.Outline>
+          </MyButton>
         </Tooltip>
       </Container>
     );
   }
 
-  if (!proxy || proxyAddress === "0x0000000000000000000000000000000000000000") {
+  if (!hasProxy) {
     return (
       <Container>
         <Tooltip
           message="A smart wallet allows Dedge to execute transactions on your behalf while being non-custodial."
           placement="bottom"
         >
-          <Button size="small" onClick={createProxy}>
-            Create Smart Wallet
-          </Button>
+          {loading ? (
+            <MyButton size={size} onClick={createProxy}>
+              <Flex alignItems="center">
+                <span>Creating Smart Wallet</span>{" "}
+                <Loader color={outline ? "normal" : "white"} ml="2" />
+              </Flex>
+            </MyButton>
+          ) : (
+            <MyButton size={size} onClick={createProxy}>
+              Create Smart Wallet
+            </MyButton>
+          )}
         </Tooltip>
       </Container>
     );
@@ -60,9 +77,9 @@ const SmartWallet = () => {
 
   return (
     <Container>
-      <Button.Outline size="small" onClick={toggle}>
+      <MyButton size={size} onClick={toggle}>
         Smart Wallet: Connected
-      </Button.Outline>
+      </MyButton>
       {isOpen && (
         <Popup p="2" mt="1">
           <Label mb="1">Smart Wallet Proxy Address</Label>

@@ -14,6 +14,11 @@ function useDACProxy() {
 
   const [proxy, setProxyContract] = useState(null);
   const [proxyAddress, setProxyAddress] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const hasProxy =
+    proxyAddress &&
+    proxyAddress !== "0x0000000000000000000000000000000000000000";
 
   // get proxy address
   const fetchProxyAddress = async () => {
@@ -35,8 +40,9 @@ function useDACProxy() {
       cUsdc,
       cWbtc,
       dacProxyFactory,
-      dedgeCompoundManager
+      dedgeCompoundManager,
     } = contracts;
+    setLoading(true);
     const tx = await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
       dacProxyFactory,
       dedgeCompoundManager.address,
@@ -48,21 +54,22 @@ function useDACProxy() {
         cBat.address,
         cUsdc.address,
         cWbtc.address,
-      ]
+      ],
     );
 
     window.toastProvider.addMessage("Creating Smart Wallet...", {
       secondaryMessage: "Check progress on Etherscan",
       actionHref: `https://etherscan.io/tx/${tx.hash}`,
       actionText: "Check",
-      variant: "processing"
+      variant: "processing",
     });
 
     const receipt = await tx.wait();
 
     window.toastProvider.addMessage("Smart Wallet created", {
-      variant: "success"
+      variant: "success",
     });
+    setLoading(false);
 
     fetchProxyAddress();
   };
@@ -87,7 +94,9 @@ function useDACProxy() {
     proxyAddress,
     createProxy,
     proxy,
-    fetchProxyAddress
+    fetchProxyAddress,
+    loading,
+    hasProxy,
   };
 }
 
