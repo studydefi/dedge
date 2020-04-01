@@ -24,7 +24,7 @@ function useCompoundPositions() {
 
     // weird bug where this fails if nothing is supplied yet
     try {
-      const sDai = await cDai.balanceOfUnderlying(proxyAddress);
+      await cDai.balanceOfUnderlying(proxyAddress);
     } catch (error) {
       // we just assume its all zero balances
       setCompoundPositions({
@@ -41,28 +41,22 @@ function useCompoundPositions() {
       setLastRefresh(new Date()); // save the time of last refresh
       const myTimeoutId = setTimeout(getBalances, 30000); // every 30 seconds get balances again
       setTimeoutId(myTimeoutId); // save timeout id so we can cancel if manual refresh
-      
+
       // quit early
       return;
     }
 
+    const coinContracts = [cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc];
+
     // borrow balances
-    const bEth = await cEther.borrowBalanceStored(proxyAddress);
-    const bBat = await cBat.borrowBalanceStored(proxyAddress);
-    const bDai = await cDai.borrowBalanceStored(proxyAddress);
-    const bUsdc = await cUsdc.borrowBalanceStored(proxyAddress);
-    const bRep = await cRep.borrowBalanceStored(proxyAddress);
-    const bZrx = await cZrx.borrowBalanceStored(proxyAddress);
-    const bWbtc = await cWbtc.borrowBalanceStored(proxyAddress);
+    const [bEth, bBat, bDai, bUsdc, bRep, bZrx, bWbtc] = await Promise.all(
+      coinContracts.map(x => x.borrowBalanceStored(proxyAddress)),
+    );
 
     // supply balances
-    const sEth = await cEther.balanceOfUnderlying(proxyAddress);
-    const sBat = await cBat.balanceOfUnderlying(proxyAddress);
-    const sDai = await cDai.balanceOfUnderlying(proxyAddress);
-    const sUsdc = await cUsdc.balanceOfUnderlying(proxyAddress);
-    const sRep = await cRep.balanceOfUnderlying(proxyAddress);
-    const sZrx = await cZrx.balanceOfUnderlying(proxyAddress);
-    const sWbtc = await cWbtc.balanceOfUnderlying(proxyAddress);
+    const [sEth, sBat, sDai, sUsdc, sRep, sZrx, sWbtc] = await Promise.all(
+      coinContracts.map(x => x.balanceOfUnderlying(proxyAddress)),
+    );
 
     const process = (x, u = 18) =>
       ethers.utils.formatUnits(x.toString(), u).toString();
