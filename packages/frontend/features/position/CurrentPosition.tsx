@@ -30,13 +30,18 @@ const NumberWrapper = ({ value, symbol }) => {
   );
 };
 
+const rateToPercent = (rate, decimals = 2) => {
+  return (rate * 100).toFixed(decimals);
+};
+
 const CurrentPosition = () => {
   const { hasProxy } = DACProxyContainer.useContainer();
-  const { compoundPositions } = CompoundPositions.useContainer();
+  const { compoundPositions, compoundApy } = CompoundPositions.useContainer();
 
   const positionsArr = Object.entries(compoundPositions);
+  const apyArr = Object.entries(compoundApy);
 
-  if (!hasProxy || Object.keys(compoundPositions).length === 0) {
+  if (!hasProxy || apyArr.length === 0) {
     return (
       <>
         <Controls notConnected={!hasProxy} />
@@ -61,6 +66,10 @@ const CurrentPosition = () => {
         <tbody>
           {positionsArr.map(([key, item]) => {
             const { supply, borrow, name, symbol, icon } = item as any;
+            const rates : any = apyArr.filter(
+              x => x[0] === symbol.toLowerCase(),
+            )[0][1];
+
             return (
               <tr key={key}>
                 <td>
@@ -68,7 +77,10 @@ const CurrentPosition = () => {
                     <Icon name={icon} /> <Box ml="2">{name}</Box>
                   </NameWrapper>
                 </td>
-                <td>4% / 7%</td>
+                <td>
+                  {rateToPercent(rates.supplyRate)}% /{" "}
+                  {rateToPercent(rates.borrowRate)}%
+                </td>
                 <td>
                   <NumberWrapper value={supply} symbol={symbol} />
                 </td>

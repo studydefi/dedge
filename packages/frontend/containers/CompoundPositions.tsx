@@ -7,6 +7,7 @@ import CoinsContainer from "./Coins";
 
 function useCompoundPositions() {
   const [compoundPositions, setCompoundPositions] = useState({});
+  const [compoundApy, setCompoundApy] = useState({});
   const [loading, setLoading] = useState(false);
   const [timeoutId, setTimeoutId] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
@@ -14,6 +15,31 @@ function useCompoundPositions() {
   const { contracts } = ContractsContainer.useContainer();
   const { proxyAddress, hasProxy } = DACProxyContainer.useContainer();
   const { COINS } = CoinsContainer.useContainer();
+
+  const getApy = async () => {
+    const res = await fetch("https://api.compound.finance/api/v2/ctoken");
+    const data = await res.json();
+
+    const ratesFor = symbol => {
+      const token = data.cToken.filter(
+        x => x.underlying_symbol === symbol.toUpperCase(),
+      )[0];
+
+      const borrowRate = parseFloat(token.borrow_rate.value);
+      const supplyRate = parseFloat(token.supply_rate.value);
+      return { borrowRate, supplyRate };
+    };
+
+    setCompoundApy({
+      eth: { ...ratesFor("eth") },
+      bat: { ...ratesFor("bat") },
+      dai: { ...ratesFor("dai") },
+      usdc: { ...ratesFor("usdc") },
+      rep: { ...ratesFor("rep") },
+      zrx: { ...ratesFor("zrx") },
+      wbtc: { ...ratesFor("wbtc") },
+    });
+  };
 
   const getBalances = async () => {
     const { cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc } = contracts;
@@ -74,6 +100,7 @@ function useCompoundPositions() {
       zrx: { ...COINS.zrx, supply: process(sZrx), borrow: process(bZrx) },
       wbtc: { ...COINS.wbtc, supply: process(sWbtc), borrow: process(bWbtc) },
     });
+    await getApy();
     setLoading(false);
 
     setLastRefresh(new Date()); // save the time of last refresh
@@ -91,7 +118,7 @@ function useCompoundPositions() {
     }
   }, [contracts, proxyAddress]);
 
-  return { compoundPositions, loading, getBalances, lastRefresh };
+  return { compoundPositions, loading, getBalances, lastRefresh, compoundApy };
 }
 
 const CompoundPositions = createContainer(useCompoundPositions);
