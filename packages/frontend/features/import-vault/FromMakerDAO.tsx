@@ -25,11 +25,12 @@ const ImportButton = () => {
   // hooks
   const { vaultIds } = useMakerVaults();
   const { allow } = useAllowVaultTransfer(selectedVaultId);
-  const { importVault } = useImportVault(selectedVaultId);
+  const { importVault, canImportVault, getCanImportVault } = useImportVault(selectedVaultId);
 
   // select first vault by default
   if (selectedVaultId === null && vaultIds.length > 0) {
     setSelectedVaultId(vaultIds[0]);
+    getCanImportVault(vaultIds[0]);
   }
 
   const closeModal = e => setIsOpen(false);
@@ -83,7 +84,9 @@ const ImportButton = () => {
               <Heading.h5 mb="2">1. Select your Vault</Heading.h5>
               <Select
                 onChange={x => {
-                  setSelectedVaultId(x.target.value);
+                  const selectedVaultId = x.target.value
+                  setSelectedVaultId(selectedVaultId);
+                  getCanImportVault(selectedVaultId);
                 }}
                 value={selectedVaultId}
                 required
@@ -106,7 +109,7 @@ const ImportButton = () => {
 
           <ModalBottom>
             <Button.Outline onClick={closeModal}>Close</Button.Outline>
-            <Button ml={3} onClick={importVault}>
+            <Button disabled={!canImportVault} ml={3} onClick={importVault}>
               Import
             </Button>
           </ModalBottom>

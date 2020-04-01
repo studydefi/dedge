@@ -5,16 +5,19 @@ import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 
 import ContractsContainer from "../../containers/Contracts";
 import DACProxyContainer from "../../containers/DACProxy";
+import { useState } from "react";
 
 const useImportVault = selectedVaultId => {
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
 
+  const [canImportVault, setCanImportVault] = useState(false);
+
   const importVault = async () => {
     const {
       makerCdpManager,
       dedgeAddressRegistry,
-      dedgeMakerManager,
+      dedgeMakerManager
     } = contracts;
 
     const ilkBytes32 = await makerCdpManager.ilks(selectedVaultId.toString());
@@ -44,11 +47,25 @@ const useImportVault = selectedVaultId => {
       selectedVaultId.toString(),
       ilkCTokenEquilavent,
       ilkJoinAddress,
-      decimals,
+      decimals
     );
   };
 
-  return { importVault };
+  const getCanImportVault = async selectedVaultId => {
+    const { makerCdpManager } = contracts;
+
+    setCanImportVault(false)
+
+    const can = await dedgeHelpers.maker.isUserAllowedVault(
+      proxy.address,
+      selectedVaultId,
+      makerCdpManager
+    );
+
+    setCanImportVault(can);
+  };
+
+  return { importVault, getCanImportVault, canImportVault };
 };
 
 export default useImportVault;

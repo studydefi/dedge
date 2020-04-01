@@ -37,6 +37,17 @@ const getVaultIds = async (
   return cdpIds;
 };
 
+const isUserAllowedVault = async (
+  user: Address,
+  cdpId: number,
+  dssCdpManager: ethers.Contract
+) => {
+  const owner = await dssCdpManager.owns(cdpId.toString());
+  const cdpCan = await dssCdpManager.cdpCan(owner, cdpId.toString(), user);
+
+  return owner === user || cdpCan.toString() === '1'
+};
+
 const importMakerVault = (
   dacProxy: ethers.Contract,
   dedgeMakerManager: Address,
@@ -113,5 +124,6 @@ const dsProxyCdpAllowDacProxy = (
 export default {
   importMakerVault,
   dsProxyCdpAllowDacProxy,
-  getVaultIds
+  getVaultIds,
+  isUserAllowedVault
 };
