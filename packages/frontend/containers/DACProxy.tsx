@@ -19,6 +19,7 @@ function useDACProxy() {
   const fetchProxyAddress = async () => {
     const { dacProxyFactory } = contracts;
     const userAddr = await signer.getAddress();
+    console.log(dacProxyFactory)
     const proxyAddress = await dacProxyFactory.proxies(userAddr);
 
     setProxyAddress(proxyAddress);

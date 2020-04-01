@@ -5,7 +5,7 @@ import BorrowBalances from "../../containers/CompoundPositions";
 const Container = styled(Box)`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 const DataContainer = styled(Box)`

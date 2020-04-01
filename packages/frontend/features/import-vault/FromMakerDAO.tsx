@@ -38,14 +38,14 @@ const ImportButton = () => {
 
   // case 1: not connected
   if (!proxy) {
-    return <Button disabled>From MakerDAO</Button>;
+    return <Button.Outline disabled>Import position from MakerDAO</Button.Outline>;
   }
 
   // case 2: no vaults found on MakerDAO for this address
   if (vaultIds.length === 0) {
     return (
       <Box>
-        <Button onClick={openModal}>From MakerDAO</Button>
+        <Button onClick={openModal}>Import position from MakerDAO</Button>
 
         <Modal isOpen={isOpen}>
           <Card width={"640px"} p={0}>

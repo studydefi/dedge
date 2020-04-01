@@ -24,20 +24,22 @@ const Address = styled(Text)`
   font-size: 12px;
 `;
 
-const SmartWallet = () => {
+const SmartWallet = ({ size = "small", outline = true }) => {
   const { address } = ConnectionContainer.useContainer();
   const { proxy, proxyAddress, createProxy } = DACProxyContainer.useContainer();
 
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
+  const MyButton = outline ? Button.Outline : Button
+
   if (!address) {
     return (
       <Container>
         <Tooltip message="Please first connect to MetaMask" placement="bottom">
-          <Button.Outline size="small" disabled>
+          <MyButton size={size} disabled>
             Smart Wallet: No Network
-          </Button.Outline>
+          </MyButton>
         </Tooltip>
       </Container>
     );
@@ -50,9 +52,9 @@ const SmartWallet = () => {
           message="A smart wallet allows Dedge to execute transactions on your behalf while being non-custodial."
           placement="bottom"
         >
-          <Button size="small" onClick={createProxy}>
+          <MyButton size={size} onClick={createProxy}>
             Create Smart Wallet
-          </Button>
+          </MyButton>
         </Tooltip>
       </Container>
     );
@@ -60,9 +62,9 @@ const SmartWallet = () => {
 
   return (
     <Container>
-      <Button.Outline size="small" onClick={toggle}>
+      <MyButton size={size} onClick={toggle}>
         Smart Wallet: Connected
-      </Button.Outline>
+      </MyButton>
       {isOpen && (
         <Popup p="2" mt="1">
           <Label mb="1">Smart Wallet Proxy Address</Label>

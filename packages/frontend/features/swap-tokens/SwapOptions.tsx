@@ -130,6 +130,7 @@ const SwapOptions = () => {
         toTokenStr={toTokenStr}
         amountToSwap={amountToSwap}
         disabled={disableConfirm}
+        outline={!proxy}
       />
     </Container>
   );

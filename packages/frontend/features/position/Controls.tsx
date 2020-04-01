@@ -12,22 +12,26 @@ import styled from "styled-components";
 
 import CompoundPositions from "../../containers/CompoundPositions";
 
+import FromMakerDAO from "../import-vault/FromMakerDAO"
+
 const ControlsContainer = styled(Box)`
   background: white;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  // border: 1px solid rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   position: relative;
 `;
 
 const RefreshButton = () => {
   const { loading, getBalances } = CompoundPositions.useContainer();
   if (!loading) {
+    
     return (
       <Button.Outline onClick={getBalances}>
         Refresh Balances
       </Button.Outline>
+
     );
   }
 
@@ -54,8 +58,10 @@ const Controls = ({ notConnected }) => {
 
   return (
     <ControlsContainer py="4">
+      <FromMakerDAO/>
+      <Button.Outline disabled>Exit Position</Button.Outline>
       {notConnected ? (
-        <Button.Outline disabled>Not Connected</Button.Outline>
+        <Button.Outline disabled>Refresh Balances</Button.Outline>
       ) : (
         <RefreshButton />
       )}
