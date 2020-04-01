@@ -12,7 +12,7 @@ function useCompoundPositions() {
   const [lastRefresh, setLastRefresh] = useState(null);
 
   const { contracts } = ContractsContainer.useContainer();
-  const { proxyAddress } = DACProxyContainer.useContainer();
+  const { proxyAddress, hasProxy } = DACProxyContainer.useContainer();
   const { COINS } = CoinsContainer.useContainer();
 
   const getBalances = async () => {
@@ -64,7 +64,7 @@ function useCompoundPositions() {
   };
 
   useEffect(() => {
-    if (proxyAddress) {
+    if (hasProxy) {
       getBalances();
     }
   }, [contracts, proxyAddress]);

@@ -19,7 +19,7 @@ const NameWrapper = styled(Flex)`
 `;
 
 const NumberWrapper = ({ value, symbol }) => {
-  const short = parseFloat(value).toPrecision(8);
+  const short = parseFloat(value).toPrecision(6);
   return (
     <Box
       title={`${value} ${symbol}`}
@@ -31,15 +31,15 @@ const NumberWrapper = ({ value, symbol }) => {
 };
 
 const CurrentPosition = () => {
-  const { proxy } = DACProxyContainer.useContainer();
+  const { hasProxy } = DACProxyContainer.useContainer();
   const { compoundPositions } = CompoundPositions.useContainer();
 
   const positionsArr = Object.entries(compoundPositions);
 
-  if (!proxy || Object.keys(compoundPositions).length === 0) {
+  if (!hasProxy || Object.keys(compoundPositions).length === 0) {
     return (
       <>
-        <Controls notConnected={!proxy} />
+        <Controls notConnected={!hasProxy} />
         <DummyPositions />
       </>
     );
@@ -80,7 +80,7 @@ const CurrentPosition = () => {
                     icon="MoreHoriz"
                     size="small"
                     icononly
-                    disabled={!proxy}
+                    disabled={!hasProxy}
                   />
                 </td>
               </tr>

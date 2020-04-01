@@ -57,7 +57,7 @@ const Controls = ({ notConnected }) => {
   const { lastRefresh } = CompoundPositions.useContainer();
 
   return (
-    <ControlsContainer py="4">
+    <ControlsContainer py="4" px="1">
       <FromMakerDAO/>
       <Button.Outline disabled>Exit Position</Button.Outline>
       {notConnected ? (

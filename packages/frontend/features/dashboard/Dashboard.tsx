@@ -32,7 +32,7 @@ const DataDisplay = styled(Box)`
 
 const Dashboard = () => {
   const { address } = ConnectionContainer.useContainer();
-  const { proxy } = DACProxyContainer.useContainer();
+  const { hasProxy } = DACProxyContainer.useContainer();
   return (
     <Container>
       {/* <Title mb="4">Swap your debt and collateral via Compound</Title> */}
@@ -66,14 +66,16 @@ const Dashboard = () => {
         </Flash>
       )}
 
-      {address && !proxy && (
-        <Flash variant="warning" mt="2">
-          <Flex alignItems="center" justifyContent="center">
-            <Text fontWeight={"bold"} mr="2">Please create a Smart Wallet:</Text>
-            <SmartWallet size="medium" outline={false}/>
-          </Flex>
-        </Flash>
-      )}
+      {address && !hasProxy && (
+          <Flash variant="warning" mt="2">
+            <Flex alignItems="center" justifyContent="center">
+              <Text fontWeight={"bold"} mr="2">
+                Please create a Smart Wallet:
+              </Text>
+              <SmartWallet size="medium" outline={false} />
+            </Flex>
+          </Flash>
+        )}
 
       <Contents py="4">
         <SwapOptions />

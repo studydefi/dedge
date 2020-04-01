@@ -16,7 +16,7 @@ import useImportVault from "./useImportVault";
 
 const ImportButton = () => {
   const { address } = ConnectionContainer.useContainer();
-  const { proxy } = DACProxyContainer.useContainer();
+  const { hasProxy } = DACProxyContainer.useContainer();
 
   // state
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,7 @@ const ImportButton = () => {
   const openModal = e => setIsOpen(true);
 
   // case 1: not connected
-  if (!proxy) {
+  if (!hasProxy) {
     return <Button.Outline disabled>Import position from MakerDAO</Button.Outline>;
   }
 

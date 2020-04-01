@@ -1,4 +1,4 @@
-import { Box, Card, Text, Button, Tooltip } from "rimble-ui";
+import { Box, Flex, Card, Text, Button, Tooltip, Loader } from "rimble-ui";
 import { useState } from "react";
 import styled from "styled-components";
 import ConnectionContainer from "../../containers/Connection";
@@ -26,12 +26,18 @@ const Address = styled(Text)`
 
 const SmartWallet = ({ size = "small", outline = true }) => {
   const { address } = ConnectionContainer.useContainer();
-  const { proxy, proxyAddress, createProxy } = DACProxyContainer.useContainer();
+  const {
+    proxy,
+    proxyAddress,
+    createProxy,
+    loading,
+    hasProxy,
+  } = DACProxyContainer.useContainer();
 
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
-  const MyButton = outline ? Button.Outline : Button
+  const MyButton = outline ? Button.Outline : Button;
 
   if (!address) {
     return (
@@ -45,16 +51,25 @@ const SmartWallet = ({ size = "small", outline = true }) => {
     );
   }
 
-  if (!proxy || proxyAddress === "0x0000000000000000000000000000000000000000") {
+  if (!hasProxy) {
     return (
       <Container>
         <Tooltip
           message="A smart wallet allows Dedge to execute transactions on your behalf while being non-custodial."
           placement="bottom"
         >
-          <MyButton size={size} onClick={createProxy}>
-            Create Smart Wallet
-          </MyButton>
+          {loading ? (
+            <MyButton size={size} onClick={createProxy}>
+              <Flex alignItems="center">
+                <span>Creating Smart Wallet</span>{" "}
+                <Loader color={outline ? "normal" : "white"} ml="2" />
+              </Flex>
+            </MyButton>
+          ) : (
+            <MyButton size={size} onClick={createProxy}>
+              Create Smart Wallet
+            </MyButton>
+          )}
         </Tooltip>
       </Container>
     );

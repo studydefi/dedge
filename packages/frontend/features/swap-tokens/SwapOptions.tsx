@@ -15,7 +15,7 @@ const Container = styled(Box)`
 `;
 
 const SwapOptions = () => {
-  const { proxy } = DACProxyContainer.useContainer();
+  const { hasProxy } = DACProxyContainer.useContainer();
   const { stableCoins, volatileCoins } = CoinsContainer.useContainer();
 
   const [thingToSwap, setThingToSwap] = useState("debt");
@@ -30,7 +30,7 @@ const SwapOptions = () => {
   );
 
   const disableConfirm =
-    !proxy || // not connected or no smart wallet
+    !hasProxy || // not connected or no smart wallet
     fromTokenStr === toTokenStr || // same token
     amountToSwap === "" || // no amount specified
     !isAmountAvailable; // amount not available
@@ -130,7 +130,7 @@ const SwapOptions = () => {
         toTokenStr={toTokenStr}
         amountToSwap={amountToSwap}
         disabled={disableConfirm}
-        outline={!proxy}
+        outline={!hasProxy}
       />
     </Container>
   );
