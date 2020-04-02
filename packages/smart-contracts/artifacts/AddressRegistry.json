@@ -290,29 +290,29 @@
   "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"AaveEthAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"AaveLendingPoolAddressProviderAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"BatAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"BatJoinAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"CDaiAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"CEtherAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"CSaiAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"CUSDCAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"CompoundComptrollerAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"CompoundPriceOracleAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"DaiAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"DaiJoinAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"DssCdpManagerAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"DssProxyActionsAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"EthJoinAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"JugAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"UniswapFactoryAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"UsdcAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"UsdcJoinAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/registries/AddressRegistry.sol\":\"AddressRegistry\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/registries/AddressRegistry.sol\":{\"keccak256\":\"0x0f9a1a23e6eabb0a3cd78e2e2a0b23b15f8d175ab02d71aac63eb6e38fb82657\",\"urls\":[\"bzz-raw://6cdf61439a849257726d6fe87cc5455c008763485170f2609ed477a3f3dc0d68\",\"dweb:/ipfs/QmbLvvK3AmCaSKPXSnHNsd5iWMFzCr9HEd4cPmbPLZxZKs\"]}},\"version\":1}",
   "bytecode": "0x60806040527324a42fd28c976a61df5d00d0599c34c4f90748c86000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555073eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555073c0a47dfe034b400b47bdad5fecda2621de6c4d95600260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550731d8aedc9e924730dd3f9641cdb4d1b92b848b4bd600360006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550733d9819210a31b4961b30ef54be2aed79b9c9cd3b600460006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550734ddc2d193948926d02f9b1fe9e1daa0718270ed5600560006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507339aa39c021dfbae8fac545936693ac917d5e7563600660006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550735d3a536e4d6dbd6114cc1ead35777bab948e3643600760006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555073f5dce57282a584d2746faf1593d3121fcac444dc600860006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550736b175474e89094c44da98b954eedeac495271d0f600960006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550730d8775f648430679a709e98d2b0cb6250d2887ef600a60006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555073a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48600b60006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550732f0b23f53734252bda2277357e97e1517d6b042a600c60006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555073a191e578a6736167326d05c119ce0c90849e84b7600d60006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550733d0b1912b66114d4096f48a8cee3a56c231772ca600e60006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550739759a6ac90977b93b58547b4a71c78317f391a28600f60006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507319c0976f590d67707e62397c87829d896dc0f1f1601060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507382ecd135dce65fbc6dbdd0e4237e0af93ffd5038601160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550735ef30b9986345249bc32d8928b7ee64de9435e39601260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555034801561065e57600080fd5b506109aa8061066e6000396000f3fe608060405234801561001057600080fd5b50600436106101215760003560e01c8063744d2712116100ad578063b29ced0611610071578063b29ced0614610532578063bd020fbc1461057c578063beea14ce146105c6578063ee2a941114610610578063f5315b141461065a57610121565b8063744d2712146103c057806379fa686b1461040a5780638ec9f15f14610454578063a303fcdb1461049e578063ac92d52b146104e857610121565b806356cc94a2116100f457806356cc94a21461024e5780635ed75a2f146102985780635f1726c7146102e257806365276bdb1461032c578063730779801461037657610121565b80630f1eb85b146101265780633f6dc33b1461017057806348665b02146101ba578063515cb0e114610204575b600080fd5b61012e6106a4565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101786106ca565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101c26106ef565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61020c610715565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61025661073b565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6102a0610761565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6102ea610787565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6103346107ad565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61037e6107d3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6103c86107f9565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61041261081f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61045c610845565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6104a661086b565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6104f0610891565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61053a6108b7565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6105846108dd565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6105ce610903565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b610618610929565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61066261094f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b600d60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600e60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b601260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600860009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600b60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b601160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600c60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b601060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600f60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600760009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600460009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600a60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600960009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea265627a7a723158202846fd89a258ffa67b2f2a6a83c678401f25bf7ba3eb2c9a8786bf0037c6353e64736f6c63430005100032",
   "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101215760003560e01c8063744d2712116100ad578063b29ced0611610071578063b29ced0614610532578063bd020fbc1461057c578063beea14ce146105c6578063ee2a941114610610578063f5315b141461065a57610121565b8063744d2712146103c057806379fa686b1461040a5780638ec9f15f14610454578063a303fcdb1461049e578063ac92d52b146104e857610121565b806356cc94a2116100f457806356cc94a21461024e5780635ed75a2f146102985780635f1726c7146102e257806365276bdb1461032c578063730779801461037657610121565b80630f1eb85b146101265780633f6dc33b1461017057806348665b02146101ba578063515cb0e114610204575b600080fd5b61012e6106a4565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101786106ca565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101c26106ef565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61020c610715565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61025661073b565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6102a0610761565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6102ea610787565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6103346107ad565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61037e6107d3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6103c86107f9565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61041261081f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61045c610845565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6104a661086b565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6104f0610891565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61053a6108b7565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6105846108dd565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6105ce610903565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b610618610929565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61066261094f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b600d60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600e60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b601260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600860009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600b60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b601160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600c60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b601060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600f60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600760009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600460009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600a60009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600960009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168156fea265627a7a723158202846fd89a258ffa67b2f2a6a83c678401f25bf7ba3eb2c9a8786bf0037c6353e64736f6c63430005100032",
-  "sourceMap": "25:1787:30:-;;;123:42;68:97;;;;;;;;;;;;;;;;;;;;203:42;171:74;;;;;;;;;;;;;;;;;;;;306:42;267:81;;;;;;;;;;;;;;;;;;;;415:42;371:86;;;;;;;;;;;;;;;;;;;;507:42;463:86;;;;;;;;;;;;;;;;;;;;586:42;555:73;;;;;;;;;;;;;;;;;;;;664:42;634:72;;;;;;;;;;;;;;;;;;;;741:42;712:71;;;;;;;;;;;;;;;;;;;;818:42;789:71;;;;;;;;;;;;;;;;;;;;911:42;883:70;;;;;;;;;;;;;;;;;;;;987:42;959:70;;;;;;;;;;;;;;;;;;;;1064:42;1035:71;;;;;;;;;;;;;;;;;;;;1276:42;1244:74;;;;;;;;;;;;;;;;;;;;1357:42;1324:75;;;;;;;;;;;;;;;;;;;;1437:42;1405:74;;;;;;;;;;;;;;;;;;;;1517:42;1485:74;;;;;;;;;;;;;;;;;;;;1593:42;1565:70;;;;;;;;;;;;;;;;;;;;1681:42;1641:82;;;;;;;;;;;;;;;;;;;;1767:42;1729:80;;;;;;;;;;;;;;;;;;;;25:1787;8:9:-1;5:2;;;30:1;27;20:12;5:2;25:1787:30;;;;;;;",
-  "deployedSourceMap": "25:1787:30:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;25:1787:30;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1324:75;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;68:97;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1405:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;267:81;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;171:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1729:80;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;789:71;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;371:86;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1035:71;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;555:73;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1641:82;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1244:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1565:70;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1485:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;712:71;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;463:86;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;959:70;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;883;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;634:72;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1324:75;;;;;;;;;;;;;:::o;68:97::-;;;;;;;;;;;;;:::o;1405:74::-;;;;;;;;;;;;;:::o;267:81::-;;;;;;;;;;;;;:::o;171:74::-;;;;;;;;;;;;;:::o;1729:80::-;;;;;;;;;;;;;:::o;789:71::-;;;;;;;;;;;;;:::o;371:86::-;;;;;;;;;;;;;:::o;1035:71::-;;;;;;;;;;;;;:::o;555:73::-;;;;;;;;;;;;;:::o;1641:82::-;;;;;;;;;;;;;:::o;1244:74::-;;;;;;;;;;;;;:::o;1565:70::-;;;;;;;;;;;;;:::o;1485:74::-;;;;;;;;;;;;;:::o;712:71::-;;;;;;;;;;;;;:::o;463:86::-;;;;;;;;;;;;;:::o;959:70::-;;;;;;;;;;;;;:::o;883:::-;;;;;;;;;;;;;:::o;634:72::-;;;;;;;;;;;;;:::o",
+  "sourceMap": "25:1787:31:-;;;123:42;68:97;;;;;;;;;;;;;;;;;;;;203:42;171:74;;;;;;;;;;;;;;;;;;;;306:42;267:81;;;;;;;;;;;;;;;;;;;;415:42;371:86;;;;;;;;;;;;;;;;;;;;507:42;463:86;;;;;;;;;;;;;;;;;;;;586:42;555:73;;;;;;;;;;;;;;;;;;;;664:42;634:72;;;;;;;;;;;;;;;;;;;;741:42;712:71;;;;;;;;;;;;;;;;;;;;818:42;789:71;;;;;;;;;;;;;;;;;;;;911:42;883:70;;;;;;;;;;;;;;;;;;;;987:42;959:70;;;;;;;;;;;;;;;;;;;;1064:42;1035:71;;;;;;;;;;;;;;;;;;;;1276:42;1244:74;;;;;;;;;;;;;;;;;;;;1357:42;1324:75;;;;;;;;;;;;;;;;;;;;1437:42;1405:74;;;;;;;;;;;;;;;;;;;;1517:42;1485:74;;;;;;;;;;;;;;;;;;;;1593:42;1565:70;;;;;;;;;;;;;;;;;;;;1681:42;1641:82;;;;;;;;;;;;;;;;;;;;1767:42;1729:80;;;;;;;;;;;;;;;;;;;;25:1787;8:9:-1;5:2;;;30:1;27;20:12;5:2;25:1787:31;;;;;;;",
+  "deployedSourceMap": "25:1787:31:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;25:1787:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1324:75;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;68:97;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1405:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;267:81;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;171:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1729:80;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;789:71;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;371:86;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1035:71;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;555:73;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1641:82;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1244:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1565:70;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1485:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;712:71;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;463:86;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;959:70;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;883;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;634:72;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1324:75;;;;;;;;;;;;;:::o;68:97::-;;;;;;;;;;;;;:::o;1405:74::-;;;;;;;;;;;;;:::o;267:81::-;;;;;;;;;;;;;:::o;171:74::-;;;;;;;;;;;;;:::o;1729:80::-;;;;;;;;;;;;;:::o;789:71::-;;;;;;;;;;;;;:::o;371:86::-;;;;;;;;;;;;;:::o;1035:71::-;;;;;;;;;;;;;:::o;555:73::-;;;;;;;;;;;;;:::o;1641:82::-;;;;;;;;;;;;;:::o;1244:74::-;;;;;;;;;;;;;:::o;1565:70::-;;;;;;;;;;;;;:::o;1485:74::-;;;;;;;;;;;;;:::o;712:71::-;;;;;;;;;;;;;:::o;463:86::-;;;;;;;;;;;;;:::o;959:70::-;;;;;;;;;;;;;:::o;883:::-;;;;;;;;;;;;;:::o;634:72::-;;;;;;;;;;;;;:::o",
   "source": "pragma solidity 0.5.16;\n\ncontract AddressRegistry {\n    // Aave\n    address public AaveLendingPoolAddressProviderAddress = 0x24a42fD28C976A61Df5D00D0599C34c4f90748c8;\n    address public AaveEthAddress = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;\n\n    // Uniswap\n    address public UniswapFactoryAddress = 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95;\n\n    // Compound\n    address public CompoundPriceOracleAddress = 0x1D8aEdc9E924730DD3f9641CDb4D1B92B848b4bd;\n    address public CompoundComptrollerAddress = 0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B;\n    address public CEtherAddress = 0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5;\n    address public CUSDCAddress = 0x39AA39c021dfbaE8faC545936693aC917d5E7563;\n    address public CDaiAddress = 0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643;\n    address public CSaiAddress = 0xF5DCe57282A584D2746FaF1593d3121Fcac444dC;\n\n    // Token(s)\n    address public DaiAddress = 0x6B175474E89094C44Da98b954EedeAC495271d0F;\n    address public BatAddress = 0x0D8775F648430679A709E98d2b0Cb6250d2887EF;\n    address public UsdcAddress = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;\n\n    // MakerDAO\n    // https://changelog.makerdao.com/\n    // https://changelog.makerdao.com/releases/mainnet/1.0.4/contracts.json\n    address public EthJoinAddress = 0x2F0b23f53734252Bda2277357e97e1517d6B042A;\n    address public UsdcJoinAddress = 0xA191e578a6736167326d05c119CE0c90849E84B7;\n    address public BatJoinAddress = 0x3D0B1912B66114d4096F48A8CEe3A56C231772cA;\n    address public DaiJoinAddress = 0x9759A6Ac90977b93B58547b4A71c78317f391A28;\n    address public JugAddress = 0x19c0976f590D67707E62397C87829d896Dc0f1F1;\n    address public DssProxyActionsAddress = 0x82ecD135Dce65Fbc6DbdD0e4237E0AF93FFD5038;\n    address public DssCdpManagerAddress = 0x5ef30b9986345249bc32d8928B7ee64DE9435E39;\n}\n",
   "sourcePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/registries/AddressRegistry.sol",
   "ast": {
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/registries/AddressRegistry.sol",
     "exportedSymbols": {
       "AddressRegistry": [
-        6966
+        7628
       ]
     },
-    "id": 6967,
+    "id": 7629,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 6908,
+        "id": 7570,
         "literals": [
           "solidity",
           "0.5",
           ".16"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:30"
+        "src": "0:23:31"
       },
       {
         "baseContracts": [],
@@ -320,20 +320,20 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 6966,
+        "id": 7628,
         "linearizedBaseContracts": [
-          6966
+          7628
         ],
         "name": "AddressRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 6911,
+            "id": 7573,
             "name": "AaveLendingPoolAddressProviderAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "68:97:30",
+            "scope": 7628,
+            "src": "68:97:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -341,10 +341,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6909,
+              "id": 7571,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "68:7:30",
+              "src": "68:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -354,14 +354,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832346134326644323843393736413631446635443030443035393943333463346639303734386338",
-              "id": 6910,
+              "id": 7572,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "123:42:30",
+              "src": "123:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -373,11 +373,11 @@
           },
           {
             "constant": false,
-            "id": 6914,
+            "id": 7576,
             "name": "AaveEthAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "171:74:30",
+            "scope": 7628,
+            "src": "171:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -385,10 +385,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6912,
+              "id": 7574,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "171:7:30",
+              "src": "171:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -398,14 +398,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307845656565654565656545654565654565456545656545454565656565456565656565656545456545",
-              "id": 6913,
+              "id": 7575,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "203:42:30",
+              "src": "203:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -417,11 +417,11 @@
           },
           {
             "constant": false,
-            "id": 6917,
+            "id": 7579,
             "name": "UniswapFactoryAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "267:81:30",
+            "scope": 7628,
+            "src": "267:81:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -429,10 +429,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6915,
+              "id": 7577,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "267:7:30",
+              "src": "267:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -442,14 +442,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307863306134376446653033344234303042343762446144354665634461323632316465366334643935",
-              "id": 6916,
+              "id": 7578,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "306:42:30",
+              "src": "306:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -461,11 +461,11 @@
           },
           {
             "constant": false,
-            "id": 6920,
+            "id": 7582,
             "name": "CompoundPriceOracleAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "371:86:30",
+            "scope": 7628,
+            "src": "371:86:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -473,10 +473,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6918,
+              "id": 7580,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "371:7:30",
+              "src": "371:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -486,14 +486,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831443861456463394539323437333044443366393634314344623444314239324238343862346264",
-              "id": 6919,
+              "id": 7581,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "415:42:30",
+              "src": "415:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -505,11 +505,11 @@
           },
           {
             "constant": false,
-            "id": 6923,
+            "id": 7585,
             "name": "CompoundComptrollerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "463:86:30",
+            "scope": 7628,
+            "src": "463:86:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -517,10 +517,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6921,
+              "id": 7583,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "463:7:30",
+              "src": "463:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -530,14 +530,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833643938313932313041333162343936316233304546353462453261654437394239633943643342",
-              "id": 6922,
+              "id": 7584,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "507:42:30",
+              "src": "507:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -549,11 +549,11 @@
           },
           {
             "constant": false,
-            "id": 6926,
+            "id": 7588,
             "name": "CEtherAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "555:73:30",
+            "scope": 7628,
+            "src": "555:73:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -561,10 +561,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6924,
+              "id": 7586,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "555:7:30",
+              "src": "555:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -574,14 +574,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307834446463324431393339343839323644303266394231664539653164616130373138323730454435",
-              "id": 6925,
+              "id": 7587,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "586:42:30",
+              "src": "586:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -593,11 +593,11 @@
           },
           {
             "constant": false,
-            "id": 6929,
+            "id": 7591,
             "name": "CUSDCAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "634:72:30",
+            "scope": 7628,
+            "src": "634:72:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -605,10 +605,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6927,
+              "id": 7589,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "634:7:30",
+              "src": "634:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -618,14 +618,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833394141333963303231646662614538666143353435393336363933614339313764354537353633",
-              "id": 6928,
+              "id": 7590,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "664:42:30",
+              "src": "664:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -637,11 +637,11 @@
           },
           {
             "constant": false,
-            "id": 6932,
+            "id": 7594,
             "name": "CDaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "712:71:30",
+            "scope": 7628,
+            "src": "712:71:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -649,10 +649,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6930,
+              "id": 7592,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "712:7:30",
+              "src": "712:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -662,14 +662,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835643361353336453444364462443631313463633145616433353737376241423934384533363433",
-              "id": 6931,
+              "id": 7593,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "741:42:30",
+              "src": "741:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -681,11 +681,11 @@
           },
           {
             "constant": false,
-            "id": 6935,
+            "id": 7597,
             "name": "CSaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "789:71:30",
+            "scope": 7628,
+            "src": "789:71:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -693,10 +693,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6933,
+              "id": 7595,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "789:7:30",
+              "src": "789:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -706,14 +706,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307846354443653537323832413538344432373436466146313539336433313231466361633434346443",
-              "id": 6934,
+              "id": 7596,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "818:42:30",
+              "src": "818:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -725,11 +725,11 @@
           },
           {
             "constant": false,
-            "id": 6938,
+            "id": 7600,
             "name": "DaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "883:70:30",
+            "scope": 7628,
+            "src": "883:70:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -737,10 +737,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6936,
+              "id": 7598,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "883:7:30",
+              "src": "883:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -750,14 +750,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307836423137353437344538393039344334344461393862393534456564654143343935323731643046",
-              "id": 6937,
+              "id": 7599,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "911:42:30",
+              "src": "911:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -769,11 +769,11 @@
           },
           {
             "constant": false,
-            "id": 6941,
+            "id": 7603,
             "name": "BatAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "959:70:30",
+            "scope": 7628,
+            "src": "959:70:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -781,10 +781,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6939,
+              "id": 7601,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "959:7:30",
+              "src": "959:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -794,14 +794,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307830443837373546363438343330363739413730394539386432623043623632353064323838374546",
-              "id": 6940,
+              "id": 7602,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "987:42:30",
+              "src": "987:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -813,11 +813,11 @@
           },
           {
             "constant": false,
-            "id": 6944,
+            "id": 7606,
             "name": "UsdcAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1035:71:30",
+            "scope": 7628,
+            "src": "1035:71:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -825,10 +825,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6942,
+              "id": 7604,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1035:7:30",
+              "src": "1035:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -838,14 +838,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841306238363939316336323138623336633164313944346132653945623063453336303665423438",
-              "id": 6943,
+              "id": 7605,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1064:42:30",
+              "src": "1064:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -857,11 +857,11 @@
           },
           {
             "constant": false,
-            "id": 6947,
+            "id": 7609,
             "name": "EthJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1244:74:30",
+            "scope": 7628,
+            "src": "1244:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -869,10 +869,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6945,
+              "id": 7607,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1244:7:30",
+              "src": "1244:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -882,14 +882,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832463062323366353337333432353242646132323737333537653937653135313764364230343241",
-              "id": 6946,
+              "id": 7608,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1276:42:30",
+              "src": "1276:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -901,11 +901,11 @@
           },
           {
             "constant": false,
-            "id": 6950,
+            "id": 7612,
             "name": "UsdcJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1324:75:30",
+            "scope": 7628,
+            "src": "1324:75:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -913,10 +913,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6948,
+              "id": 7610,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1324:7:30",
+              "src": "1324:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -926,14 +926,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841313931653537386136373336313637333236643035633131394345306339303834394538344237",
-              "id": 6949,
+              "id": 7611,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1357:42:30",
+              "src": "1357:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -945,11 +945,11 @@
           },
           {
             "constant": false,
-            "id": 6953,
+            "id": 7615,
             "name": "BatJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1405:74:30",
+            "scope": 7628,
+            "src": "1405:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -957,10 +957,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6951,
+              "id": 7613,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1405:7:30",
+              "src": "1405:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -970,14 +970,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833443042313931324236363131346434303936463438413843456533413536433233313737326341",
-              "id": 6952,
+              "id": 7614,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1437:42:30",
+              "src": "1437:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -989,11 +989,11 @@
           },
           {
             "constant": false,
-            "id": 6956,
+            "id": 7618,
             "name": "DaiJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1485:74:30",
+            "scope": 7628,
+            "src": "1485:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1001,10 +1001,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6954,
+              "id": 7616,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1485:7:30",
+              "src": "1485:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1014,14 +1014,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307839373539413641633930393737623933423538353437623441373163373833313766333931413238",
-              "id": 6955,
+              "id": 7617,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1517:42:30",
+              "src": "1517:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1033,11 +1033,11 @@
           },
           {
             "constant": false,
-            "id": 6959,
+            "id": 7621,
             "name": "JugAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1565:70:30",
+            "scope": 7628,
+            "src": "1565:70:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1045,10 +1045,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6957,
+              "id": 7619,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1565:7:30",
+              "src": "1565:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1058,14 +1058,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831396330393736663539304436373730374536323339374338373832396438393644633066314631",
-              "id": 6958,
+              "id": 7620,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1593:42:30",
+              "src": "1593:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1077,11 +1077,11 @@
           },
           {
             "constant": false,
-            "id": 6962,
+            "id": 7624,
             "name": "DssProxyActionsAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1641:82:30",
+            "scope": 7628,
+            "src": "1641:82:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1089,10 +1089,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6960,
+              "id": 7622,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1641:7:30",
+              "src": "1641:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1102,14 +1102,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307838326563443133354463653635466263364462644430653432333745304146393346464435303338",
-              "id": 6961,
+              "id": 7623,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1681:42:30",
+              "src": "1681:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1121,11 +1121,11 @@
           },
           {
             "constant": false,
-            "id": 6965,
+            "id": 7627,
             "name": "DssCdpManagerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1729:80:30",
+            "scope": 7628,
+            "src": "1729:80:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1133,10 +1133,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6963,
+              "id": 7625,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1729:7:30",
+              "src": "1729:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1146,14 +1146,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835656633306239393836333435323439626333326438393238423765653634444539343335453339",
-              "id": 6964,
+              "id": 7626,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1767:42:30",
+              "src": "1767:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1164,31 +1164,31 @@
             "visibility": "public"
           }
         ],
-        "scope": 6967,
-        "src": "25:1787:30"
+        "scope": 7629,
+        "src": "25:1787:31"
       }
     ],
-    "src": "0:1813:30"
+    "src": "0:1813:31"
   },
   "legacyAST": {
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/registries/AddressRegistry.sol",
     "exportedSymbols": {
       "AddressRegistry": [
-        6966
+        7628
       ]
     },
-    "id": 6967,
+    "id": 7629,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 6908,
+        "id": 7570,
         "literals": [
           "solidity",
           "0.5",
           ".16"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:30"
+        "src": "0:23:31"
       },
       {
         "baseContracts": [],
@@ -1196,20 +1196,20 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 6966,
+        "id": 7628,
         "linearizedBaseContracts": [
-          6966
+          7628
         ],
         "name": "AddressRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 6911,
+            "id": 7573,
             "name": "AaveLendingPoolAddressProviderAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "68:97:30",
+            "scope": 7628,
+            "src": "68:97:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1217,10 +1217,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6909,
+              "id": 7571,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "68:7:30",
+              "src": "68:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1230,14 +1230,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832346134326644323843393736413631446635443030443035393943333463346639303734386338",
-              "id": 6910,
+              "id": 7572,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "123:42:30",
+              "src": "123:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1249,11 +1249,11 @@
           },
           {
             "constant": false,
-            "id": 6914,
+            "id": 7576,
             "name": "AaveEthAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "171:74:30",
+            "scope": 7628,
+            "src": "171:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1261,10 +1261,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6912,
+              "id": 7574,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "171:7:30",
+              "src": "171:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1274,14 +1274,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307845656565654565656545654565654565456545656545454565656565456565656565656545456545",
-              "id": 6913,
+              "id": 7575,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "203:42:30",
+              "src": "203:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1293,11 +1293,11 @@
           },
           {
             "constant": false,
-            "id": 6917,
+            "id": 7579,
             "name": "UniswapFactoryAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "267:81:30",
+            "scope": 7628,
+            "src": "267:81:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1305,10 +1305,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6915,
+              "id": 7577,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "267:7:30",
+              "src": "267:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1318,14 +1318,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307863306134376446653033344234303042343762446144354665634461323632316465366334643935",
-              "id": 6916,
+              "id": 7578,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "306:42:30",
+              "src": "306:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1337,11 +1337,11 @@
           },
           {
             "constant": false,
-            "id": 6920,
+            "id": 7582,
             "name": "CompoundPriceOracleAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "371:86:30",
+            "scope": 7628,
+            "src": "371:86:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1349,10 +1349,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6918,
+              "id": 7580,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "371:7:30",
+              "src": "371:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1362,14 +1362,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831443861456463394539323437333044443366393634314344623444314239324238343862346264",
-              "id": 6919,
+              "id": 7581,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "415:42:30",
+              "src": "415:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1381,11 +1381,11 @@
           },
           {
             "constant": false,
-            "id": 6923,
+            "id": 7585,
             "name": "CompoundComptrollerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "463:86:30",
+            "scope": 7628,
+            "src": "463:86:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1393,10 +1393,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6921,
+              "id": 7583,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "463:7:30",
+              "src": "463:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1406,14 +1406,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833643938313932313041333162343936316233304546353462453261654437394239633943643342",
-              "id": 6922,
+              "id": 7584,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "507:42:30",
+              "src": "507:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1425,11 +1425,11 @@
           },
           {
             "constant": false,
-            "id": 6926,
+            "id": 7588,
             "name": "CEtherAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "555:73:30",
+            "scope": 7628,
+            "src": "555:73:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1437,10 +1437,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6924,
+              "id": 7586,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "555:7:30",
+              "src": "555:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1450,14 +1450,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307834446463324431393339343839323644303266394231664539653164616130373138323730454435",
-              "id": 6925,
+              "id": 7587,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "586:42:30",
+              "src": "586:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1469,11 +1469,11 @@
           },
           {
             "constant": false,
-            "id": 6929,
+            "id": 7591,
             "name": "CUSDCAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "634:72:30",
+            "scope": 7628,
+            "src": "634:72:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1481,10 +1481,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6927,
+              "id": 7589,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "634:7:30",
+              "src": "634:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1494,14 +1494,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833394141333963303231646662614538666143353435393336363933614339313764354537353633",
-              "id": 6928,
+              "id": 7590,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "664:42:30",
+              "src": "664:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1513,11 +1513,11 @@
           },
           {
             "constant": false,
-            "id": 6932,
+            "id": 7594,
             "name": "CDaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "712:71:30",
+            "scope": 7628,
+            "src": "712:71:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1525,10 +1525,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6930,
+              "id": 7592,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "712:7:30",
+              "src": "712:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1538,14 +1538,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835643361353336453444364462443631313463633145616433353737376241423934384533363433",
-              "id": 6931,
+              "id": 7593,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "741:42:30",
+              "src": "741:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1557,11 +1557,11 @@
           },
           {
             "constant": false,
-            "id": 6935,
+            "id": 7597,
             "name": "CSaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "789:71:30",
+            "scope": 7628,
+            "src": "789:71:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1569,10 +1569,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6933,
+              "id": 7595,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "789:7:30",
+              "src": "789:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1582,14 +1582,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307846354443653537323832413538344432373436466146313539336433313231466361633434346443",
-              "id": 6934,
+              "id": 7596,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "818:42:30",
+              "src": "818:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1601,11 +1601,11 @@
           },
           {
             "constant": false,
-            "id": 6938,
+            "id": 7600,
             "name": "DaiAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "883:70:30",
+            "scope": 7628,
+            "src": "883:70:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1613,10 +1613,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6936,
+              "id": 7598,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "883:7:30",
+              "src": "883:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1626,14 +1626,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307836423137353437344538393039344334344461393862393534456564654143343935323731643046",
-              "id": 6937,
+              "id": 7599,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "911:42:30",
+              "src": "911:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1645,11 +1645,11 @@
           },
           {
             "constant": false,
-            "id": 6941,
+            "id": 7603,
             "name": "BatAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "959:70:30",
+            "scope": 7628,
+            "src": "959:70:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1657,10 +1657,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6939,
+              "id": 7601,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "959:7:30",
+              "src": "959:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1670,14 +1670,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307830443837373546363438343330363739413730394539386432623043623632353064323838374546",
-              "id": 6940,
+              "id": 7602,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "987:42:30",
+              "src": "987:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1689,11 +1689,11 @@
           },
           {
             "constant": false,
-            "id": 6944,
+            "id": 7606,
             "name": "UsdcAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1035:71:30",
+            "scope": 7628,
+            "src": "1035:71:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1701,10 +1701,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6942,
+              "id": 7604,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1035:7:30",
+              "src": "1035:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1714,14 +1714,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841306238363939316336323138623336633164313944346132653945623063453336303665423438",
-              "id": 6943,
+              "id": 7605,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1064:42:30",
+              "src": "1064:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1733,11 +1733,11 @@
           },
           {
             "constant": false,
-            "id": 6947,
+            "id": 7609,
             "name": "EthJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1244:74:30",
+            "scope": 7628,
+            "src": "1244:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1745,10 +1745,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6945,
+              "id": 7607,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1244:7:30",
+              "src": "1244:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1758,14 +1758,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307832463062323366353337333432353242646132323737333537653937653135313764364230343241",
-              "id": 6946,
+              "id": 7608,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1276:42:30",
+              "src": "1276:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1777,11 +1777,11 @@
           },
           {
             "constant": false,
-            "id": 6950,
+            "id": 7612,
             "name": "UsdcJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1324:75:30",
+            "scope": 7628,
+            "src": "1324:75:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1789,10 +1789,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6948,
+              "id": 7610,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1324:7:30",
+              "src": "1324:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1802,14 +1802,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307841313931653537386136373336313637333236643035633131394345306339303834394538344237",
-              "id": 6949,
+              "id": 7611,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1357:42:30",
+              "src": "1357:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1821,11 +1821,11 @@
           },
           {
             "constant": false,
-            "id": 6953,
+            "id": 7615,
             "name": "BatJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1405:74:30",
+            "scope": 7628,
+            "src": "1405:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1833,10 +1833,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6951,
+              "id": 7613,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1405:7:30",
+              "src": "1405:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1846,14 +1846,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307833443042313931324236363131346434303936463438413843456533413536433233313737326341",
-              "id": 6952,
+              "id": 7614,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1437:42:30",
+              "src": "1437:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1865,11 +1865,11 @@
           },
           {
             "constant": false,
-            "id": 6956,
+            "id": 7618,
             "name": "DaiJoinAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1485:74:30",
+            "scope": 7628,
+            "src": "1485:74:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1877,10 +1877,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6954,
+              "id": 7616,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1485:7:30",
+              "src": "1485:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1890,14 +1890,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307839373539413641633930393737623933423538353437623441373163373833313766333931413238",
-              "id": 6955,
+              "id": 7617,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1517:42:30",
+              "src": "1517:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1909,11 +1909,11 @@
           },
           {
             "constant": false,
-            "id": 6959,
+            "id": 7621,
             "name": "JugAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1565:70:30",
+            "scope": 7628,
+            "src": "1565:70:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1921,10 +1921,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6957,
+              "id": 7619,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1565:7:30",
+              "src": "1565:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1934,14 +1934,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307831396330393736663539304436373730374536323339374338373832396438393644633066314631",
-              "id": 6958,
+              "id": 7620,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1593:42:30",
+              "src": "1593:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1953,11 +1953,11 @@
           },
           {
             "constant": false,
-            "id": 6962,
+            "id": 7624,
             "name": "DssProxyActionsAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1641:82:30",
+            "scope": 7628,
+            "src": "1641:82:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1965,10 +1965,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6960,
+              "id": 7622,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1641:7:30",
+              "src": "1641:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1978,14 +1978,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307838326563443133354463653635466263364462644430653432333745304146393346464435303338",
-              "id": 6961,
+              "id": 7623,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1681:42:30",
+              "src": "1681:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -1997,11 +1997,11 @@
           },
           {
             "constant": false,
-            "id": 6965,
+            "id": 7627,
             "name": "DssCdpManagerAddress",
             "nodeType": "VariableDeclaration",
-            "scope": 6966,
-            "src": "1729:80:30",
+            "scope": 7628,
+            "src": "1729:80:31",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2009,10 +2009,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 6963,
+              "id": 7625,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1729:7:30",
+              "src": "1729:7:31",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -2022,14 +2022,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307835656633306239393836333435323439626333326438393238423765653634444539343335453339",
-              "id": 6964,
+              "id": 7626,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1767:42:30",
+              "src": "1767:42:31",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_address_payable",
@@ -2040,19 +2040,27 @@
             "visibility": "public"
           }
         ],
-        "scope": 6967,
-        "src": "25:1787:30"
+        "scope": 7629,
+        "src": "25:1787:31"
       }
     ],
-    "src": "0:1813:30"
+    "src": "0:1813:31"
   },
   "compiler": {
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0xe982E462b094850F12AF94d21D470e21bE9D0E9C",
+      "transactionHash": "0xfa139c3f3689f78fe796375895746dc67f1f01140ec17acc3c38179467953d96"
+    }
+  },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T11:42:49.990Z",
+  "updatedAt": "2020-04-01T11:19:27.873Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

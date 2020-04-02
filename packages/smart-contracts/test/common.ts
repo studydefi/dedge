@@ -143,3 +143,14 @@ export const openVault = async (
 
   return true;
 };
+
+export const allCTokens = [
+  legos.compound.cEther.address,
+  legos.compound.cSAI.address,
+  legos.compound.cDAI.address,
+  legos.compound.cREP.address,
+  legos.compound.cUSDC.address,
+  legos.compound.cBAT.address,
+  legos.compound.cZRX.address,
+  legos.compound.cWBTC.address
+];

@@ -45,7 +45,7 @@ const isUserAllowedVault = async (
   const owner = await dssCdpManager.owns(cdpId.toString());
   const cdpCan = await dssCdpManager.cdpCan(owner, cdpId.toString(), user);
 
-  return owner === user || cdpCan.toString() === '1'
+  return owner === user || cdpCan.toString() === "1";
 };
 
 const importMakerVault = (
@@ -56,7 +56,7 @@ const importMakerVault = (
   ilkCTokenEquilavent: Address,
   ilkJoinAddress: Address,
   decimalPlaces: number = 18,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   // struct ImportMakerVaultCallData {
   //     address addressRegistryAddress;
@@ -96,9 +96,11 @@ const importMakerVault = (
     ]
   );
 
-  return dacProxy.execute(dedgeMakerManager, importMakerVaultCallbackdata, {
-    gasLimit
-  });
+  return dacProxy.execute(
+    dedgeMakerManager,
+    importMakerVaultCallbackdata,
+    overrides
+  );
 };
 
 const dsProxyCdpAllowDacProxy = (
@@ -107,7 +109,7 @@ const dsProxyCdpAllowDacProxy = (
   dssCdpManager: Address, // DssCdpManager's address,
   dssProxyActions: Address, // Dss-ProxyAction's address
   cdpId: number,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   const allowDacProxyCallback = IDssProxyActions.functions.cdpAllow.encode([
     dssCdpManager,
@@ -116,9 +118,7 @@ const dsProxyCdpAllowDacProxy = (
     "1"
   ]);
 
-  return dsProxy.execute(dssProxyActions, allowDacProxyCallback, {
-    gasLimit
-  });
+  return dsProxy.execute(dssProxyActions, allowDacProxyCallback, overrides);
 };
 
 export default {

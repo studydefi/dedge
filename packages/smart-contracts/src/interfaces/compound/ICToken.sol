@@ -8,7 +8,7 @@ interface ICToken {
     function repayBorrow(uint repayAmount) external returns (uint);
     function repayBorrowBehalf(address borrower, uint repayAmount) external returns (uint);
     function exchangeRateCurrent() external returns (uint);
-    function borrowBalanceCurrent(address account) external returns (uint);
+    function borrowBalanceCurrent(address account) external view returns (uint);
     function borrowBalanceStored(address account) external view returns (uint256);
     function balanceOfUnderlying(address account) external view returns (uint);
     
