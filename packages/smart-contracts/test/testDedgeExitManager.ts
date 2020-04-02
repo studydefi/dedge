@@ -255,6 +255,7 @@ describe("DedgeExitManager", () => {
 
     const exitPositionsCallbackdata = IDedgeExitManager.functions.exitPositions.encode(
       [
+        // Wanna loan 105% instead of 100% due to potential slippages
         ethers.utils
           .parseEther(ethers.utils.formatEther(ethersOwed.toString()))
           .mul(105)
