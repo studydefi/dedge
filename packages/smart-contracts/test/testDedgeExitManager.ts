@@ -7,10 +7,7 @@ import { dedgeHelpers } from "../helpers/index";
 import {
   provider,
   legos,
-  sleep,
   tryAndWait,
-  newCTokenContract,
-  getTokenFromUniswapAndApproveProxyTransfer
 } from "./common";
 
 import {
@@ -29,7 +26,7 @@ chai.use(solidity);
 const { expect } = chai;
 
 const wallet = new ethers.Wallet(
-  "0x646f1ce2fdad0e6deeeb5c7e8e5543bdde65e86029e2fd9fc169899c440a7913",
+  "0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d",
   provider
 );
 
@@ -96,27 +93,25 @@ describe("DedgeExitManager", () => {
     );
 
     // Supplies 10 ETH and borrows 500 DAI from compound via ds-proxy
-    // await sleep(500);
+    const ethToSupply = 10;
+    const daiToBorrow = 500;
+    const supplyEthAndBorrowCalldata = IDedgeCompoundManager.functions.supplyETHAndBorrow.encode(
+      [
+        legos.compound.cDAI.address,
+        ethers.utils.parseEther(daiToBorrow.toString())
+      ]
+    );
 
-    // const ethToSupply = 10;
-    // const daiToBorrow = 500;
-    // const supplyEthAndBorrowCalldata = IDedgeCompoundManager.functions.supplyETHAndBorrow.encode(
-    //   [
-    //     legos.compound.cDAI.address,
-    //     ethers.utils.parseEther(daiToBorrow.toString())
-    //   ]
-    // );
-
-    // await tryAndWait(
-    //   dacProxyContract.execute(
-    //     dedgeCompoundManagerAddress,
-    //     supplyEthAndBorrowCalldata,
-    //     {
-    //       gasLimit: 4000000,
-    //       value: ethers.utils.parseEther(ethToSupply.toString())
-    //     }
-    //   )
-    // );
+    await tryAndWait(
+      dacProxyContract.execute(
+        dedgeCompoundManagerAddress,
+        supplyEthAndBorrowCalldata,
+        {
+          gasLimit: 4000000,
+          value: ethers.utils.parseEther(ethToSupply.toString())
+        }
+      )
+    );
   });
 
   it("Test Exit Positions", async () => {
