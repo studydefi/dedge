@@ -1,14 +1,27 @@
-import { Button, Modal, Card, Box, Text, Heading } from "rimble-ui";
+import {
+  Button,
+  Modal,
+  Card,
+  Box,
+  Flex,
+  Text,
+  Field,
+  Input,
+  Heading,
+} from "rimble-ui";
 import DACProxyContainer from "../../containers/DACProxy";
 import { useState } from "react";
 import { ModalCloseIcon, ModalBottom } from "../../components/Modal";
 import CoinsContainer from "../../containers/Coins";
 
+import SupplyCoin from "./SupplyCoin";
+import BorrowCoin from "./BorrowCoin";
+
 const CoinOptions = ({ symbol }) => {
   const { hasProxy } = DACProxyContainer.useContainer();
   const { COINS } = CoinsContainer.useContainer();
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const coin = COINS[symbol.toLowerCase()];
 
   const openModal = () => setIsOpen(true);
@@ -30,14 +43,10 @@ const CoinOptions = ({ symbol }) => {
 
           <Box p={4}>
             <Heading.h3 mb="4">Options for {coin.name}</Heading.h3>
-
-            <Box mb="4">
-              {/* <Heading.h5 mb="2">Please confirm that you want to:</Heading.h5>
-              <Text>
-                Swap {amountToSwap} {fromToken.symbol} of {thingToSwap} to{" "}
-                {toToken.symbol}
-              </Text> */}
-            </Box>
+            <Flex mb="4" justifyContent="space-around" textAlign="center">
+              <SupplyCoin coin={coin} />
+              <BorrowCoin coin={coin} />
+            </Flex>
           </Box>
 
           <ModalBottom>
