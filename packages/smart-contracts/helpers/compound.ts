@@ -19,7 +19,7 @@ const swapOperation = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   // struct SwapOperationCalldata {
   //     address addressRegistryAddress;
@@ -50,9 +50,7 @@ const swapOperation = (
     ]
   );
 
-  return dacProxy.execute(dedgeCompoundManager, swapOperationCalldata, {
-    gasLimit
-  });
+  return dacProxy.execute(dedgeCompoundManager, swapOperationCalldata, overrides);
 };
 
 const swapDebt = (
@@ -62,7 +60,7 @@ const swapDebt = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   return swapOperation(
     (x: any[]): string =>
@@ -73,7 +71,7 @@ const swapDebt = (
     oldCToken,
     oldTokenUnderlyingDeltaWei,
     newCToken,
-    gasLimit
+    overrides
   );
 };
 
@@ -84,7 +82,7 @@ const swapCollateral = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   return swapOperation(
     (x: any[]): string =>
@@ -95,7 +93,7 @@ const swapCollateral = (
     oldCToken,
     oldTokenUnderlyingDeltaWei,
     newCToken,
-    gasLimit
+    overrides
   );
 };
 

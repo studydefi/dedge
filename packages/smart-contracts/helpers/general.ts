@@ -13,14 +13,12 @@ const transferETH = (
   dedgeGeneralManager: Address,
   target: Address,
   amountWei: BigNumber,
-  gasLimit: Number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   const transferETHCallback = IDedgeGeneralManager.functions.transferETH.encode(
     [target, amountWei.toString()]
   );
-  return dacProxy.execute(dedgeGeneralManager, transferETHCallback, {
-    gasLimit
-  });
+  return dacProxy.execute(dedgeGeneralManager, transferETHCallback, overrides);
 };
 
 const transferERC20 = (
@@ -29,15 +27,13 @@ const transferERC20 = (
   erc20: Address,
   target: Address,
   amountWei: BigNumber,
-  gasLimit: Number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   const transferERC20Callback = IDedgeGeneralManager.functions.transferERC20.encode(
     [target, erc20, amountWei.toString()]
   );
 
-  return dacProxy.execute(dedgeGeneralManager, transferERC20Callback, {
-    gasLimit
-  });
+  return dacProxy.execute(dedgeGeneralManager, transferERC20Callback, overrides);
 };
 
 export default {
