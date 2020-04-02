@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Box, Modal, Text, Button, Heading, Card, EthAddress } from "rimble-ui";
+import {
+  Box,
+  Flex,
+  Loader,
+  Modal,
+  Text,
+  Button,
+  Heading,
+  Card,
+  EthAddress,
+} from "rimble-ui";
 
 import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
 
@@ -12,7 +22,7 @@ const SwapConfirm = ({
   toTokenStr,
   amountToSwap,
   disabled,
-  outline
+  outline,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,7 +30,7 @@ const SwapConfirm = ({
   const closeModal = () => setIsOpen(false);
 
   const { COINS } = CoinsContainer.useContainer();
-  const { swapFunction } = useSwap(
+  const { swapFunction, loading } = useSwap(
     thingToSwap,
     fromTokenStr,
     toTokenStr,
@@ -30,7 +40,7 @@ const SwapConfirm = ({
   const fromToken = COINS[fromTokenStr];
   const toToken = COINS[toTokenStr];
 
-  const MyButton = outline ? Button.Outline : Button
+  const MyButton = outline ? Button.Outline : Button;
 
   return (
     <Box>
@@ -58,8 +68,21 @@ const SwapConfirm = ({
 
           <ModalBottom>
             <Button.Outline onClick={closeModal}>Close</Button.Outline>
-            <Button ml={3} onClick={swapFunction}>
-              Perform Swap
+            <Button
+              ml={3}
+              disabled={loading}
+              onClick={async () => {
+                await swapFunction();
+                closeModal();
+              }}
+            >
+              {loading ? (
+                <Flex alignItems="center">
+                  <span>Swapping...</span> <Loader color="white" ml="2" />
+                </Flex>
+              ) : (
+                "Perform swap"
+              )}
             </Button>
           </ModalBottom>
         </Card>
