@@ -5,16 +5,12 @@ import { dedgeHelpers } from "dedge-smart-contracts/helpers/index";
 import {
   wallet,
   legos,
-  sleep,
-  tryAndWait,
-  newCTokenContract,
-  getTokenFromUniswapAndApproveProxyTransfer,
+  tryAndWait
 } from "dedge-smart-contracts/test/common";
 
 import {
   dacProxyFactoryAddress,
   dedgeCompoundManagerAddress,
-  addressRegistryAddress,
 } from "dedge-smart-contracts/build/DeployedAddresses.json";
 
 import dacProxyDef from "dedge-smart-contracts/artifacts/DACProxy.json";
@@ -46,6 +42,7 @@ const main = async () => {
     legos.compound.cWBTC.address,
   ];
 
+  console.log(`Address: ${wallet.address}`)
   console.log("Creating proxy address and entering market....");
   await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
     dacProxyFactoryContract,
@@ -60,6 +57,8 @@ const main = async () => {
     dacProxyDef.abi,
     wallet,
   );
+
+  console.log(`Proxy: ${dacProxyAddress}`)
 
   // Supplies 10 ETH and borrows 500 DAI from compound via ds-proxy
   const ethToSupply = 10;
