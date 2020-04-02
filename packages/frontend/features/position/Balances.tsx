@@ -12,6 +12,20 @@ const DataContainer = styled(Box)`
   text-align: center;
 `;
 
+const displayDollar = value => {
+  if (typeof value === "undefined" || Number.isNaN(value)) {
+    return <Text>$ —</Text>;
+  }
+  return <Text title={`$${value}`}>$ {value.toFixed(2)}</Text>;
+};
+
+const displayPercent = value => {
+  if (typeof value === "undefined" || Number.isNaN(value)) {
+    return <Text>— %</Text>;
+  }
+  return <Text title={`${value}`}>{value.toFixed(2)} %</Text>;
+};
+
 const Balances = () => {
   const { totals } = CompoundPositions.useContainer();
   const {
@@ -26,41 +40,25 @@ const Balances = () => {
       <Container mb="2">
         <DataContainer m="2">
           <Heading as="h4">Supply Balance</Heading>
-          {supplyBalanceUSD ? (
-            <Text>$ {supplyBalanceUSD}</Text>
-          ) : (
-            <Text>$ —</Text>
-          )}
+          {displayDollar(supplyBalanceUSD)}
         </DataContainer>
         <DataContainer m="2">
           <Heading as="h4">Borrow Balance</Heading>
-          {borrowBalanceUSD ? (
-            <Text>$ {borrowBalanceUSD}</Text>
-          ) : (
-            <Text>$ —</Text>
-          )}
+          {displayDollar(borrowBalanceUSD)}
         </DataContainer>
         <DataContainer m="2">
           <Heading as="h4">Borrow Percentage</Heading>
-          {currentBorrowPercentage ? (
-            <Text>$ {currentBorrowPercentage}</Text>
-          ) : (
-            <Text>— %</Text>
-          )}
+          {displayPercent(currentBorrowPercentage)}
         </DataContainer>
       </Container>
       <Container mb="2">
         <DataContainer m="2">
           <Heading as="h4">ETH Price</Heading>
-          {ethInUSD ? <Text>$ {ethInUSD}</Text> : <Text>$ —</Text>}
+          {displayDollar(ethInUSD)}
         </DataContainer>
         <DataContainer m="2">
           <Heading as="h4">Liquidation Price</Heading>
-          {liquidationPriceUSD ? (
-            <Text>$ {liquidationPriceUSD}</Text>
-          ) : (
-            <Text>$ —</Text>
-          )}
+          {displayDollar(liquidationPriceUSD)}
         </DataContainer>
       </Container>
     </>

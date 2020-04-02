@@ -5,6 +5,7 @@ import ContractsContainer from "./Contracts";
 import DACProxyContainer from "./DACProxy";
 import CoinsContainer from "./Coins";
 import { dedgeHelpers } from "../../smart-contracts/dist/helpers";
+import ConnectionContainer from "./Connection";
 
 function useCompoundPositions() {
   const [compoundPositions, setCompoundPositions] = useState({});
@@ -14,6 +15,7 @@ function useCompoundPositions() {
   const [timeoutId, setTimeoutId] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
 
+  const { signer } = ConnectionContainer.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { proxyAddress, hasProxy } = DACProxyContainer.useContainer();
   const { COINS } = CoinsContainer.useContainer();
@@ -25,7 +27,7 @@ function useCompoundPositions() {
       currentBorrowPercentage,
       ethInUSD,
       liquidationPriceUSD,
-    } = await dedgeHelpers.compound.getAccountInformation(proxyAddress);
+    } = await dedgeHelpers.compound.getAccountInformation(signer, proxyAddress);
 
     setTotals({
       borrowBalanceUSD,
