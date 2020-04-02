@@ -35,6 +35,7 @@ type Contracts = Record<string, ethers.Contract>;
 
 function useContracts() {
   const [contracts, setContracts] = useState<Contracts>({});
+  const [ready, setReady] = useState(false);
   const { signer, network } = Connection.useContainer();
 
   const initContracts = () => {
@@ -63,17 +64,22 @@ function useContracts() {
       const instance = new ethers.Contract(address[1], abi, signer);
       contractInstances[name] = instance;
     }
-
     setContracts(contractInstances);
+    setReady(true);
   };
 
   useEffect(() => {
     if (signer && network) {
-      initContracts();
+      try {
+        initContracts();
+      } catch (error) {
+        setContracts({});
+        alert("Contracts not found, are you sure you are on Mainnet?");
+      }
     }
   }, [signer, network]);
 
-  return { contracts };
+  return { contracts, ready };
 }
 
 const ContractsContainer = createContainer(useContracts);

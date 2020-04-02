@@ -7,7 +7,7 @@ import ConnectionContainer from "../../containers/Connection";
 
 const useMakerVaults = () => {
   const { address } = ConnectionContainer.useContainer();
-  const { contracts } = ContractsContainer.useContainer();
+  const { contracts, ready } = ContractsContainer.useContainer();
   const [vaultIds, setVaultIds] = useState([]);
 
   const getVaults = async () => {
@@ -23,7 +23,7 @@ const useMakerVaults = () => {
   };
 
   useEffect(() => {
-    if (address) {
+    if (ready) {
       getVaults();
     }
   }, [address]);
