@@ -120,6 +120,8 @@ describe("DedgeExitManager", () => {
   });
 
   it("Test Exit Positions", async () => {
+    const initialEthAmount = await wallet.getBalance();
+
     // Get exit positions data
     const enteredMarkets = await comptrollerContract.getAssetsIn(
       dacProxyContract.address
@@ -277,5 +279,9 @@ describe("DedgeExitManager", () => {
         }
       )
     );
+
+    const finalEthAmount = await wallet.getBalance();
+
+    expect(finalEthAmount.gt(initialEthAmount)).eq(true);
   });
 });
