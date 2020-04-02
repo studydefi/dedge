@@ -334,6 +334,30 @@ describe("DedgeCompoundManager", () => {
     expect(finalFunds.gt(initialFunds)).eq(true);
   });
 
+  it("borrowThroughProxy (ETH)", async () => {
+    const targetCTokenAddress = legos.compound.cEther.address;
+    const targetAmount = ethers.utils.parseUnits("1");
+
+    const initialBorrowed = await newCTokenContract(
+      targetCTokenAddress
+    ).borrowBalanceStored(dacProxyContract.address);
+
+    const calldata = IDedgeCompoundManager.functions.borrowThroughProxy.encode([
+      targetCTokenAddress,
+      targetAmount
+    ]);
+
+    await dacProxyContract.execute(dedgeCompoundManagerAddress, calldata, {
+      gasLimit: 4000000,
+    });
+
+    const finalBorrowed = await newCTokenContract(
+      targetCTokenAddress
+    ).borrowBalanceStored(dacProxyContract.address);
+
+    expect(finalBorrowed.gt(initialBorrowed)).eq(true);
+  });
+
   it("borrowThroughProxy (DAI)", async () => {
     const targetCTokenAddress = legos.compound.cDAI.address;
     const targetAmount = ethers.utils.parseUnits("50");
