@@ -139,8 +139,54 @@ const getAccountInformationViaAPI = async (address: Address): Promise<any> => {
   };
 };
 
+const getAccountSnapshot = async (
+  signer: ethers.Signer,
+  cToken: Address,
+  owner: Address
+) => {
+  const newCTokenContract = (curCToken: Address) =>
+    new ethers.Contract(curCToken, legos.compound.cTokenAbi, signer);
+
+  const [
+    err,
+    cTokenBalance,
+    borrowBalance,
+    exchangeRateMantissa
+  ] = await newCTokenContract(cToken).getAccountSnapshot(owner);
+
+  const expScale = (new BigNumber(10)).pow(18)
+
+  if (err.toString() !== '0') {
+    throw new Error(`Error on getAccountSnapshot: ${err}, go to https://compound.finance/docs/ctokens#ctoken-error-codes for more info`)
+  }
+
+  return {
+    balanceOfUnderlying: cTokenBalance.mul(exchangeRateMantissa).div(expScale),
+    borrowBalance
+  }
+};
+
+const getCTokenBalanceOfUnderlying = async (
+  signer: ethers.Signer,
+  cToken: Address,
+  owner: Address
+) => {
+  const { balanceOfUnderlying } = await getAccountSnapshot(signer, cToken, owner)
+  return balanceOfUnderlying
+}
+
+const getCTokenBorrowBalance = async (
+  signer: ethers.Signer,
+  cToken: Address,
+  owner: Address
+) => {
+  const { borrowBalance } = await getAccountSnapshot(signer, cToken, owner)
+  return borrowBalance
+}
+
+
 const getAccountInformation = async (
-  signer: ethers.Wallet,
+  signer: ethers.Signer,
   dacProxy: Address
 ) => {
   const newCTokenContract = (curCToken: Address) =>
@@ -182,38 +228,29 @@ const getAccountInformation = async (
     );
   };
 
-  // TODO: borrowBalanceStored to borrowBalanceCurrent
-  // tslint:disable-next-line
-  const debtsInToken: [Address, BigNumber][] = await Promise.all(
-    enteredMarkets.map(x =>
-      newCTokenContract(x)
-        .borrowBalanceStored(dacProxy)
-        .then(y => {
-          return [x, y];
-        })
-    )
-  );
+  const debtCollateralInTokens: [Address, BigNumber, BigNumber][] = await Promise.all(
+    enteredMarkets
+      .map(async (x: Address) => {
+        const {
+          balanceOfUnderlying,
+          borrowBalance
+        } = await getAccountSnapshot(signer, x, dacProxy)
 
-  const collateralsInToken: [Address, BigNumber][] = await Promise.all(
-    enteredMarkets.map(x =>
-      newCTokenContract(x)
-        .balanceOfUnderlying(dacProxy)
-        .then(y => {
-          return [x, y];
-        })
-    )
-  );
+        return [x, borrowBalance, balanceOfUnderlying]
+      })
+  )
+
 
   const debtsInEth = await Promise.all(
-    debtsInToken
-      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
-      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+    debtCollateralInTokens
+      .filter((x:  [Address, BigNumber, BigNumber]) => x[1] > new BigNumber(0))
+      .map((x:  [Address, BigNumber, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
   );
 
   const collateralInEth = await Promise.all(
-    collateralsInToken
-      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
-      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+    debtCollateralInTokens
+      .filter((x:  [Address, BigNumber, BigNumber]) => x[2] > new BigNumber(0))
+      .map((x:  [Address, BigNumber, BigNumber]) => getTokenToEthPrice(x[0], x[2]))
   );
 
   const ethersBorrowed = debtsInEth.reduce((a, b) => a + b);
@@ -242,5 +279,8 @@ export default {
   swapCollateral,
   swapDebt,
   getAccountInformationViaAPI,
-  getAccountInformation
+  getAccountInformation,
+  getAccountSnapshot,
+  getCTokenBalanceOfUnderlying,
+  getCTokenBorrowBalance,
 };
