@@ -5,7 +5,11 @@ import dedgeCompoundManagerDef from "../artifacts/DedgeCompoundManager.json";
 
 import { Address, EncoderFunction } from "./types";
 
+import { getLegos, networkIds } from "money-legos";
+
 import axios from "axios";
+
+const legos = getLegos(networkIds.mainnet);
 
 const IDedgeCompoundManager = new ethers.utils.Interface(
   dedgeCompoundManagerDef.abi
@@ -50,7 +54,11 @@ const swapOperation = (
     ]
   );
 
-  return dacProxy.execute(dedgeCompoundManager, swapOperationCalldata, overrides);
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    swapOperationCalldata,
+    overrides
+  );
 };
 
 const swapDebt = (
@@ -97,7 +105,7 @@ const swapCollateral = (
   );
 };
 
-const getAccountInformation = async (address: Address): Promise<any> => {
+const getAccountInformationViaAPI = async (address: Address): Promise<any> => {
   // Get account information
   const compoundResp = await axios.get(
     `https://api.compound.finance/api/v2/account?addresses[]=${address}`
@@ -127,12 +135,112 @@ const getAccountInformation = async (address: Address): Promise<any> => {
     supplyBalanceUSD: supplyValueInEth * ethInUSD,
     currentBorrowPercentage,
     ethInUSD,
-    liquidationPriceUSD: currentBorrowPercentage * ethInUSD
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
+  };
+};
+
+const getAccountInformation = async (
+  signer: ethers.Wallet,
+  dacProxy: Address
+) => {
+  const newCTokenContract = (curCToken: Address) =>
+    new ethers.Contract(curCToken, legos.compound.cTokenAbi, signer);
+
+  const comptrollerContract = new ethers.Contract(
+    legos.compound.comptroller.address,
+    legos.compound.comptroller.abi,
+    signer
+  );
+
+  const uniswapFactoryContract = new ethers.Contract(
+    legos.uniswap.factory.address,
+    legos.uniswap.factory.abi,
+    signer
+  );
+
+  const enteredMarkets = await comptrollerContract.getAssetsIn(dacProxy);
+
+  const getTokenToEthPrice = async (cToken, amountWei) => {
+    if (cToken === legos.compound.cEther.address) {
+      return amountWei;
+    }
+
+    const tokenAddress = await newCTokenContract(cToken).underlying();
+
+    const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
+      tokenAddress
+    );
+
+    const uniswapExchangeContract = new ethers.Contract(
+      uniswapExchangeAddress,
+      legos.uniswap.exchange.abi,
+      signer
+    );
+
+    return await uniswapExchangeContract.getEthToTokenOutputPrice(
+      amountWei.toString()
+    );
+  };
+
+  // TODO: borrowBalanceStored to borrowBalanceCurrent
+  // tslint:disable-next-line
+  const debtsInToken: [Address, BigNumber][] = await Promise.all(
+    enteredMarkets.map(x =>
+      newCTokenContract(x)
+        .borrowBalanceStored(dacProxy)
+        .then(y => {
+          return [x, y];
+        })
+    )
+  );
+
+  const collateralsInToken: [Address, BigNumber][] = await Promise.all(
+    enteredMarkets.map(x =>
+      newCTokenContract(x)
+        .balanceOfUnderlying(dacProxy)
+        .then(y => {
+          return [x, y];
+        })
+    )
+  );
+
+  const debtsInEth = await Promise.all(
+    debtsInToken
+      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
+      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+  );
+
+  const collateralInEth = await Promise.all(
+    collateralsInToken
+      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
+      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+  );
+
+  const ethersBorrowed = debtsInEth.reduce((a, b) => a + b);
+  const ethersSupplied = collateralInEth.reduce((a, b) => a + b);
+
+  const currentBorrowPercentage = ethersBorrowed / ethersSupplied;
+
+  // Get ethereum price in USD
+  const coingeckoResp = await axios.get(
+    "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+  );
+  const ethInUSD = parseFloat(coingeckoResp.data.ethereum.usd);
+
+  const wei2Float = x => parseFloat(ethers.utils.formatEther(x.toString()));
+
+  return {
+    borrowBalanceUSD: wei2Float(ethersBorrowed) * ethInUSD,
+    supplyBalanceUSD: wei2Float(ethersSupplied) * ethInUSD,
+    currentBorrowPercentage,
+    ethInUSD,
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
   };
 };
 
 export default {
   swapCollateral,
   swapDebt,
+  getAccountInformationViaAPI,
   getAccountInformation
 };

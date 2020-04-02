@@ -4,17 +4,39 @@ import { ethers } from "ethers";
 import ContractsContainer from "./Contracts";
 import DACProxyContainer from "./DACProxy";
 import CoinsContainer from "./Coins";
+import { dedgeHelpers } from "../../smart-contracts/dist/helpers";
+import ConnectionContainer from "./Connection";
 
 function useCompoundPositions() {
   const [compoundPositions, setCompoundPositions] = useState({});
   const [compoundApy, setCompoundApy] = useState({});
+  const [totals, setTotals] = useState({});
   const [loading, setLoading] = useState(false);
   const [timeoutId, setTimeoutId] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
 
+  const { signer } = ConnectionContainer.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { proxyAddress, hasProxy } = DACProxyContainer.useContainer();
   const { COINS } = CoinsContainer.useContainer();
+
+  const getTotals = async () => {
+    const {
+      borrowBalanceUSD,
+      supplyBalanceUSD,
+      currentBorrowPercentage,
+      ethInUSD,
+      liquidationPriceUSD,
+    } = await dedgeHelpers.compound.getAccountInformation(signer, proxyAddress);
+
+    setTotals({
+      borrowBalanceUSD,
+      supplyBalanceUSD,
+      currentBorrowPercentage,
+      ethInUSD,
+      liquidationPriceUSD,
+    });
+  };
 
   const getApy = async () => {
     const res = await fetch("https://api.compound.finance/api/v2/ctoken");
@@ -62,6 +84,8 @@ function useCompoundPositions() {
         zrx: { ...COINS.zrx, supply: "0", borrow: "0" },
         wbtc: { ...COINS.wbtc, supply: "0", borrow: "0" },
       });
+      getApy();
+      getTotals();
       setLoading(false);
 
       setLastRefresh(new Date()); // save the time of last refresh
@@ -101,6 +125,7 @@ function useCompoundPositions() {
       wbtc: { ...COINS.wbtc, supply: process(sWbtc), borrow: process(bWbtc) },
     });
     await getApy();
+    await getTotals();
     setLoading(false);
 
     setLastRefresh(new Date()); // save the time of last refresh
@@ -118,7 +143,14 @@ function useCompoundPositions() {
     }
   }, [contracts, proxyAddress]);
 
-  return { compoundPositions, loading, getBalances, lastRefresh, compoundApy };
+  return {
+    compoundPositions,
+    loading,
+    getBalances,
+    lastRefresh,
+    compoundApy,
+    totals,
+  };
 }
 
 const CompoundPositions = createContainer(useCompoundPositions);
