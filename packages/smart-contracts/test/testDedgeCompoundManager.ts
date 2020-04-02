@@ -324,8 +324,7 @@ describe("DedgeCompoundManager", () => {
     ]);
 
     await dacProxyContract.execute(dedgeCompoundManagerAddress, calldata, {
-      gasLimit: 4000000,
-      value: targetAmount
+      gasLimit: 4000000
     });
 
     const finalFunds = await newCTokenContract(
@@ -333,5 +332,29 @@ describe("DedgeCompoundManager", () => {
     ).balanceOfUnderlying(dacProxyContract.address);
 
     expect(finalFunds.gt(initialFunds)).eq(true);
+  });
+
+  it("borrowThroughProxy (DAI)", async () => {
+    const targetCTokenAddress = legos.compound.cDAI.address;
+    const targetAmount = ethers.utils.parseUnits("50");
+
+    const initialBorrowed = await newCTokenContract(
+      targetCTokenAddress
+    ).borrowBalanceStored(dacProxyContract.address);
+
+    const calldata = IDedgeCompoundManager.functions.borrowThroughProxy.encode([
+      targetCTokenAddress,
+      targetAmount
+    ]);
+
+    await dacProxyContract.execute(dedgeCompoundManagerAddress, calldata, {
+      gasLimit: 4000000,
+    });
+
+    const finalBorrowed = await newCTokenContract(
+      targetCTokenAddress
+    ).borrowBalanceStored(dacProxyContract.address);
+
+    expect(finalBorrowed.gt(initialBorrowed)).eq(true);
   });
 });

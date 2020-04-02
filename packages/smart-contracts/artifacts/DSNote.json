@@ -427,7 +427,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7905,
                           "src": "1209:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -456,7 +456,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7905,
                           "src": "1218:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -524,7 +524,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7905,
                           "src": "1245:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1004,7 +1004,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7905,
                           "src": "1209:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1033,7 +1033,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7905,
                           "src": "1218:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1101,7 +1101,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7905,
                           "src": "1245:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1212,7 +1212,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-31T21:16:43.535Z",
+  "updatedAt": "2020-04-01T11:18:01.835Z",
   "devdoc": {
     "methods": {}
   },

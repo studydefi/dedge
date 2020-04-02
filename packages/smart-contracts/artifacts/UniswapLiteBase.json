@@ -606,7 +606,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7342,
+                              "referencedDeclaration": 7907,
                               "src": "932:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -1504,7 +1504,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7342,
+                              "referencedDeclaration": 7907,
                               "src": "1455:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -4409,7 +4409,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7342,
+                              "referencedDeclaration": 7907,
                               "src": "932:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -5307,7 +5307,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7342,
+                              "referencedDeclaration": 7907,
                               "src": "1455:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -7620,7 +7620,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-31T21:20:40.482Z",
+  "updatedAt": "2020-04-01T11:18:01.920Z",
   "devdoc": {
     "methods": {}
   },

@@ -32,11 +32,21 @@ contract DedgeExitManager is UniswapLiteBase {
 
     constructor() public {}
 
+    struct DebtMarket {
+        address cToken;
+        uint256 amount;
+    }
+
+    struct CollateralMarket {
+        address cToken;
+        uint256 amount;
+    }
+
     struct ExitPositionCalldata {
         address payable exitUserAddress;
         address addressRegistryAddress;
-        address[] debtCTokens;
-        address[] collateralCTokens;
+        DebtMarket[] debtMarket;
+        CollateralMarket[] collateralMarket;
     }
 
     function _proxyGuardPermit(address payable proxyAddress, address src)
@@ -106,53 +116,44 @@ contract DedgeExitManager is UniswapLiteBase {
     }
 
     function _redeemUnderlying(address cToken, uint256 redeemTokens) internal {
+        uint a = ICToken(cToken).redeemUnderlying(redeemTokens);
         require(
-            ICToken(cToken).redeemUnderlying(redeemTokens) == 0,
+            a == 0,
             "cmpnd-mgr-ctoken-redeem-underlying-failed"
         );
     }
 
-    function _repayDebt(address CEtherAddress, address cToken) internal {
-        // How much have we borrowed
-        uint256 borrowedAmount = ICToken(cToken).borrowBalanceCurrent(
-            address(this)
-        );
-
+    function _repayDebt(address CEtherAddress, address cToken, uint256 amount)
+        internal
+    {
         // Always assume we have enough ETH to repay debt
         if (cToken != CEtherAddress) {
             address underlying = ICToken(cToken).underlying();
 
             // Get ETH needed to get ERC20
-            uint256 ethAmount = _getEthToTokenOutput(
-                underlying,
-                borrowedAmount
-            );
+            uint256 ethAmount = _getEthToTokenOutput(underlying, amount);
 
             // Convert ETH to token
             _ethToToken(underlying, ethAmount);
         }
 
-        _repayBorrow(CEtherAddress, cToken, borrowedAmount);
+        _repayBorrow(CEtherAddress, cToken, amount);
     }
 
-    function _retrieveCollateral(address CEtherAddress, address cToken)
-        internal
-        returns (uint256)
-    {
-        // Supplied amount
-        uint256 suppliedAmount = ICToken(cToken).balanceOfUnderlying(
-            address(this)
-        );
-
+    function _retrieveCollateral(
+        address CEtherAddress,
+        address cToken,
+        uint256 amount
+    ) internal returns (uint256) {
         // Redeems token
-        _redeemUnderlying(cToken, suppliedAmount);
+        _redeemUnderlying(cToken, amount);
 
         if (cToken == CEtherAddress) {
-            return suppliedAmount;
+            return amount;
         }
 
         address underlying = ICToken(cToken).underlying();
-        return _tokenToEth(underlying, suppliedAmount);
+        return _tokenToEth(underlying, amount);
     }
 
     function exitPositionsPostLoan(
@@ -167,25 +168,30 @@ contract DedgeExitManager is UniswapLiteBase {
             (ExitPositionCalldata)
         );
 
-        address CEtherAddress = AddressRegistry(
-            epCalldata
-                .addressRegistryAddress
-        )
-            .CEtherAddress();
+        AddressRegistry addressRegistry = AddressRegistry(
+            epCalldata.addressRegistryAddress
+        );
+        address CEtherAddress = addressRegistry.CEtherAddress();
 
         // Repay debt and retrieve collateral
-        for (uint256 i = 0; i < epCalldata.debtCTokens.length; i++) {
-            _repayDebt(CEtherAddress, epCalldata.debtCTokens[i]);
-        }
-        uint256 totalEthAmount;
-        for (uint256 i = 0; i < epCalldata.collateralCTokens.length; i++) {
-            totalEthAmount += _retrieveCollateral(
+        for (uint256 i = 0; i < epCalldata.debtMarket.length; i++) {
+            _repayDebt(
                 CEtherAddress,
-                epCalldata.collateralCTokens[i]
+                epCalldata.debtMarket[i].cToken,
+                epCalldata.debtMarket[i].amount
             );
         }
 
-        // Repays ETH - fees back to exit address
+        uint256 totalEthAmount;
+        for (uint256 i = 0; i < epCalldata.collateralMarket.length; i++) {
+            totalEthAmount += _retrieveCollateral(
+                CEtherAddress,
+                epCalldata.collateralMarket[i].cToken,
+                epCalldata.collateralMarket[i].amount
+            );
+        }
+
+        // Repays (ETH - fees) back to exitAddress
         epCalldata.exitUserAddress.call.value(
             totalEthAmount.sub(_amount).sub(_fee).sub(_protocolFee)
         )("");
@@ -229,47 +235,5 @@ contract DedgeExitManager is UniswapLiteBase {
 
         // Forbids lendingPool to call proxy
         _proxyGuardForbid(dacProxyAddress, address(lendingPool));
-    }
-
-    function getExitPositionsData(address addressRegistryAddress, address owner)
-        public
-        view
-        returns (
-            uint256 ethDebtAmount,
-            address[] memory debtAddress,
-            address[] memory collateralAddress
-        )
-    {
-        AddressRegistry addressRegistry = AddressRegistry(
-            addressRegistryAddress
-        );
-
-        IComptroller comptroller = IComptroller(addressRegistry.CompoundComptrollerAddress());
-
-        address[] memory marketsEntered = comptroller.getAssetsIn(owner);
-
-        address curMarket;
-        uint curCollateral;
-        uint curCollateralI;
-        uint curDebt;
-        uint curDebtI;
-
-        for (uint i = 0; i < marketsEntered.length; i++) {
-            curMarket = marketsEntered[i];
-            curDebt = ICToken(curMarket).borrowBalanceCurrent(owner);
-            curCollateral = ICToken(curMarket).balanceOfUnderlying(owner);
-
-            if (curCollateral > 0) {
-                collateralAddress[curCollateralI] = curMarket;
-                curCollateralI++;
-            }
-
-            if (curDebt > 0) {
-                debtAddress[curDebtI] = curMarket;
-                curDebtI++;
-
-                ethDebtAmount += curDebt;
-            }
-        }
     }
 }
