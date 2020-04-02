@@ -14,6 +14,28 @@ const getExitPositionParameters = async (
   signer: ethers.Wallet,
   dacProxy: Address
 ) => {
+  const getTokenInEthAmount = async (cToken: Address, amountWei) => {
+    if (cToken === legos.compound.cEther.address) {
+      return amountWei;
+    }
+
+    const tokenAddress = await newCTokenContract(cToken).underlying();
+
+    const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
+      tokenAddress
+    );
+
+    const uniswapExchangeContract = new ethers.Contract(
+      uniswapExchangeAddress,
+      legos.uniswap.exchange.abi,
+      signer
+    );
+
+    return uniswapExchangeContract.getEthToTokenOutputPrice(
+      amountWei.toString()
+    );
+  };
+
   const newCTokenContract = (curCToken: Address) =>
     new ethers.Contract(curCToken, legos.compound.cTokenAbi, signer);
 
@@ -31,61 +53,46 @@ const getExitPositionParameters = async (
 
   const enteredMarkets = await comptrollerContract.getAssetsIn(dacProxy);
 
-  const debtMarkets = [];
-  const collateralMarkets = [];
-  let ethersOwed = 0;
+  // TODO: borrowBalanceStored -> borrowBalanceCurrent
+  const debtsInToken: [Address, BigNumber][] = await Promise.all(
+    enteredMarkets.map(x =>
+      newCTokenContract(x)
+        .borrowBalanceStored(dacProxy)
+        .then(y => {
+          return [x, y];
+        })
+    )
+  );
 
-  // tslint:disable-next-line
-  for (let i = 0; i < enteredMarkets.length; i++) {
-    const curCToken = enteredMarkets[i];
+  const collateralsInToken: [Address, BigNumber][] = await Promise.all(
+    enteredMarkets.map(x =>
+      newCTokenContract(x)
+        .balanceOfUnderlying(dacProxy)
+        .then(y => {
+          return [x, y];
+        })
+    )
+  );
 
-    // TODO: Change this to borrowBalanceCurrent
-    const curDebtBal = await newCTokenContract(curCToken).borrowBalanceStored(
-      dacProxy
-    );
-    const curColBal = await newCTokenContract(curCToken).balanceOfUnderlying(
-      dacProxy
-    );
+  const debtInEth = await Promise.all(
+    debtsInToken
+      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
+      .map((x: [Address, BigNumber]) => getTokenInEthAmount(x[0], x[1]))
+  );
 
-    if (curDebtBal > 0) {
-      debtMarkets.push([curCToken, curDebtBal]);
+  const debtMarkets = debtsInToken.filter(
+    (x: [Address, BigNumber]) => x[1] > new BigNumber(0)
+  );
 
-      if (curCToken === legos.compound.cEther.address) {
-        ethersOwed = ethersOwed + curDebtBal;
-      } else {
-        const tokenAddress = await newCTokenContract(curCToken).underlying();
-
-        const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
-          tokenAddress
-        );
-
-        const uniswapExchangeContract = new ethers.Contract(
-          uniswapExchangeAddress,
-          legos.uniswap.exchange.abi,
-          signer
-        );
-
-        const ethOwedAmount = await uniswapExchangeContract.getEthToTokenOutputPrice(
-          curDebtBal.toString()
-        );
-
-        ethersOwed = ethersOwed + ethOwedAmount;
-      }
-    }
-
-    if (curColBal > 0) {
-      // Take out 99% instead of 100%, this is because we can't execute borrowBalanceStored
-      // on ganache for whatever reason :|
-
-      // On mainnet, we should be able to do 100% but we need to change
-      // borrowBalanceStored to borrowBalanceCurrent
-      collateralMarkets.push([curCToken, curColBal.mul(99).div(100)]);
-    }
-  }
+  const collateralMarkets = collateralsInToken
+    .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
+    .map((x: [Address, BigNumber]): [Address, BigNumber] => {
+      return [x[0], x[1].mul(99).div(100)]; // TODO: Remove 99%
+    });
 
   return {
     etherToBorrowWeiBN: ethers.utils.parseEther(
-      ethers.utils.formatEther(ethersOwed.toString())
+      ethers.utils.formatEther(debtInEth.toString())
     ),
     debtMarkets,
     collateralMarkets
@@ -176,7 +183,11 @@ const exitPositionToETH = (
     ]
   );
 
-  return dacProxy.execute(dedgeExitManager, exitPositionsCallbackdata, overrides);
+  return dacProxy.execute(
+    dedgeExitManager,
+    exitPositionsCallbackdata,
+    overrides
+  );
 };
 
 export default {

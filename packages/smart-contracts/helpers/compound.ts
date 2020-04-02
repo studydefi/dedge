@@ -135,7 +135,7 @@ const getAccountInformationViaAPI = async (address: Address): Promise<any> => {
     supplyBalanceUSD: supplyValueInEth * ethInUSD,
     currentBorrowPercentage,
     ethInUSD,
-    liquidationPriceUSD: currentBorrowPercentage * ethInUSD / 0.75 // 75% is the collateral factor
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
   };
 };
 
@@ -157,6 +157,7 @@ const getAccountInformation = async (
     legos.uniswap.factory.abi,
     signer
   );
+
   const enteredMarkets = await comptrollerContract.getAssetsIn(dacProxy);
 
   const getTokenToEthPrice = async (cToken, amountWei) => {
@@ -180,33 +181,43 @@ const getAccountInformation = async (
       amountWei.toString()
     );
   };
-  
-  let ethersBorrowed = 0;
-  let ethersSupplied = 0;
 
-  // TODO: Parallelize this?
+  // TODO: borrowBalanceStored to borrowBalanceCurrent
   // tslint:disable-next-line
-  for (let i = 0; i < enteredMarkets.length; i++) {
-    const curCToken = enteredMarkets[i];
+  const debtsInToken: [Address, BigNumber][] = await Promise.all(
+    enteredMarkets.map(x =>
+      newCTokenContract(x)
+        .borrowBalanceStored(dacProxy)
+        .then(y => {
+          return [x, y];
+        })
+    )
+  );
 
-    // TODO: Change this to borrowBalanceCurrent
-    const curDebtBal = await newCTokenContract(curCToken).borrowBalanceStored(
-      dacProxy
-    );
-    const curColBal = await newCTokenContract(curCToken).balanceOfUnderlying(
-      dacProxy
-    );
+  const collateralsInToken: [Address, BigNumber][] = await Promise.all(
+    enteredMarkets.map(x =>
+      newCTokenContract(x)
+        .balanceOfUnderlying(dacProxy)
+        .then(y => {
+          return [x, y];
+        })
+    )
+  );
 
-    if (curDebtBal > 0) {
-      const debtInEth = await getTokenToEthPrice(curCToken, curDebtBal);
-      ethersBorrowed = ethersBorrowed + debtInEth;
-    }
+  const debtsInEth = await Promise.all(
+    debtsInToken
+      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
+      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+  );
 
-    if (curColBal > 0) {
-      const colInEth = await getTokenToEthPrice(curCToken, curColBal);
-      ethersSupplied = ethersSupplied + colInEth;
-    }
-  }
+  const collateralInEth = await Promise.all(
+    collateralsInToken
+      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
+      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+  );
+
+  const ethersBorrowed = debtsInEth.reduce((a, b) => a + b);
+  const ethersSupplied = collateralInEth.reduce((a, b) => a + b);
 
   const currentBorrowPercentage = ethersBorrowed / ethersSupplied;
 
@@ -216,14 +227,14 @@ const getAccountInformation = async (
   );
   const ethInUSD = parseFloat(coingeckoResp.data.ethereum.usd);
 
-  const wei2Float = x => parseFloat(ethers.utils.formatEther(x.toString()))
+  const wei2Float = x => parseFloat(ethers.utils.formatEther(x.toString()));
 
   return {
     borrowBalanceUSD: wei2Float(ethersBorrowed) * ethInUSD,
     supplyBalanceUSD: wei2Float(ethersSupplied) * ethInUSD,
     currentBorrowPercentage,
     ethInUSD,
-    liquidationPriceUSD: currentBorrowPercentage * ethInUSD / 0.75 // 75% is the collateral factor
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
   };
 };
 
