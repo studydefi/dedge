@@ -13,6 +13,7 @@ import DACProxyContainer from "../../containers/DACProxy";
 import CompoundPositions from "../../containers/CompoundPositions";
 import DummyPositions from "./DummyPositions";
 import Controls from "./Controls";
+import CoinOptions from "./CoinOptions";
 
 const NameWrapper = styled(Flex)`
   align-items: center;
@@ -66,7 +67,7 @@ const CurrentPosition = () => {
         <tbody>
           {positionsArr.map(([key, item]) => {
             const { supply, borrow, name, symbol, icon } = item as any;
-            const rates : any = apyArr.filter(
+            const rates: any = apyArr.filter(
               x => x[0] === symbol.toLowerCase(),
             )[0][1];
 
@@ -88,12 +89,16 @@ const CurrentPosition = () => {
                   <NumberWrapper value={borrow} symbol={symbol} />
                 </td>
                 <td>
-                  <Button.Outline
-                    icon="MoreHoriz"
-                    size="small"
-                    icononly
-                    disabled={!hasProxy}
-                  />
+                  {hasProxy && apyArr.length > 0 ? (
+                    <CoinOptions symbol={symbol} />
+                  ) : (
+                    <Button.Outline
+                      icon="MoreHoriz"
+                      size="small"
+                      icononly
+                      disabled={!hasProxy}
+                    />
+                  )}
                 </td>
               </tr>
             );
