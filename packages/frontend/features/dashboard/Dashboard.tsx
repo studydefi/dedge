@@ -10,6 +10,7 @@ import MetaMask from "../topbar/MetaMask";
 import SmartWallet from "../topbar/SmartWallet";
 import ConnectionContainer from "../../containers/Connection";
 import DACProxyContainer from "../../containers/DACProxy";
+import ContractsContainer from "../../containers/Contracts";
 
 const Container = styled(Flex)`
   // background: yellow;
@@ -32,6 +33,7 @@ const DataDisplay = styled(Box)`
 
 const Dashboard = () => {
   const { address } = ConnectionContainer.useContainer();
+  const { ready } = ContractsContainer.useContainer();
   const { hasProxy } = DACProxyContainer.useContainer();
   return (
     <Container>
@@ -65,17 +67,27 @@ const Dashboard = () => {
           </Flex>
         </Flash>
       )}
+      
+      {address && !ready && (
+        <Flash variant="warning" mt="2">
+          <Flex alignItems="center" justifyContent="center">
+            <Text fontWeight={"bold"} mr="2">
+              Contracts not found, are you sure you are on Mainnet?
+            </Text>
+          </Flex>
+        </Flash>
+      )}
 
-      {address && !hasProxy && (
-          <Flash variant="warning" mt="2">
-            <Flex alignItems="center" justifyContent="center">
-              <Text fontWeight={"bold"} mr="2">
-                Please create a Smart Wallet:
-              </Text>
-              <SmartWallet size="medium" outline={false} />
-            </Flex>
-          </Flash>
-        )}
+      {address && ready && !hasProxy && (
+        <Flash variant="warning" mt="2">
+          <Flex alignItems="center" justifyContent="center">
+            <Text fontWeight={"bold"} mr="2">
+              Please create a Smart Wallet:
+            </Text>
+            <SmartWallet size="medium" outline={false} />
+          </Flex>
+        </Flash>
+      )}
 
       <Contents py="4">
         <SwapOptions />

@@ -1,15 +1,15 @@
-import ContractsContainer from "../../containers/Contracts";
-import DACProxyContainer from "../../containers/DACProxy";
+import { createContainer } from "unstated-next";
 import { useState, useEffect } from "react";
 
-import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
-import ConnectionContainer from "../../containers/Connection";
+import ConnectionContainer from "./Connection";
+import ContractsContainer from "./Contracts";
 
-const useMakerVaults = () => {
+import { dedgeHelpers } from "../../smart-contracts/dist/helpers";
+
+function useVaults() {
   const { address } = ConnectionContainer.useContainer();
   const { contracts, ready } = ContractsContainer.useContainer();
   const [vaultIds, setVaultIds] = useState([]);
-  console.log("new vault ids", vaultIds)
 
   const getVaults = async () => {
     const { makerCdpManager, makerProxyRegistry } = contracts;
@@ -20,7 +20,6 @@ const useMakerVaults = () => {
       makerCdpManager,
     );
 
-    console.log("retrieved vaults", vaultIds);
     setVaultIds(vaultIds);
   };
 
@@ -31,6 +30,8 @@ const useMakerVaults = () => {
   }, [address]);
 
   return { vaultIds, getVaults };
-};
+}
 
-export default useMakerVaults;
+const VaultsContainer = createContainer(useVaults);
+
+export default VaultsContainer;

@@ -2,14 +2,17 @@ import useSwapOperation from "./useSwapOperation";
 import ContractsContainer from "../../containers/Contracts";
 import { ethers } from "ethers";
 import { Wei } from "../../types";
+import { useState } from "react";
 
 const inWei = (x: string, u = 18): Wei => ethers.utils.parseUnits(x, u);
 
 const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
   const { contracts } = ContractsContainer.useContainer();
   const { swapDebt, swapCollateral } = useSwapOperation();
+  const [loading, setLoading] = useState(false);
 
   const swapFunction = async () => {
+    setLoading(true);
     const { cEther, cDai, cBat, cUsdc, cRep, cZrx, cWbtc } = contracts;
 
     const amount: Wei =
@@ -44,10 +47,12 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       amount,
     );
     console.log("Transaction Hash", tx.hash);
-    await tx.wait();
+    setLoading(false);
+
+    return tx.wait();
   };
 
-  return { swapFunction };
+  return { swapFunction, loading };
 };
 
 export default useSwap;
