@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils/bignumber";
 import { Address } from "./types";
+import compound from "./compound";
 
 import { getLegos, networkIds } from "money-legos";
 
@@ -14,7 +15,7 @@ const getExitPositionParameters = async (
   signer: ethers.Wallet,
   dacProxy: Address
 ) => {
-  const getTokenInEthAmount = async (cToken: Address, amountWei) => {
+  const getTokenToEthPrice = async (cToken, amountWei) => {
     if (cToken === legos.compound.cEther.address) {
       return amountWei;
     }
@@ -31,7 +32,7 @@ const getExitPositionParameters = async (
       signer
     );
 
-    return uniswapExchangeContract.getEthToTokenOutputPrice(
+    return await uniswapExchangeContract.getEthToTokenOutputPrice(
       amountWei.toString()
     );
   };
@@ -53,49 +54,45 @@ const getExitPositionParameters = async (
 
   const enteredMarkets = await comptrollerContract.getAssetsIn(dacProxy);
 
-  // TODO: borrowBalanceStored -> borrowBalanceCurrent
-  const debtsInToken: [Address, BigNumber][] = await Promise.all(
-    enteredMarkets.map(x =>
-      newCTokenContract(x)
-        .borrowBalanceStored(dacProxy)
-        .then(y => {
-          return [x, y];
-        })
-    )
+  // tslint:disable-next-line
+  const debtCollateralInTokens: [
+    Address,
+    BigNumber,
+    BigNumber
+  ][] = await Promise.all(
+    enteredMarkets.map(async (x: Address) => {
+      const {
+        balanceOfUnderlying,
+        borrowBalance
+      } = await compound.getAccountSnapshot(signer, x, dacProxy);
+
+      return [x, borrowBalance, balanceOfUnderlying];
+    })
   );
 
-  const collateralsInToken: [Address, BigNumber][] = await Promise.all(
-    enteredMarkets.map(x =>
-      newCTokenContract(x)
-        .balanceOfUnderlying(dacProxy)
-        .then(y => {
-          return [x, y];
-        })
-    )
-  );
-
-  const debtInEth = await Promise.all(
-    debtsInToken
-      .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
-      .map((x: [Address, BigNumber]) => getTokenInEthAmount(x[0], x[1]))
-  );
-
-  const debtMarkets = debtsInToken.filter(
-    (x: [Address, BigNumber]) => x[1] > new BigNumber(0)
-  );
-
-  const collateralMarkets = collateralsInToken
-    .filter((x: [Address, BigNumber]) => x[1] > new BigNumber(0))
-    .map((x: [Address, BigNumber]): [Address, BigNumber] => {
-      return [x[0], x[1].mul(99).div(100)]; // TODO: Remove 99%
+  const debtMarketsInTokens: [Address, BigNumber][] = debtCollateralInTokens
+    .filter((x: [Address, BigNumber, BigNumber]) => x[1] > new BigNumber(0))
+    .map((x: [Address, BigNumber, BigNumber]): [Address, BigNumber] => {
+      return [x[0], x[1]];
     });
 
+  const collateralMarketsInTokens: [Address, BigNumber][] = debtCollateralInTokens
+    .filter((x: [Address, BigNumber, BigNumber]) => x[2] > new BigNumber(0))
+    .map((x: [Address, BigNumber, BigNumber]): [Address, BigNumber] => {
+      return [x[0], x[2].mul(99).div(100)]; // TODO: Remove 99%
+    });
+
+  const debtInEth = await Promise.all(
+    debtMarketsInTokens
+      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+  );
+
+  const ethersToBorrow = debtInEth.reduce((a, b) => a + b)
+
   return {
-    etherToBorrowWeiBN: ethers.utils.parseEther(
-      ethers.utils.formatEther(debtInEth.toString())
-    ),
-    debtMarkets,
-    collateralMarkets
+    etherToBorrowWeiBN: ethersToBorrow,
+    debtMarkets: debtMarketsInTokens,
+    collateralMarkets: collateralMarketsInTokens
   };
 };
 
@@ -109,6 +106,24 @@ const exitPositionToETH = (
   collateralMarkets: [Address, BigNumber][],
   overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
+  // struct DebtMarket {
+  //     address cToken;
+  //     uint256 amount;
+  // }
+
+  // struct CollateralMarket {
+  //     address cToken;
+  //     uint256 amount;
+  // }
+
+  // struct ExitPositionCalldata {
+  //     address payable exitUserAddress;
+  //     address addressRegistryAddress;
+  //     DebtMarket[] debtMarket;
+  //     CollateralMarket[] collateralMarket;
+  // }
+
+  // uint(32) prefix
   const abiPrefix = ethers.utils.defaultAbiCoder.encode(["uint"], [32]);
   const abiExitUserAddress = ethers.utils.defaultAbiCoder.encode(
     ["address"],
