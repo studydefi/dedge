@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { BigNumber } from "ethers/utils/bignumber";
 import { Address } from "./types";
+import compound from "./compound";
 
 import { getLegos, networkIds } from "money-legos";
 
@@ -14,6 +15,28 @@ const getExitPositionParameters = async (
   signer: ethers.Wallet,
   dacProxy: Address
 ) => {
+  const getTokenToEthPrice = async (cToken, amountWei) => {
+    if (cToken === legos.compound.cEther.address) {
+      return amountWei;
+    }
+
+    const tokenAddress = await newCTokenContract(cToken).underlying();
+
+    const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
+      tokenAddress
+    );
+
+    const uniswapExchangeContract = new ethers.Contract(
+      uniswapExchangeAddress,
+      legos.uniswap.exchange.abi,
+      signer
+    );
+
+    return await uniswapExchangeContract.getEthToTokenOutputPrice(
+      amountWei.toString()
+    );
+  };
+
   const newCTokenContract = (curCToken: Address) =>
     new ethers.Contract(curCToken, legos.compound.cTokenAbi, signer);
 
@@ -31,64 +54,45 @@ const getExitPositionParameters = async (
 
   const enteredMarkets = await comptrollerContract.getAssetsIn(dacProxy);
 
-  const debtMarkets = [];
-  const collateralMarkets = [];
-  let ethersOwed = 0;
-
   // tslint:disable-next-line
-  for (let i = 0; i < enteredMarkets.length; i++) {
-    const curCToken = enteredMarkets[i];
+  const debtCollateralInTokens: [
+    Address,
+    BigNumber,
+    BigNumber
+  ][] = await Promise.all(
+    enteredMarkets.map(async (x: Address) => {
+      const {
+        balanceOfUnderlying,
+        borrowBalance
+      } = await compound.getAccountSnapshot(signer, x, dacProxy);
 
-    // TODO: Change this to borrowBalanceCurrent
-    const curDebtBal = await newCTokenContract(curCToken).borrowBalanceStored(
-      dacProxy
-    );
-    const curColBal = await newCTokenContract(curCToken).balanceOfUnderlying(
-      dacProxy
-    );
+      return [x, borrowBalance, balanceOfUnderlying];
+    })
+  );
 
-    if (curDebtBal > 0) {
-      debtMarkets.push([curCToken, curDebtBal]);
+  const debtMarketsInTokens: [Address, BigNumber][] = debtCollateralInTokens
+    .filter((x: [Address, BigNumber, BigNumber]) => x[1] > new BigNumber(0))
+    .map((x: [Address, BigNumber, BigNumber]): [Address, BigNumber] => {
+      return [x[0], x[1]];
+    });
 
-      if (curCToken === legos.compound.cEther.address) {
-        ethersOwed = ethersOwed + curDebtBal;
-      } else {
-        const tokenAddress = await newCTokenContract(curCToken).underlying();
+  const collateralMarketsInTokens: [Address, BigNumber][] = debtCollateralInTokens
+    .filter((x: [Address, BigNumber, BigNumber]) => x[2] > new BigNumber(0))
+    .map((x: [Address, BigNumber, BigNumber]): [Address, BigNumber] => {
+      return [x[0], x[2].mul(99).div(100)]; // TODO: Remove 99%
+    });
 
-        const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
-          tokenAddress
-        );
+  const debtInEth = await Promise.all(
+    debtMarketsInTokens
+      .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
+  );
 
-        const uniswapExchangeContract = new ethers.Contract(
-          uniswapExchangeAddress,
-          legos.uniswap.exchange.abi,
-          signer
-        );
-
-        const ethOwedAmount = await uniswapExchangeContract.getEthToTokenOutputPrice(
-          curDebtBal.toString()
-        );
-
-        ethersOwed = ethersOwed + ethOwedAmount;
-      }
-    }
-
-    if (curColBal > 0) {
-      // Take out 99% instead of 100%, this is because we can't execute borrowBalanceStored
-      // on ganache for whatever reason :|
-
-      // On mainnet, we should be able to do 100% but we need to change
-      // borrowBalanceStored to borrowBalanceCurrent
-      collateralMarkets.push([curCToken, curColBal.mul(99).div(100)]);
-    }
-  }
+  const ethersToBorrow = debtInEth.reduce((a, b) => a + b)
 
   return {
-    etherToBorrowWeiBN: ethers.utils.parseEther(
-      ethers.utils.formatEther(ethersOwed.toString())
-    ),
-    debtMarkets,
-    collateralMarkets
+    etherToBorrowWeiBN: ethersToBorrow,
+    debtMarkets: debtMarketsInTokens,
+    collateralMarkets: collateralMarketsInTokens
   };
 };
 
@@ -102,6 +106,24 @@ const exitPositionToETH = (
   collateralMarkets: [Address, BigNumber][],
   overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
+  // struct DebtMarket {
+  //     address cToken;
+  //     uint256 amount;
+  // }
+
+  // struct CollateralMarket {
+  //     address cToken;
+  //     uint256 amount;
+  // }
+
+  // struct ExitPositionCalldata {
+  //     address payable exitUserAddress;
+  //     address addressRegistryAddress;
+  //     DebtMarket[] debtMarket;
+  //     CollateralMarket[] collateralMarket;
+  // }
+
+  // uint(32) prefix
   const abiPrefix = ethers.utils.defaultAbiCoder.encode(["uint"], [32]);
   const abiExitUserAddress = ethers.utils.defaultAbiCoder.encode(
     ["address"],
@@ -176,7 +198,11 @@ const exitPositionToETH = (
     ]
   );
 
-  return dacProxy.execute(dedgeExitManager, exitPositionsCallbackdata, overrides);
+  return dacProxy.execute(
+    dedgeExitManager,
+    exitPositionsCallbackdata,
+    overrides
+  );
 };
 
 export default {
