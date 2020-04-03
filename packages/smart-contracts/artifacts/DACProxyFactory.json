@@ -6975,6 +6975,44 @@
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
   "networks": {
+    "1": {
+      "events": {
+        "0x259b30ca39885c6d801a0b5dbc988640f3c25e2f37531fe138c5c5af8955d41b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "proxy",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "cache",
+              "type": "address"
+            }
+          ],
+          "name": "Created",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xb06121EA08019dF9F7F3eA76b465067bfA3f7f5F",
+      "transactionHash": "0x0490e4a52161ef07943fe7bb526689d9d849a61e7b2f479f9e08bc32a1f4826b"
+    },
     "5777": {
       "events": {
         "0x259b30ca39885c6d801a0b5dbc988640f3c25e2f37531fe138c5c5af8955d41b": {
@@ -7015,7 +7053,7 @@
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-03T04:49:15.460Z",
+  "updatedAt": "2020-04-03T05:45:42.858Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
