@@ -50,6 +50,17 @@ const SwapConfirm = ({
           <Icon name="Launch" color={outline ? "primary" : "white"} ml="2" />
         </Flex>
       </MyButton>
+      {thingToSwap === "collateral" && (
+        <>
+          <Text fontSize="0" color="#999" fontWeight="bold" mt="2">
+            Due to nature of slippages:
+          </Text>
+          <Text fontSize="0" color="#999">
+            MAX: 95% (90% recommended)
+          </Text>
+        </>
+      )}
+
       <Modal isOpen={isOpen}>
         <Card width={"640px"} p={0}>
           <ModalCloseIcon onClick={closeModal} />
