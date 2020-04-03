@@ -8,7 +8,7 @@ import {
   Button,
   Heading,
   Card,
-  EthAddress,
+  Icon,
 } from "rimble-ui";
 
 import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
@@ -45,14 +45,16 @@ const SwapConfirm = ({
   return (
     <Box>
       <MyButton width="100%" onClick={openModal} disabled={disabled}>
-        Confirm
+        <Flex alignItems="center">
+          <span>Confirm</span>
+          <Icon name="Launch" color={outline ? "primary" : "white"} ml="2" />
+        </Flex>
       </MyButton>
-
       <Modal isOpen={isOpen}>
         <Card width={"640px"} p={0}>
           <ModalCloseIcon onClick={closeModal} />
 
-          <Box p={4}>
+          <Box p={4} pb={1}>
             <Heading.h3 mb="4">
               Swap {thingToSwap} from {fromToken.symbol} to {toToken.symbol}
             </Heading.h3>
@@ -62,6 +64,12 @@ const SwapConfirm = ({
               <Text>
                 Swap {amountToSwap} {fromToken.symbol} of {thingToSwap} to{" "}
                 {toToken.symbol}
+              </Text>
+            </Box>
+
+            <Box>
+              <Text fontSize="0" color="#999">
+                Service Fee: 0.0135% (0.09% to AAVE for flash loan)
               </Text>
             </Box>
           </Box>
