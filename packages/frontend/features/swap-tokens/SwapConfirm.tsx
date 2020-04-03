@@ -15,6 +15,7 @@ import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
 
 import CoinsContainer from "../../containers/Coins";
 import useSwap from "./useSwap";
+import CompoundPositions from "../../containers/CompoundPositions";
 
 const SwapConfirm = ({
   thingToSwap,
@@ -30,6 +31,7 @@ const SwapConfirm = ({
   const closeModal = () => setIsOpen(false);
 
   const { COINS } = CoinsContainer.useContainer();
+  const { getBalances } = CompoundPositions.useContainer();
   const { swapFunction, loading } = useSwap(
     thingToSwap,
     fromTokenStr,
@@ -92,6 +94,10 @@ const SwapConfirm = ({
               disabled={loading}
               onClick={async () => {
                 await swapFunction();
+                window.toastProvider.addMessage(`Swap completed!`, {
+                  variant: "success",
+                });
+                getBalances();
                 closeModal();
               }}
             >
