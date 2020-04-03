@@ -1,1 +1,8 @@
-{"dacProxyFactoryAddress":"0x572bfabaeb0f7F5d65EEa04D85595010756Ba986","dedgeCompoundManagerAddress":"0x16493dfB0281bA27C8B712f6Eb8eC32bcc50EAEc","dedgeMakerManagerAddress":"0x1C9c3ED6De13F423a4457aCCfa4e09bc436D5e89","dedgeExitManagerAddress":"0x81BFDCF729B5cAC3c4f1F906b63F26E5865b615B","dedgeGeneralManagerAddress":"0x40b4C8B5EE1FDd5259E40907E257f11819681b3d","addressRegistryAddress":"0x584d265d2b2c221676137d930A96458B8C30199F"}
+{
+  "dacProxyFactoryAddress": "0xc35cbaD2c984f30895Bf0AD372805817dD5975f7",
+  "dedgeCompoundManagerAddress": "0x16493dfB0281bA27C8B712f6Eb8eC32bcc50EAEc",
+  "dedgeMakerManagerAddress": "0x1C9c3ED6De13F423a4457aCCfa4e09bc436D5e89",
+  "dedgeExitManagerAddress": "0x81BFDCF729B5cAC3c4f1F906b63F26E5865b615B",
+  "dedgeGeneralManagerAddress": "0x40b4C8B5EE1FDd5259E40907E257f11819681b3d",
+  "addressRegistryAddress": "0x584d265d2b2c221676137d930A96458B8C30199F"
+}
