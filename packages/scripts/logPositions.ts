@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { getLegos, networkIds } from "money-legos";
 import { wallet } from "dedge-smart-contracts/test/common";
 
-import { dacProxyFactoryAddress } from "dedge-smart-contracts/build/DeployedAddresses.json";
+import { dacProxyFactoryAddress } from "dedge-smart-contracts/artifacts/DeployedAddresses.json";
 import { dedgeHelpers } from "dedge-smart-contracts/helpers";
 
 import dacProxyFactoryDef from "dedge-smart-contracts/artifacts/DACProxyFactory.json";

@@ -10,7 +10,7 @@ import {
 import {
   dacProxyFactoryAddress,
   dedgeCompoundManagerAddress
-} from "dedge-smart-contracts/build/DeployedAddresses.json";
+} from "dedge-smart-contracts/artifacts/DeployedAddresses.json";
 
 import dacProxyFactoryDef from "dedge-smart-contracts/artifacts/DACProxyFactory.json";
 

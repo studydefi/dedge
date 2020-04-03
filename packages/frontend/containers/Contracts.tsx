@@ -5,10 +5,10 @@ import { ethers } from "ethers";
 import Connection from "./Connection";
 import { legos } from "money-legos";
 
-import dacProxyFactory from "../../smart-contracts/build/DACProxyFactory.json";
-import dedgeCompoundManager from "../../smart-contracts/build/DedgeCompoundManager.json";
-import dedgeAddressRegistry from "../../smart-contracts/build/AddressRegistry.json";
-import dedgeMakerManager from "../../smart-contracts/build/DedgeMakerManager.json";
+import dacProxyFactory from "../../smart-contracts/artifacts/DACProxyFactory.json";
+import dedgeCompoundManager from "../../smart-contracts/artifacts/DedgeCompoundManager.json";
+import dedgeAddressRegistry from "../../smart-contracts/artifacts/AddressRegistry.json";
+import dedgeMakerManager from "../../smart-contracts/artifacts/DedgeMakerManager.json";
 
 const CONTRACTS = {
   makerProxyRegistry: legos.maker.proxyRegistry,
