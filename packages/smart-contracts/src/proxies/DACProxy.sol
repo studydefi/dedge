@@ -18,7 +18,8 @@ contract DACProxy is
     BytesLibLite
 {
     // TODO: Change this value
-    address payable constant protocolFeePayoutAddress = 0x56D5e01D5D2F853aA8f4ac5d2FfB4cBBCa9e2b0f;
+    address payable constant protocolFeePayoutAddress1 = 0x773CCbFB422850617A5680D40B1260422d072f41;
+    address payable constant protocolFeePayoutAddress2 = 0xAbcCB8f0a3c206Bb0468C52CCc20f3b81077417B;
 
     constructor(address _cacheAddr) public {
         setCache(_cacheAddr);
@@ -81,9 +82,11 @@ contract DACProxy is
 
         // Repays protocol fee
         if (_reserve == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE) {
-            protocolFeePayoutAddress.call.value(protocolFee)("");
+            protocolFeePayoutAddress1.call.value(protocolFee.div(2))("");
+            protocolFeePayoutAddress2.call.value(protocolFee.div(2))("");
         } else {
-            IERC20(_reserve).transfer(protocolFeePayoutAddress, protocolFee);
+            IERC20(_reserve).transfer(protocolFeePayoutAddress1, protocolFee.div(2));
+            IERC20(_reserve).transfer(protocolFeePayoutAddress2, protocolFee.div(2));
         }
 
         // Repays aave
