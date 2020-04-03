@@ -87,7 +87,7 @@ const getExitPositionParameters = async (
       .map((x: [Address, BigNumber]) => getTokenToEthPrice(x[0], x[1]))
   );
 
-  const ethersToBorrow = debtInEth.reduce((a, b) => a + b)
+  const ethersToBorrow = debtInEth.reduce((a, b) => a.add(b), new BigNumber(0))
 
   return {
     etherToBorrowWeiBN: ethersToBorrow,
