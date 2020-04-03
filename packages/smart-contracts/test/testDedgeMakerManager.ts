@@ -10,7 +10,8 @@ import {
   newCTokenContract,
   tryAndWait,
   openVault,
-  allCTokens
+  allCTokens,
+  getTokenFromUniswapAndApproveProxyTransfer
 } from "./common";
 
 import {
