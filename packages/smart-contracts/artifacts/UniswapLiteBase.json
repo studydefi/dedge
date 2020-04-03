@@ -1,9 +1,9 @@
 {
   "contractName": "UniswapLiteBase",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/uniswap/UniswapLiteBase.sol\":\"UniswapLiteBase\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/IERC20.sol\":{\"keccak256\":\"0xe3762e63e74657a066e6fe281ec694e366ca86f6378470304c646b4e785e09f3\",\"urls\":[\"bzz-raw://67607850cbce7ffa66356dd28412e64ff58f62fa7c709f5fa28306b8be9050a7\",\"dweb:/ipfs/QmUaFhH5a6rQ8yJG2A6zJJ1ds9txqxr8ytxd2s7bhiNX35\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/uniswap/IUniswapExchange.sol\":{\"keccak256\":\"0xde1a310030b2b654b9c1e7782e94d7f00be0172c32dc4e99a7c168dd53d72843\",\"urls\":[\"bzz-raw://6a8b12cff637c3a1b025bd90a3c75524e53207c457b770bf22800df883fff45d\",\"dweb:/ipfs/QmSJXJDH5jiCkU11Xn7KeVTMoS64xg2XQ5hWGqQhMEnrmX\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/uniswap/IUniswapFactory.sol\":{\"keccak256\":\"0x0d2a2e2c0811bd1e9e757a1a804366cef39120f7eec3bffbcd8802afbf5d6f4b\",\"urls\":[\"bzz-raw://f5d9e36f7f3c6a0771d3656a1b1088f27d82f1f242579fe71e10b2d49aaac5b9\",\"dweb:/ipfs/QmZTjArdX13p6EGRD7fZuros5Wjs52usvNbxSavbLoRgZn\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/uniswap/UniswapLiteBase.sol\":{\"keccak256\":\"0x1058669a50e9c5b2dce70aae66723a01e68e167deb9c3b89ea371cc0038d5dc4\",\"urls\":[\"bzz-raw://3bfffd813909b4322374f3a1b179b10469669ad71fdb6c37f081784453febe05\",\"dweb:/ipfs/QmUFhAH2JxQGdYHRmjVMALuC9e17bZEGKMK7XwGWQwsqn7\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a7231582025be6ba6fceb7d8e4d473f3406556debf153d33937a4416ec799811b69a002c264736f6c63430005100032",
-  "deployedBytecode": "0x6080604052600080fdfea265627a7a7231582025be6ba6fceb7d8e4d473f3406556debf153d33937a4416ec799811b69a002c264736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/uniswap/UniswapLiteBase.sol\":\"UniswapLiteBase\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/IERC20.sol\":{\"keccak256\":\"0xe3762e63e74657a066e6fe281ec694e366ca86f6378470304c646b4e785e09f3\",\"urls\":[\"bzz-raw://67607850cbce7ffa66356dd28412e64ff58f62fa7c709f5fa28306b8be9050a7\",\"dweb:/ipfs/QmUaFhH5a6rQ8yJG2A6zJJ1ds9txqxr8ytxd2s7bhiNX35\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/uniswap/IUniswapExchange.sol\":{\"keccak256\":\"0xde1a310030b2b654b9c1e7782e94d7f00be0172c32dc4e99a7c168dd53d72843\",\"urls\":[\"bzz-raw://6a8b12cff637c3a1b025bd90a3c75524e53207c457b770bf22800df883fff45d\",\"dweb:/ipfs/QmSJXJDH5jiCkU11Xn7KeVTMoS64xg2XQ5hWGqQhMEnrmX\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/uniswap/IUniswapFactory.sol\":{\"keccak256\":\"0x0d2a2e2c0811bd1e9e757a1a804366cef39120f7eec3bffbcd8802afbf5d6f4b\",\"urls\":[\"bzz-raw://f5d9e36f7f3c6a0771d3656a1b1088f27d82f1f242579fe71e10b2d49aaac5b9\",\"dweb:/ipfs/QmZTjArdX13p6EGRD7fZuros5Wjs52usvNbxSavbLoRgZn\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/uniswap/UniswapLiteBase.sol\":{\"keccak256\":\"0x1058669a50e9c5b2dce70aae66723a01e68e167deb9c3b89ea371cc0038d5dc4\",\"urls\":[\"bzz-raw://3bfffd813909b4322374f3a1b179b10469669ad71fdb6c37f081784453febe05\",\"dweb:/ipfs/QmUFhAH2JxQGdYHRmjVMALuC9e17bZEGKMK7XwGWQwsqn7\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a72315820390ff8f9405b3fefea600318d262d865de8ddf8dc61d7a2690fdd77b7b2fbd1a64736f6c63430005100032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a72315820390ff8f9405b3fefea600318d262d865de8ddf8dc61d7a2690fdd77b7b2fbd1a64736f6c63430005100032",
   "sourceMap": "177:2793:24:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;177:2793:24;;;;;;;",
   "deployedSourceMap": "177:2793:24:-;;;;;",
   "source": "pragma solidity 0.5.16;\n\nimport \"../../interfaces/uniswap/IUniswapExchange.sol\";\nimport \"../../interfaces/uniswap/IUniswapFactory.sol\";\n\nimport \"../../interfaces/IERC20.sol\";\n\n\ncontract UniswapLiteBase {\n    // Uniswap Mainnet factory address\n    address constant UniswapFactoryAddress = 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95;\n\n    function _getUniswapExchange(address tokenAddress) internal view returns (address) {\n        return IUniswapFactory(UniswapFactoryAddress).getExchange(tokenAddress);\n    }\n\n    function _ethToToken(address tokenAddress, uint ethAmount)\n        internal returns (uint) {\n        return _ethToToken(tokenAddress, ethAmount, uint(1));\n    }\n\n    function _ethToToken(address tokenAddress, uint ethAmount, uint minTokenAmount)\n        internal returns (uint) {\n        return IUniswapExchange(_getUniswapExchange(tokenAddress))\n            .ethToTokenSwapInput.value(ethAmount)(minTokenAmount, uint(now + 60));\n    }\n\n    function _tokenToEth(address tokenAddress, uint tokenAmount) internal returns (uint) {\n        return _tokenToEth(tokenAddress, tokenAmount, uint(1));\n    }\n\n    function _tokenToEth(address tokenAddress, uint tokenAmount, uint minEthAmount) internal returns (uint) {\n        address exchange = _getUniswapExchange(tokenAddress);\n\n        IERC20(tokenAddress).approve(exchange, tokenAmount);\n\n        return IUniswapExchange(exchange)\n            .tokenToEthSwapInput(tokenAmount, minEthAmount, uint(now + 60));\n    }\n\n    function _tokenToToken(address from, address to, uint tokenInAmount, uint minTokenOut) internal returns (uint) {\n        uint ethAmount = _tokenToEth(from, tokenInAmount);\n        return _ethToToken(to, ethAmount, minTokenOut);\n    }\n\n    function _tokenToToken(address from, address to, uint tokenAmount) internal returns (uint) {\n        return _tokenToToken(from, to, tokenAmount, uint(1));\n    }\n\n    function _getTokenToEthInput(address tokenAddress, uint tokenAmount) internal view returns (uint) {\n        return IUniswapExchange(_getUniswapExchange(tokenAddress)).getTokenToEthInputPrice(tokenAmount);\n    }\n\n    function _getEthToTokenInput(address tokenAddress, uint ethAmount) internal view returns (uint) {\n        return IUniswapExchange(_getUniswapExchange(tokenAddress)).getEthToTokenInputPrice(ethAmount);\n    }\n\n    function _getTokenToEthOutput(address tokenAddress, uint ethAmount) internal view returns (uint) {\n        return IUniswapExchange(_getUniswapExchange(tokenAddress)).getTokenToEthOutputPrice(ethAmount);\n    }\n\n    function _getEthToTokenOutput(address tokenAddress, uint tokenAmount) internal view returns (uint) {\n        return IUniswapExchange(_getUniswapExchange(tokenAddress)).getEthToTokenOutputPrice(tokenAmount);\n    }\n\n    function _getTokenToTokenInput(address from, address to, uint fromAmount) internal view returns (uint) {\n        uint ethAmount = _getTokenToEthInput(from, fromAmount);\n        return _getEthToTokenInput(to, ethAmount);\n    }\n}\n",
@@ -606,7 +606,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7907,
+                              "referencedDeclaration": 7829,
                               "src": "932:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -1504,7 +1504,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7907,
+                              "referencedDeclaration": 7829,
                               "src": "1455:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -4409,7 +4409,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7907,
+                              "referencedDeclaration": 7829,
                               "src": "932:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -5307,7 +5307,7 @@
                               "name": "now",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7907,
+                              "referencedDeclaration": 7829,
                               "src": "1455:3:24",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
@@ -7620,7 +7620,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-01T11:18:01.920Z",
+  "updatedAt": "2020-04-03T06:25:13.619Z",
   "devdoc": {
     "methods": {}
   },

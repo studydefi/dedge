@@ -45,9 +45,9 @@
       "type": "event"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":true,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes4\",\"name\":\"sig\",\"type\":\"bytes4\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"guy\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"foo\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"bar\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"fax\",\"type\":\"bytes\"}],\"name\":\"LogNote\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Note.sol\":\"DSNote\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Note.sol\":{\"keccak256\":\"0xc1440658c9e69c115e90b60f1a3b424155d9f0fa495a689bce0a202d8daf1df7\",\"urls\":[\"bzz-raw://dc3c2c615db44839d9353908fa2935cab29e0739ef559f00397724b904e5187f\",\"dweb:/ipfs/Qma5uk2NoqVnZgZF3fCXPRfkZMbxfEKuYo6NABq79We1t1\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a72315820fa29f2e2df0ef8ad1caa462e937ba8cdde6e604fe4800d2c5efd3d5a208e013364736f6c63430005100032",
-  "deployedBytecode": "0x6080604052600080fdfea265627a7a72315820fa29f2e2df0ef8ad1caa462e937ba8cdde6e604fe4800d2c5efd3d5a208e013364736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":true,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes4\",\"name\":\"sig\",\"type\":\"bytes4\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"guy\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"foo\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"bar\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"fax\",\"type\":\"bytes\"}],\"name\":\"LogNote\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Note.sol\":\"DSNote\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Note.sol\":{\"keccak256\":\"0xc1440658c9e69c115e90b60f1a3b424155d9f0fa495a689bce0a202d8daf1df7\",\"urls\":[\"bzz-raw://dc3c2c615db44839d9353908fa2935cab29e0739ef559f00397724b904e5187f\",\"dweb:/ipfs/Qma5uk2NoqVnZgZF3fCXPRfkZMbxfEKuYo6NABq79We1t1\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a7231582081591acd0a0632d9b8d61b61e3f496e7dc43f1b27d19dbf987445b16c576a1fb64736f6c63430005100032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a7231582081591acd0a0632d9b8d61b61e3f496e7dc43f1b27d19dbf987445b16c576a1fb64736f6c63430005100032",
   "sourceMap": "734:541:20:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;734:541:20;;;;;;;",
   "deployedSourceMap": "734:541:20:-;;;;;",
   "source": "/// note.sol -- the `note' modifier, for logging calls as events\n\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU General Public License as published by\n// the Free Software Foundation, either version 3 of the License, or\n// (at your option) any later version.\n\n// This program is distributed in the hope that it will be useful,\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n// GNU General Public License for more details.\n\n// You should have received a copy of the GNU General Public License\n// along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\npragma solidity 0.5.16;\n\ncontract DSNote {\n    event LogNote(\n        bytes4   indexed  sig,\n        address  indexed  guy,\n        bytes32  indexed  foo,\n        bytes32  indexed  bar,\n        uint256           wad,\n        bytes             fax\n    ) anonymous;\n\n    modifier note {\n        bytes32 foo;\n        bytes32 bar;\n        uint256 wad;\n\n        assembly {\n            foo := calldataload(4)\n            bar := calldataload(36)\n            wad := callvalue\n        }\n\n        emit LogNote(msg.sig, msg.sender, foo, bar, wad, msg.data);\n\n        _;\n    }\n}",
@@ -427,7 +427,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1209:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -456,7 +456,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1218:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -524,7 +524,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1245:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1004,7 +1004,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1209:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1033,7 +1033,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1218:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1101,7 +1101,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1245:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1212,7 +1212,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-01T11:18:01.835Z",
+  "updatedAt": "2020-04-03T06:25:13.515Z",
   "devdoc": {
     "methods": {}
   },

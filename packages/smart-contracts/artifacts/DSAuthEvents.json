@@ -28,9 +28,9 @@
       "type": "event"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"authority\",\"type\":\"address\"}],\"name\":\"LogSetAuthority\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"LogSetOwner\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":\"DSAuthEvents\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":{\"keccak256\":\"0x7636abae52593354ed288e67b6c2e5e1df218f753f6c253ae691cb5252274cf1\",\"urls\":[\"bzz-raw://d66e47ce74476c103bb8a1b11d618232276d4b57badfd7d96a45e9c881e83543\",\"dweb:/ipfs/QmXMWVNLRdiBHmnTx1c2DFvidnXpFuiy4CMh2T2avWEQ2h\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a7231582098e39723f40c3a46c2834c1e31d6fe8c565e4fc3a9da0ee093382f945156dddd64736f6c63430005100032",
-  "deployedBytecode": "0x6080604052600080fdfea265627a7a7231582098e39723f40c3a46c2834c1e31d6fe8c565e4fc3a9da0ee093382f945156dddd64736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"authority\",\"type\":\"address\"}],\"name\":\"LogSetAuthority\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"LogSetOwner\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":\"DSAuthEvents\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":{\"keccak256\":\"0x7636abae52593354ed288e67b6c2e5e1df218f753f6c253ae691cb5252274cf1\",\"urls\":[\"bzz-raw://d66e47ce74476c103bb8a1b11d618232276d4b57badfd7d96a45e9c881e83543\",\"dweb:/ipfs/QmXMWVNLRdiBHmnTx1c2DFvidnXpFuiy4CMh2T2avWEQ2h\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a72315820b69de992e67cf758b03cd292dd083a4ccf3e700e6f7e4643cbbe449b9d201c7b64736f6c63430005100032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a72315820b69de992e67cf758b03cd292dd083a4ccf3e700e6f7e4643cbbe449b9d201c7b64736f6c63430005100032",
   "sourceMap": "795:131:17:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;795:131:17;;;;;;;",
   "deployedSourceMap": "795:131:17:-;;;;;",
   "source": "// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU General Public License as published by\n// the Free Software Foundation, either version 3 of the License, or\n// (at your option) any later version.\n\n// This program is distributed in the hope that it will be useful,\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n// GNU General Public License for more details.\n\n// You should have received a copy of the GNU General Public License\n// along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\npragma solidity 0.5.16;\n\ncontract DSAuthority {\n    function canCall(\n        address src, address dst, bytes4 sig\n    ) public view returns (bool);\n}\n\ncontract DSAuthEvents {\n    event LogSetAuthority (address indexed authority);\n    event LogSetOwner     (address indexed owner);\n}\n\ncontract DSAuth is DSAuthEvents {\n    DSAuthority  public  authority;\n    address      public  owner;\n\n    constructor() public {\n        owner = msg.sender;\n        emit LogSetOwner(msg.sender);\n    }\n\n    function setOwner(address owner_)\n        public\n        auth\n    {\n        owner = owner_;\n        emit LogSetOwner(owner);\n    }\n\n    function setAuthority(DSAuthority authority_)\n        public\n        auth\n    {\n        authority = authority_;\n        emit LogSetAuthority(address(authority));\n    }\n\n    modifier auth {\n        require(isAuthorized(msg.sender, msg.sig), \"ds-auth-unauthorized\");\n        _;\n    }\n\n    function isAuthorized(address src, bytes4 sig) internal view returns (bool) {\n        if (src == address(this)) {\n            return true;\n        } else if (src == owner) {\n            return true;\n        } else if (address(authority) == address(0)) {\n            return false;\n        } else {\n            return authority.canCall(src, address(this), sig);\n        }\n    }\n}",
@@ -443,7 +443,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 7905,
+                        "referencedDeclaration": 7827,
                         "src": "1074:3:17",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -486,7 +486,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1111:3:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -993,7 +993,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7905,
+                              "referencedDeclaration": 7827,
                               "src": "1489:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1022,7 +1022,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7905,
+                              "referencedDeclaration": 7827,
                               "src": "1501:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1114,10 +1114,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "1468:7:17",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1204,7 +1204,7 @@
                           "name": "this",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7961,
+                          "referencedDeclaration": 7883,
                           "src": "1663:4:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -1456,7 +1456,7 @@
                                       "name": "this",
                                       "nodeType": "Identifier",
                                       "overloadedDeclarations": [],
-                                      "referencedDeclaration": 7961,
+                                      "referencedDeclaration": 7883,
                                       "src": "1905:4:17",
                                       "typeDescriptions": {
                                         "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -2203,7 +2203,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 7905,
+                        "referencedDeclaration": 7827,
                         "src": "1074:3:17",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -2246,7 +2246,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7905,
+                          "referencedDeclaration": 7827,
                           "src": "1111:3:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -2753,7 +2753,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7905,
+                              "referencedDeclaration": 7827,
                               "src": "1489:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -2782,7 +2782,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7905,
+                              "referencedDeclaration": 7827,
                               "src": "1501:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -2874,10 +2874,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "1468:7:17",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2964,7 +2964,7 @@
                           "name": "this",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7961,
+                          "referencedDeclaration": 7883,
                           "src": "1663:4:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -3216,7 +3216,7 @@
                                       "name": "this",
                                       "nodeType": "Identifier",
                                       "overloadedDeclarations": [],
-                                      "referencedDeclaration": 7961,
+                                      "referencedDeclaration": 7883,
                                       "src": "1905:4:17",
                                       "typeDescriptions": {
                                         "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -3561,7 +3561,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-01T11:18:01.811Z",
+  "updatedAt": "2020-04-03T06:25:13.491Z",
   "devdoc": {
     "methods": {}
   },
