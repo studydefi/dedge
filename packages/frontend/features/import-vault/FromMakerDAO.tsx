@@ -56,6 +56,14 @@ const ImportButton = () => {
     );
   }
 
+  const handleImportVaultClicked = async () => {
+    await importVault();
+    window.toastProvider.addMessage(`Vault #${selectedVaultId} imported!`, {
+      variant: "success",
+    });
+    closeModal();
+  };
+
   // case 2: no vaults found on MakerDAO for this address
   if (vaultIds.length === 0) {
     return (
@@ -135,7 +143,7 @@ const ImportButton = () => {
             <Button
               disabled={!importAllowed || loadingImport}
               ml={3}
-              onClick={importVault}
+              onClick={handleImportVaultClicked}
             >
               {loadingImport ? (
                 <Flex alignItems="center">

@@ -64,7 +64,7 @@ function useDACProxy() {
       variant: "processing",
     });
 
-    const receipt = await tx.wait();
+    await tx.wait();
 
     window.toastProvider.addMessage("Smart Wallet created", {
       variant: "success",

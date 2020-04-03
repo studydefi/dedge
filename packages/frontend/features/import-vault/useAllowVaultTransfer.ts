@@ -44,13 +44,28 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
       signer,
     );
 
-    await dedgeHelpers.maker.dsProxyCdpAllowDacProxy(
+    const tx = await dedgeHelpers.maker.dsProxyCdpAllowDacProxy(
       makerDsProxyContract,
       proxyAddress,
       makerCdpManager.address,
       makerProxyActions.address,
       selectedVaultId.toString(),
     );
+
+    window.toastProvider.addMessage(`Allowing vault #${selectedVaultId}...`, {
+      secondaryMessage: "Check progress on Etherscan",
+      actionHref: `https://etherscan.io/tx/${tx.hash}`,
+      actionText: "Check",
+      variant: "processing",
+    });
+
+    await tx.wait();
+
+    window.toastProvider.addMessage(
+      `Vault #${selectedVaultId} allowance approved`,
+      { variant: "success" },
+    );
+
     setLoading(false);
     getAllowStatus();
   };
