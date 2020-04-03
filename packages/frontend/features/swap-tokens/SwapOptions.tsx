@@ -1,4 +1,4 @@
-import { Box, Text, Field, Input, Button, Tooltip } from "rimble-ui";
+import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
 import styled from "styled-components";
 
 import Select from "../../components/Select";
@@ -23,7 +23,7 @@ const SwapOptions = () => {
   const [toTokenStr, setToTokenStr] = useState("eth");
   const [amountToSwap, setAmountToSwap] = useState("");
 
-  const { isAmountAvailable } = useIsAmountAvailable(
+  const { isAmountAvailable, canSwapAmount } = useIsAmountAvailable(
     amountToSwap,
     fromTokenStr,
     thingToSwap,
@@ -32,8 +32,14 @@ const SwapOptions = () => {
   const disableConfirm =
     !hasProxy || // not connected or no smart wallet
     fromTokenStr === toTokenStr || // same token
+    !isAmountAvailable || // amount not available
     amountToSwap === "" || // no amount specified
-    !isAmountAvailable; // amount not available
+    amountToSwap === "0";
+
+  const setMax = () => {
+    if (!hasProxy) return;
+    setAmountToSwap(canSwapAmount.toString());
+  };
 
   return (
     <Container p="3">
@@ -112,8 +118,11 @@ const SwapOptions = () => {
         </Field>
       </Box>
 
-      <Box>
-        <Field label={`Amount of ${fromTokenStr.toLocaleUpperCase()} to swap`}>
+      <Box mb="3">
+        <Field
+          mb="0"
+          label={`Amount of ${fromTokenStr.toLocaleUpperCase()} to swap`}
+        >
           <Input
             type="number"
             required={true}
@@ -122,6 +131,9 @@ const SwapOptions = () => {
             onChange={e => setAmountToSwap(e.target.value.toString())}
           />
         </Field>
+        <Text textAlign="right" opacity={!hasProxy ? "0.5" : "1"}>
+          <Link onClick={setMax}>Set max</Link>
+        </Text>
       </Box>
 
       <SwapConfirm

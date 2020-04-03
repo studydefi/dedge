@@ -53,6 +53,13 @@ const useImportVault = selectedVaultId => {
       decimals,
     );
 
+    window.toastProvider.addMessage(`Import vault #${selectedVaultId}...`, {
+      secondaryMessage: "Check progress on Etherscan",
+      actionHref: `https://etherscan.io/tx/${tx.hash}`,
+      actionText: "Check",
+      variant: "processing",
+    });
+
     await tx.wait();
     setLoading(false);
     getVaults();

@@ -35,7 +35,12 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         ADDRESS_MAP[toTokenStr],
         amount,
       );
-      console.log("Transaction Hash", tx.hash);
+      window.toastProvider.addMessage(`Swapping debt...`, {
+        secondaryMessage: "Check progress on Etherscan",
+        actionHref: `https://etherscan.io/tx/${tx.hash}`,
+        actionText: "Check",
+        variant: "processing",
+      });
       await tx.wait();
       return;
     }
@@ -46,7 +51,12 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       ADDRESS_MAP[toTokenStr],
       amount,
     );
-    console.log("Transaction Hash", tx.hash);
+    window.toastProvider.addMessage(`Swapping collateral...`, {
+      secondaryMessage: "Check progress on Etherscan",
+      actionHref: `https://etherscan.io/tx/${tx.hash}`,
+      actionText: "Check",
+      variant: "processing",
+    });
     setLoading(false);
 
     return tx.wait();

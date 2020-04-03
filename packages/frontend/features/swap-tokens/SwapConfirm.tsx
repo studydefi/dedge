@@ -8,13 +8,14 @@ import {
   Button,
   Heading,
   Card,
-  EthAddress,
+  Icon,
 } from "rimble-ui";
 
 import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
 
 import CoinsContainer from "../../containers/Coins";
 import useSwap from "./useSwap";
+import CompoundPositions from "../../containers/CompoundPositions";
 
 const SwapConfirm = ({
   thingToSwap,
@@ -30,6 +31,7 @@ const SwapConfirm = ({
   const closeModal = () => setIsOpen(false);
 
   const { COINS } = CoinsContainer.useContainer();
+  const { getBalances } = CompoundPositions.useContainer();
   const { swapFunction, loading } = useSwap(
     thingToSwap,
     fromTokenStr,
@@ -45,14 +47,27 @@ const SwapConfirm = ({
   return (
     <Box>
       <MyButton width="100%" onClick={openModal} disabled={disabled}>
-        Confirm
+        <Flex alignItems="center">
+          <span>Confirm</span>
+          <Icon name="Launch" color={outline ? "primary" : "white"} ml="2" />
+        </Flex>
       </MyButton>
+      {thingToSwap === "collateral" && (
+        <>
+          <Text fontSize="0" color="#999" fontWeight="bold" mt="2">
+            Due to nature of slippages:
+          </Text>
+          <Text fontSize="0" color="#999">
+            MAX: 95% (90% recommended)
+          </Text>
+        </>
+      )}
 
       <Modal isOpen={isOpen}>
         <Card width={"640px"} p={0}>
           <ModalCloseIcon onClick={closeModal} />
 
-          <Box p={4}>
+          <Box p={4} pb={1}>
             <Heading.h3 mb="4">
               Swap {thingToSwap} from {fromToken.symbol} to {toToken.symbol}
             </Heading.h3>
@@ -64,6 +79,12 @@ const SwapConfirm = ({
                 {toToken.symbol}
               </Text>
             </Box>
+
+            <Box>
+              <Text fontSize="0" color="#999">
+                Service Fee: 0.0135% (0.09% to AAVE for flash loan)
+              </Text>
+            </Box>
           </Box>
 
           <ModalBottom>
@@ -73,6 +94,10 @@ const SwapConfirm = ({
               disabled={loading}
               onClick={async () => {
                 await swapFunction();
+                window.toastProvider.addMessage(`Swap completed!`, {
+                  variant: "success",
+                });
+                getBalances();
                 closeModal();
               }}
             >
