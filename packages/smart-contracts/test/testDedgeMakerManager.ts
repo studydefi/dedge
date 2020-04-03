@@ -10,11 +10,12 @@ import {
   newCTokenContract,
   tryAndWait,
   openVault,
-  getTokenFromUniswapAndApproveProxyTransfer
+  allCTokens
 } from "./common";
 
 import {
   dacProxyFactoryAddress,
+  dedgeCompoundManagerAddress,
   dedgeMakerManagerAddress,
   addressRegistryAddress
 } from "../build/DeployedAddresses.json";
@@ -77,9 +78,11 @@ describe("DedgeMakerManager", () => {
       ilkCTokenContract.address,
       dacProxyContract.address
     );
+
+    // Borrow is always DAI
     const borrowInitial = await dedgeHelpers.compound.getCTokenBorrowBalance(
       ilkCTokenContract.signer,
-      ilkCTokenContract.address,
+      cDaiContract.address,
       dacProxyContract.address
     );
 
@@ -127,9 +130,11 @@ describe("DedgeMakerManager", () => {
       ilkCTokenContract.address,
       dacProxyContract.address
     );
+
+    // Borrow is always DAI
     const borrowFinal = await dedgeHelpers.compound.getCTokenBorrowBalance(
       ilkCTokenContract.signer,
-      ilkCTokenContract.address,
+      cDaiContract.address,
       dacProxyContract.address
     );
 
@@ -140,7 +145,11 @@ describe("DedgeMakerManager", () => {
 
   before(async () => {
     // Builds DAC Proxy
-    await dacProxyFactoryContract.build({ gasLimit: 4000000 });
+    await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
+      dacProxyFactoryContract,
+      dedgeCompoundManagerAddress,
+      allCTokens
+    );
     const dacProxyAddress = await dacProxyFactoryContract.proxies(
       wallet.address
     );
