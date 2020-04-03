@@ -27,11 +27,11 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"apt\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"urn\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"name\":\"daiJoin_join\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/makerdao/DssProxyActionsBase.sol\":\"Common\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/IERC20.sol\":{\"keccak256\":\"0xe3762e63e74657a066e6fe281ec694e366ca86f6378470304c646b4e785e09f3\",\"urls\":[\"bzz-raw://67607850cbce7ffa66356dd28412e64ff58f62fa7c709f5fa28306b8be9050a7\",\"dweb:/ipfs/QmUaFhH5a6rQ8yJG2A6zJJ1ds9txqxr8ytxd2s7bhiNX35\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/makerdao/DssProxyActionsBase.sol\":{\"keccak256\":\"0x8465bf916f7fbb622bfd0e4d5448effe0f1d056c267a733ce386f739ccf5916e\",\"urls\":[\"bzz-raw://106f1c87e4524a908bb1807951b2e1048797eba0f36604c119eaa4c9e0d0e2ab\",\"dweb:/ipfs/QmRofckMx8B6rP6eRDxKvmSkgo7ipamVDwPYptUfevmMCD\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b50610298806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063c56167c614610030575b600080fd5b61009c6004803603606081101561004657600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602001909291908035906020019092919050505061009e565b005b8273ffffffffffffffffffffffffffffffffffffffff1663f4b9fa756040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156100e657600080fd5b505af11580156100fa573d6000803e3d6000fd5b505050506040513d602081101561011057600080fd5b810190808051906020019092919050505073ffffffffffffffffffffffffffffffffffffffff1663095ea7b384836040518363ffffffff1660e01b8152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050600060405180830381600087803b1580156101a757600080fd5b505af11580156101bb573d6000803e3d6000fd5b505050508273ffffffffffffffffffffffffffffffffffffffff16633b4da69f83836040518363ffffffff1660e01b8152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050600060405180830381600087803b15801561024657600080fd5b505af115801561025a573d6000803e3d6000fd5b5050505050505056fea265627a7a723158204d98399b0edaaac519ea68a3349ae09ff0d508825ab256f57c96aab25a47102164736f6c63430005100032",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c8063c56167c614610030575b600080fd5b61009c6004803603606081101561004657600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602001909291908035906020019092919050505061009e565b005b8273ffffffffffffffffffffffffffffffffffffffff1663f4b9fa756040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156100e657600080fd5b505af11580156100fa573d6000803e3d6000fd5b505050506040513d602081101561011057600080fd5b810190808051906020019092919050505073ffffffffffffffffffffffffffffffffffffffff1663095ea7b384836040518363ffffffff1660e01b8152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050600060405180830381600087803b1580156101a757600080fd5b505af11580156101bb573d6000803e3d6000fd5b505050508273ffffffffffffffffffffffffffffffffffffffff16633b4da69f83836040518363ffffffff1660e01b8152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050600060405180830381600087803b15801561024657600080fd5b505af115801561025a573d6000803e3d6000fd5b5050505050505056fea265627a7a723158204d98399b0edaaac519ea68a3349ae09ff0d508825ab256f57c96aab25a47102164736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"apt\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"urn\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"name\":\"daiJoin_join\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/makerdao/DssProxyActionsBase.sol\":\"Common\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/IERC20.sol\":{\"keccak256\":\"0xe3762e63e74657a066e6fe281ec694e366ca86f6378470304c646b4e785e09f3\",\"urls\":[\"bzz-raw://67607850cbce7ffa66356dd28412e64ff58f62fa7c709f5fa28306b8be9050a7\",\"dweb:/ipfs/QmUaFhH5a6rQ8yJG2A6zJJ1ds9txqxr8ytxd2s7bhiNX35\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/makerdao/DssProxyActionsBase.sol\":{\"keccak256\":\"0x8465bf916f7fbb622bfd0e4d5448effe0f1d056c267a733ce386f739ccf5916e\",\"urls\":[\"bzz-raw://106f1c87e4524a908bb1807951b2e1048797eba0f36604c119eaa4c9e0d0e2ab\",\"dweb:/ipfs/QmRofckMx8B6rP6eRDxKvmSkgo7ipamVDwPYptUfevmMCD\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506101eb806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063c56167c614610030575b600080fd5b6100666004803603606081101561004657600080fd5b506001600160a01b03813581169160208101359091169060400135610068565b005b826001600160a01b031663f4b9fa756040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156100a357600080fd5b505af11580156100b7573d6000803e3d6000fd5b505050506040513d60208110156100cd57600080fd5b50516040805163095ea7b360e01b81526001600160a01b038681166004830152602482018590529151919092169163095ea7b391604480830192600092919082900301818387803b15801561012157600080fd5b505af1158015610135573d6000803e3d6000fd5b50505050826001600160a01b0316633b4da69f83836040518363ffffffff1660e01b815260040180836001600160a01b03166001600160a01b0316815260200182815260200192505050600060405180830381600087803b15801561019957600080fd5b505af11580156101ad573d6000803e3d6000fd5b5050505050505056fea265627a7a72315820d8b402c55dd600eed686f9277b942559808f6190a32d8196d3783e256e62253f64736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c8063c56167c614610030575b600080fd5b6100666004803603606081101561004657600080fd5b506001600160a01b03813581169160208101359091169060400135610068565b005b826001600160a01b031663f4b9fa756040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156100a357600080fd5b505af11580156100b7573d6000803e3d6000fd5b505050506040513d60208110156100cd57600080fd5b50516040805163095ea7b360e01b81526001600160a01b038681166004830152602482018590529151919092169163095ea7b391604480830192600092919082900301818387803b15801561012157600080fd5b505af1158015610135573d6000803e3d6000fd5b50505050826001600160a01b0316633b4da69f83836040518363ffffffff1660e01b815260040180836001600160a01b03166001600160a01b0316815260200182815260200192505050600060405180830381600087803b15801561019957600080fd5b505af11580156101ad573d6000803e3d6000fd5b5050505050505056fea265627a7a72315820d8b402c55dd600eed686f9277b942559808f6190a32d8196d3783e256e62253f64736f6c63430005100032",
   "sourceMap": "2413:661:22:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2413:661:22;;;;;;;",
-  "deployedSourceMap": "2413:661:22:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2413:661:22;;;;;;;;;;;;;;;;;;;2663:409;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2663:409:22;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;2962:3;2950:20;;;:22;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2950:22:22;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2950:22:22;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2950:22:22;;;;;;;;;;;;;;;;:30;;;2981:3;2986;2950:40;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2950:40:22;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2950:40:22;;;;3046:3;3034:21;;;3056:3;3061;3034:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3034:31:22;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;3034:31:22;;;;2663:409;;;:::o",
+  "deployedSourceMap": "2413:661:22:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2413:661:22;;;;;;;;;;;;;;;;;;;2663:409;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;2663:409:22;;;;;;;;;;;;;;;;;:::i;:::-;;;2962:3;-1:-1:-1;;;;;2950:20:22;;:22;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2950:22:22;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2950:22:22;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2950:22:22;:40;;;-1:-1:-1;;;2950:40:22;;-1:-1:-1;;;;;2950:40:22;;;;;;;;;;;;;;;:30;;;;;;;:40;;;;;-1:-1:-1;;2950:40:22;;;;;;;-1:-1:-1;2950:30:22;:40;;;5:2:-1;;;;30:1;27;20:12;5:2;2950:40:22;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2950:40:22;;;;3046:3;-1:-1:-1;;;;;3034:21:22;;3056:3;3061;3034:31;;;;;;;;;;;;;-1:-1:-1;;;;;3034:31:22;-1:-1:-1;;;;;3034:31:22;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3034:31:22;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;3034:31:22;;;;2663:409;;;:::o",
   "source": "pragma solidity 0.5.16;\n\nimport \"../../interfaces/IERC20.sol\";\n\n\ncontract GemLike {\n    function approve(address, uint) public;\n    function transfer(address, uint) public;\n    function transferFrom(address, address, uint) public;\n    function deposit() public payable;\n    function withdraw(uint) public;\n}\n\ncontract ManagerLike {\n    function cdpCan(address, uint, address) public view returns (uint);\n    function ilks(uint) public view returns (bytes32);\n    function owns(uint) public view returns (address);\n    function urns(uint) public view returns (address);\n    function vat() public view returns (address);\n    function open(bytes32, address) public returns (uint);\n    function give(uint, address) public;\n    function cdpAllow(uint, address, uint) public;\n    function urnAllow(address, uint) public;\n    function frob(uint, int, int) public;\n    function flux(uint, address, uint) public;\n    function move(uint, address, uint) public;\n    function exit(address, uint, address, uint) public;\n    function quit(uint, address) public;\n    function enter(address, uint) public;\n    function shift(uint, uint) public;\n}\n\ncontract VatLike {\n    function can(address, address) public view returns (uint);\n    function ilks(bytes32) public view returns (uint, uint, uint, uint, uint);\n    function dai(address) public view returns (uint);\n    function urns(bytes32, address) public view returns (uint, uint);\n    function frob(bytes32, address, address, address, int, int) public;\n    function hope(address) public;\n    function move(address, address, uint) public;\n}\n\ncontract GemJoinLike {\n    function dec() public returns (uint);\n    function gem() public returns (GemLike);\n    function join(address, uint) public payable;\n    function exit(address, uint) public;\n}\n\ncontract DaiJoinLike {\n    function vat() public returns (VatLike);\n    function dai() public returns (GemLike);\n    function join(address, uint) public payable;\n    function exit(address, uint) public;\n}\n\ncontract JugLike {\n    function drip(bytes32) public returns (uint);\n}\n\n// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n// WARNING: These functions meant to be used as a a library for a DSProxy. Some are unsafe if you call them directly.\n// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\ncontract Common {\n    uint256 constant RAY = 10 ** 27;\n\n    // Internal functions\n\n    function mul(uint x, uint y) internal pure returns (uint z) {\n        require(y == 0 || (z = x * y) / y == x, \"mul-overflow\");\n    }\n\n    // Public functions\n\n    function daiJoin_join(\n        address apt,\n        address urn,\n        uint wad\n    ) public {\n        // DAI Already flashloaned\n        // DaiJoinLike(apt).dai().transferFrom(dacProxyAddress, dedgeMakerManagerAddress, wad);\n        // Approves adapter to take the DAI amount\n        DaiJoinLike(apt).dai().approve(apt, wad);\n        // Joins DAI into the vat\n        DaiJoinLike(apt).join(urn, wad);\n    }\n}\n\ncontract DssProxyActionsBase is Common {\n    // Internal functions\n\n    function sub(uint x, uint y) internal pure returns (uint z) {\n        require((z = x - y) <= x, \"sub-overflow\");\n    }\n\n    function toInt(uint x) internal pure returns (int y) {\n        y = int(x);\n        require(y >= 0, \"int-overflow\");\n    }\n\n    function toRad(uint wad) internal pure returns (uint rad) {\n        rad = mul(wad, 10 ** 27);\n    }\n\n    function convertTo18(address gemJoin, uint256 amt) internal returns (uint256 wad) {\n        // For those collaterals that have less than 18 decimals precision we need to do the conversion before passing to frob function\n        // Adapters will automatically handle the difference of precision\n        wad = mul(\n            amt,\n            10 ** (18 - GemJoinLike(gemJoin).dec())\n        );\n    }\n\n    function convertToGemUnits(address gemJoin, uint256 wad) internal returns (uint256 amt) {\n        // For those collaterals that have less than 18 decimals precision we need to do the conversion\n        amt = wad / (10 ** (18 - GemJoinLike(gemJoin).dec()));\n    }\n\n    function _getDrawDart(\n        address vat,\n        address jug,\n        address urn,\n        bytes32 ilk,\n        uint wad\n    ) internal returns (int dart) {\n        // Updates stability fee rate\n        uint rate = JugLike(jug).drip(ilk);\n\n        // Gets DAI balance of the urn in the vat\n        uint dai = VatLike(vat).dai(urn);\n\n        // If there was already enough DAI in the vat balance, just exits it without adding more debt\n        if (dai < mul(wad, RAY)) {\n            // Calculates the needed dart so together with the existing dai in the vat is enough to exit wad amount of DAI tokens\n            dart = toInt(sub(mul(wad, RAY), dai) / rate);\n            // This is neeeded due lack of precision. It might need to sum an extra dart wei (for the given DAI wad amount)\n            dart = mul(uint(dart), rate) < mul(wad, RAY) ? dart + 1 : dart;\n        }\n    }\n\n    function _getWipeAllWad(\n        address vat,\n        address usr,\n        address urn,\n        bytes32 ilk\n    ) internal view returns (uint wad) {\n        // Gets actual rate from the vat\n        (, uint rate,,,) = VatLike(vat).ilks(ilk);\n        // Gets actual art value of the urn\n        (, uint art) = VatLike(vat).urns(ilk, urn);\n        // Gets actual dai amount in the urn\n        uint dai = VatLike(vat).dai(usr);\n\n        uint rad = sub(mul(art, rate), dai);\n        wad = rad / RAY;\n\n        // If the rad precision has some dust, it will need to request for 1 extra wad wei\n        wad = mul(wad, RAY) < rad ? wad + 1 : wad;\n    }\n\n    function open(\n        address manager,\n        bytes32 ilk,\n        address usr\n    ) public returns (uint cdp) {\n        cdp = ManagerLike(manager).open(ilk, usr);\n    }\n\n    function give(\n        address manager,\n        uint cdp,\n        address usr\n    ) public {\n        ManagerLike(manager).give(cdp, usr);\n    }\n\n    function cdpAllow(\n        address manager,\n        uint cdp,\n        address usr,\n        uint ok\n    ) public {\n        ManagerLike(manager).cdpAllow(cdp, usr, ok);\n    }\n\n    function flux(\n        address manager,\n        uint cdp,\n        address dst,\n        uint wad\n    ) public {\n        ManagerLike(manager).flux(cdp, dst, wad);\n    }\n\n    function frob(\n        address manager,\n        uint cdp,\n        int dink,\n        int dart\n    ) public {\n        ManagerLike(manager).frob(cdp, dink, dart);\n    }\n\n    function wipeAllAndFreeETH(\n        address manager,\n        address ethJoin,\n        address daiJoin,\n        uint cdp,\n        uint wadC\n    ) public {\n        address vat = ManagerLike(manager).vat();\n        address urn = ManagerLike(manager).urns(cdp);\n        bytes32 ilk = ManagerLike(manager).ilks(cdp);\n        (, uint art) = VatLike(vat).urns(ilk, urn);\n\n        // Joins DAI amount into the vat\n        daiJoin_join(daiJoin, urn, _getWipeAllWad(vat, urn, urn, ilk));\n        // Paybacks debt to the CDP and unlocks WETH amount from it\n        frob(\n            manager,\n            cdp,\n            -toInt(wadC),\n            -int(art)\n        );\n        // Moves the amount from the CDP urn to proxy's address\n        flux(manager, cdp, address(this), wadC);\n        // Exits WETH amount to proxy address as a token\n        GemJoinLike(ethJoin).exit(address(this), wadC);\n        // Converts WETH to ETH\n        GemJoinLike(ethJoin).gem().withdraw(wadC);\n        // Sends ETH back to the user's wallet\n        // msg.sender.transfer(wadC);\n    }\n\n    function wipeAllAndFreeGem(\n        address manager,\n        address gemJoin,\n        address daiJoin,\n        uint cdp,\n        uint wadC\n    ) public {\n        address vat = ManagerLike(manager).vat();\n        address urn = ManagerLike(manager).urns(cdp);\n        bytes32 ilk = ManagerLike(manager).ilks(cdp);\n        (, uint art) = VatLike(vat).urns(ilk, urn);\n\n        // Joins DAI amount into the vat\n        daiJoin_join(daiJoin, urn, _getWipeAllWad(vat, urn, urn, ilk));\n        uint wad18 = convertTo18(gemJoin, wadC);\n        // Paybacks debt to the CDP and unlocks token amount from it\n        frob(\n            manager,\n            cdp,\n            -toInt(wad18),\n            -int(art)\n        );\n        // Moves the amount from the CDP urn to proxy's address\n        flux(manager, cdp, address(this), wad18);\n        // Exits token amount to the user's wallet as a token\n        GemJoinLike(gemJoin).exit(address(this), wadC);\n    }\n}",
   "sourcePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/makerdao/DssProxyActionsBase.sol",
   "ast": {
@@ -3894,10 +3894,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "2570:7:22",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4627,10 +4627,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "3218:7:22",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4940,10 +4940,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "3355:7:22",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -10513,7 +10513,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "7310:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -10630,7 +10630,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "7423:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -12161,7 +12161,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "8423:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -12278,7 +12278,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "8542:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -16454,10 +16454,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "2570:7:22",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -17187,10 +17187,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "3218:7:22",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -17500,10 +17500,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7908,
-                        7909
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7909,
+                      "referencedDeclaration": 7831,
                       "src": "3355:7:22",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -23073,7 +23073,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "7310:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -23190,7 +23190,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "7423:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -24721,7 +24721,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "8423:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -24838,7 +24838,7 @@
                             "name": "this",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7993,
+                            "referencedDeclaration": 7915,
                             "src": "8542:4:22",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DssProxyActionsBase_$4711",
@@ -25160,7 +25160,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-01T11:18:01.844Z",
+  "updatedAt": "2020-04-03T06:25:13.529Z",
   "devdoc": {
     "methods": {}
   },
