@@ -32,11 +32,12 @@ const SwapOptions = () => {
   const disableConfirm =
     !hasProxy || // not connected or no smart wallet
     fromTokenStr === toTokenStr || // same token
+    !isAmountAvailable || // amount not available
     amountToSwap === "" || // no amount specified
-    !isAmountAvailable; // amount not available
+    amountToSwap === "0";
 
   const setMax = () => {
-    if (!disableConfirm) return;
+    if (!hasProxy) return;
     setAmountToSwap(canSwapAmount.toString());
   };
 
@@ -130,7 +131,7 @@ const SwapOptions = () => {
             onChange={e => setAmountToSwap(e.target.value.toString())}
           />
         </Field>
-        <Text textAlign="right">
+        <Text textAlign="right" opacity={!hasProxy ? "0.5" : "1"}>
           <Link onClick={setMax}>Set max</Link>
         </Text>
       </Box>
