@@ -44,8 +44,8 @@ const SwapOptions = () => {
             onChange={e => setThingToSwap(e.target.value)}
             value={thingToSwap}
           >
-            <option value="debt">Debt</option>
-            <option value="collateral">Collateral</option>
+            <option value="debt">Debt (borrowed)</option>
+            <option value="collateral">Collateral (supplied)</option>
           </Select>
         </Field>
       </Box>

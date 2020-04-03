@@ -48,7 +48,7 @@ const Balances = () => {
         </DataContainer>
         <DataContainer m="2">
           <Heading as="h4">Borrow Percentage</Heading>
-          {displayPercent(currentBorrowPercentage)}
+          {displayPercent(currentBorrowPercentage * 100)}
         </DataContainer>
       </Container>
       <Container mb="2">

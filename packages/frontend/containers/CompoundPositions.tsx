@@ -70,59 +70,33 @@ function useCompoundPositions() {
     setLoading(true);
     clearTimeout(timeoutId);
 
-    // weird bug where this fails if nothing is supplied yet
-    try {
-      await cDai.balanceOfUnderlying(proxyAddress);
-    } catch (error) {
-      // we just assume its all zero balances
-      setCompoundPositions({
-        eth: { ...COINS.eth, supply: "0", borrow: "0" },
-        bat: { ...COINS.bat, supply: "0", borrow: "0" },
-        dai: { ...COINS.dai, supply: "0", borrow: "0" },
-        usdc: { ...COINS.usdc, supply: "0", borrow: "0" },
-        rep: { ...COINS.rep, supply: "0", borrow: "0" },
-        zrx: { ...COINS.zrx, supply: "0", borrow: "0" },
-        wbtc: { ...COINS.wbtc, supply: "0", borrow: "0" },
-      });
-      getApy();
-      getTotals();
-      setLoading(false);
-
-      setLastRefresh(new Date()); // save the time of last refresh
-      const myTimeoutId = setTimeout(getBalances, 30000); // every 30 seconds get balances again
-      setTimeoutId(myTimeoutId); // save timeout id so we can cancel if manual refresh
-
-      // quit early
-      return;
-    }
-
-    const coinContracts = [cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc];
-
-    // borrow balances
-    const [bEth, bBat, bDai, bUsdc, bRep, bZrx, bWbtc] = await Promise.all(
-      coinContracts.map(x => x.borrowBalanceStored(proxyAddress)),
-    );
-
-    // supply balances
-    const [sEth, sBat, sDai, sUsdc, sRep, sZrx, sWbtc] = await Promise.all(
-      coinContracts.map(x => x.balanceOfUnderlying(proxyAddress)),
-    );
-
     const process = (x, u = 18) =>
       ethers.utils.formatUnits(x.toString(), u).toString();
 
+    const coinContracts = [cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc];
+
+    const [eth, bat, dai, usdc, rep, zrx, wbtc] = await Promise.all(
+      coinContracts.map(cToken =>
+        dedgeHelpers.compound
+          .getAccountSnapshot(signer, cToken.address, proxyAddress)
+          .then(res => {
+            const isUsdc = cToken.address === cUsdc.address;
+            return {
+              borrow: process(res.borrowBalance, isUsdc ? 6 : 18),
+              supply: process(res.balanceOfUnderlying, isUsdc ? 6 : 18),
+            };
+          }),
+      ),
+    );
+
     setCompoundPositions({
-      eth: { ...COINS.eth, supply: process(sEth), borrow: process(bEth) },
-      bat: { ...COINS.bat, supply: process(sBat), borrow: process(bBat) },
-      dai: { ...COINS.dai, supply: process(sDai), borrow: process(bDai) },
-      usdc: {
-        ...COINS.usdc,
-        supply: process(sUsdc, 6),
-        borrow: process(bUsdc, 6),
-      },
-      rep: { ...COINS.rep, supply: process(sRep), borrow: process(bRep) },
-      zrx: { ...COINS.zrx, supply: process(sZrx), borrow: process(bZrx) },
-      wbtc: { ...COINS.wbtc, supply: process(sWbtc), borrow: process(bWbtc) },
+      eth: { ...COINS.eth, ...eth },
+      bat: { ...COINS.bat, ...bat },
+      dai: { ...COINS.dai, ...dai },
+      usdc: { ...COINS.usdc, ...usdc },
+      rep: { ...COINS.rep, ...rep },
+      zrx: { ...COINS.zrx, ...zrx },
+      wbtc: { ...COINS.wbtc, ...wbtc },
     });
     await getApy();
     await getTotals();
