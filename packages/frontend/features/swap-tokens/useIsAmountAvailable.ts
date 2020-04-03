@@ -14,15 +14,14 @@ const useIsAmountAvailable = (
     return { isAmountAvailable: false };
   }
 
-  // swapping debt
-  if (thingToSwap === "debt") {
-    const result = parseFloat(amount) < parseFloat(tokenBalance.borrow);
-    return { isAmountAvailable: result };
-  }
+  const canSwapAmount =
+    thingToSwap === "debt"
+      ? parseFloat(tokenBalance.borrow)
+      : 0.95 * parseFloat(tokenBalance.supply);
 
-  // swapping collateral
-  const result = parseFloat(amount) < 0.95 * parseFloat(tokenBalance.supply);
-  return { isAmountAvailable: result };
+  const result = parseFloat(amount) <= canSwapAmount;
+
+  return { isAmountAvailable: result, canSwapAmount };
 };
 
 export default useIsAmountAvailable;
