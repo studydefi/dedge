@@ -52,15 +52,18 @@ const RepayCoin = ({ coin }) => {
     <Box>
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
-        <Field label={`Amount of ${coin.symbol} to Repay`}>
-          <Input
-            disabled={canTransfer === false || canTransfer === null}
-            type="number"
-            required={true}
-            placeholder="1337"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value.toString())}
-          />
+        <Field required={true} label={`Amount of ${coin.symbol} to Repay`}>
+          {canTransfer === false || canTransfer === null ? (
+            <Input required={true} type="hidden" />
+          ) : (
+            <Input
+              type="number"
+              required={true}
+              placeholder="1337"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value.toString())}
+            />
+          )}
         </Field>
       </Box>
       {canTransfer === false || canTransfer === null ? (
