@@ -1,6 +1,10 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "build:frontend": "lerna bootstrap && cd packages/frontend && npm run build",
+    "start": "python3 -m http.server --directory ../frontend/out"
+  },
   "devDependencies": {
     "husky": "^4.2.3",
     "lerna": "^3.20.2"
