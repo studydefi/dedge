@@ -1,6 +1,11 @@
 # Dedge
 
-[![CircleCI](https://circleci.com/gh/studydefi/dedge.svg?style=svg)](https://circleci.com/gh/studydefi/dedge)
+---
+| Package  |    Status     |
+|----------|:-------------:|
+| smart-contracts | 
+[![CircleCI](https://circleci.com/gh/studydefi/dedge.svg?style=svg)](https://circleci.com/gh/studydefi/dedge) |
+---
 
 https://dedge.exchange
 
