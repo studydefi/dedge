@@ -4,6 +4,7 @@ import { legos } from "money-legos/dist";
 
 import { Button, Loader, Box, Flex, Field, Input } from "rimble-ui";
 
+import CompoundPositions from "../../containers/CompoundPositions";
 import ContractsContainer from "../../containers/Contracts";
 import ConnectionContainer from "../../containers/Connection";
 import DACProxyContainer from "../../containers/DACProxy";
@@ -11,6 +12,7 @@ import DACProxyContainer from "../../containers/DACProxy";
 import { useState, useEffect } from "react";
 
 const RepayCoin = ({ coin }) => {
+  const { getBalances } = CompoundPositions.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { signer, address } = ConnectionContainer.useContainer();
   const { hasProxy, proxy, proxyAddress } = DACProxyContainer.useContainer();
@@ -144,6 +146,7 @@ const RepayCoin = ({ coin }) => {
             );
 
             setLoading(false);
+            getBalances();
           }}
         >
           {loading ? (

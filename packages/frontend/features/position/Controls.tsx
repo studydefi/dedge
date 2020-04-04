@@ -12,7 +12,8 @@ import styled from "styled-components";
 
 import CompoundPositions from "../../containers/CompoundPositions";
 
-import FromMakerDAO from "../import-vault/FromMakerDAO"
+import FromMakerDAO from "../import-vault/FromMakerDAO";
+import ExitPosition from "../exit-position/ExitPosition";
 
 const ControlsContainer = styled(Box)`
   background: white;
@@ -26,12 +27,8 @@ const ControlsContainer = styled(Box)`
 const RefreshButton = () => {
   const { loading, getBalances } = CompoundPositions.useContainer();
   if (!loading) {
-    
     return (
-      <Button.Outline onClick={getBalances}>
-        Refresh Balances
-      </Button.Outline>
-
+      <Button.Outline onClick={getBalances}>Refresh Balances</Button.Outline>
     );
   }
 
@@ -58,8 +55,12 @@ const Controls = ({ notConnected }) => {
 
   return (
     <ControlsContainer py="4" px="1">
-      <FromMakerDAO/>
-      <Button.Outline disabled>Exit Position</Button.Outline>
+      <FromMakerDAO />
+      {notConnected ? (
+        <Button.Outline disabled>Exit Positions</Button.Outline>
+      ) : (
+        <ExitPosition />
+      )}
       {notConnected ? (
         <Button.Outline disabled>Refresh Balances</Button.Outline>
       ) : (
