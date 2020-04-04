@@ -127,12 +127,20 @@ const Dashboard = () => {
             <br />
 
             <Box mb="4">
-              <Heading.h5 mb="2">Q: How can I start using this?</Heading.h5>
+              <Heading.h5 mb="2">Q: How can I import a Maker vault?</Heading.h5>
               <Text>
-                1. Create a vault with MakerDAO <br />
+                1. Create a vault with MakerDAO (if you haven't) <br />
                 2. Create a smart-wallet on dedge.exchange <br />
                 3. Import that vault into dedge.exchange <br />
                 4. Start swapping your debt/collateral!
+              </Text>
+            </Box>
+
+            <Box mb="4">
+              <Heading.h5 mb="2">Q: How can I supply/borrow/withdraw/repay?</Heading.h5>
+              <Text>
+                1. Create a smart-wallet on dedge.exchange (if you haven't)<br />
+                2. Click on the "..." button on the options column
               </Text>
             </Box>
 

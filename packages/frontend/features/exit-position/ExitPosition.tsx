@@ -7,8 +7,7 @@ import {
   Text,
   Button,
   Heading,
-  Card,
-  EthAddress,
+  Card
 } from "rimble-ui";
 
 // components
@@ -71,7 +70,7 @@ const ExitPositionsButton = () => {
               disabled={loading}
               onClick={async () => {
                 setLoading(true);
-                
+
                 const { dedgeAddressRegistry, dedgeExitManager } = contracts;
 
                 const {
