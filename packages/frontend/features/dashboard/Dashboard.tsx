@@ -1,4 +1,13 @@
-import { Box, Text, Flex, Flash } from "rimble-ui";
+import {
+  Modal,
+  Card,
+  Box,
+  Button,
+  Heading,
+  Text,
+  Flex,
+  Flash,
+} from "rimble-ui";
 import styled from "styled-components";
 
 import SwapOptions from "../swap-tokens/SwapOptions";
@@ -11,6 +20,9 @@ import SmartWallet from "../topbar/SmartWallet";
 import ConnectionContainer from "../../containers/Connection";
 import DACProxyContainer from "../../containers/DACProxy";
 import ContractsContainer from "../../containers/Contracts";
+import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
+
+import { useState } from "react";
 
 const Container = styled(Flex)`
   // background: yellow;
@@ -35,6 +47,9 @@ const Dashboard = () => {
   const { address } = ConnectionContainer.useContainer();
   const { ready } = ContractsContainer.useContainer();
   const { hasProxy } = DACProxyContainer.useContainer();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <Container>
       {/* <Title mb="4">Swap your debt and collateral via Compound</Title> */}
@@ -51,11 +66,8 @@ const Dashboard = () => {
         <hr />
         <Box>
           Please note that this is beta software, use at your own risk. For more
-          details, refer to our{" "}
-          <Flash.Link target="_blank" rel="noopener noreferrer">
-            FAQ
-          </Flash.Link>
-          .
+          details, refer to our
+          <Button.Text onClick={() => setIsModalOpen(true)}>FAQ.</Button.Text>
         </Box>
       </Flash>
 
@@ -67,7 +79,7 @@ const Dashboard = () => {
           </Flex>
         </Flash>
       )}
-      
+
       {address && !ready && (
         <Flash variant="warning" mt="2">
           <Flex alignItems="center" justifyContent="center">
@@ -97,6 +109,57 @@ const Dashboard = () => {
           <CurrentPosition />
         </DataDisplay>
       </Contents>
+
+      <Modal isOpen={isModalOpen}>
+        <Card width={"640px"} p={0}>
+          <ModalCloseIcon onClick={() => setIsModalOpen(false)} />
+
+          <Box p={4}>
+            <Heading.h3 mb="4">FAQ</Heading.h3>
+
+            <Box>
+              <Heading.h5 mb="2">Q: Does your cat have an Instagram page?</Heading.h5>
+              <Text>
+                <a href="https://www.instagram.com/mr.miso.oz">Yes</a>
+              </Text>
+            </Box>
+
+            <br />
+
+            <Box mb="4">
+              <Heading.h5 mb="2">Q: How can I start using this?</Heading.h5>
+              <Text>
+                1. Create a vault with MakerDAO <br />
+                2. Create a smart-wallet on dedge.exchange <br />
+                3. Import that vault into dedge.exchange <br />
+                4. Start swapping your debt/collateral!
+              </Text>
+            </Box>
+
+            <Box>
+              <Heading.h5 mb="2">Q: Does Dedge have access to my funds?</Heading.h5>
+              <Text>No</Text>
+            </Box>
+
+            <br />
+
+            <Box>
+              <Heading.h5 mb="2">Q: What is the smart wallet for?</Heading.h5>
+              <Text>
+                The smart wallet allows us to perform atomic transactions on
+                your behalf. For example, taking out a loan and repaying your
+                debt.
+              </Text>
+            </Box>
+          </Box>
+
+          <ModalBottom>
+            <Button.Outline onClick={() => setIsModalOpen(false)}>
+              Close
+            </Button.Outline>
+          </ModalBottom>
+        </Card>
+      </Modal>
     </Container>
   );
 };
