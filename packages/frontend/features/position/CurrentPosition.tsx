@@ -20,11 +20,12 @@ const NameWrapper = styled(Flex)`
 `;
 
 const NumberWrapper = ({ value, symbol }) => {
-  const short = parseFloat(value).toPrecision(6);
+  const valueFixed = (Math.round(value * 1000000) / 1000000).toFixed(6)
+  const short = parseFloat(valueFixed).toPrecision(6);
   return (
     <Box
       title={`${value} ${symbol}`}
-      color={value === "0.0" || value === "0" ? "lightgrey" : "unset"}
+      color={short.toString() === "0.00000" || valueFixed === "0" ? "lightgrey" : "unset"}
     >
       {short} {symbol}
     </Box>

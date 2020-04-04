@@ -79,7 +79,7 @@ const getExitPositionParameters = async (
   const collateralMarketsInTokens: [Address, BigNumber][] = debtCollateralInTokens
     .filter((x: [Address, BigNumber, BigNumber]) => x[2] > new BigNumber(0))
     .map((x: [Address, BigNumber, BigNumber]): [Address, BigNumber] => {
-      return [x[0], x[2].mul(99).div(100)]; // TODO: Remove 99%
+      return [x[0], x[2]];
     });
 
   const debtInEth = await Promise.all(

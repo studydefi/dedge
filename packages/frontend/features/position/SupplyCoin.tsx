@@ -1,14 +1,17 @@
-import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 import { ethers } from "ethers";
 
 import { Button, Loader, Box, Flex, Field, Input } from "rimble-ui";
 
+import CompoundPositions from "../../containers/CompoundPositions";
 import ContractsContainer from "../../containers/Contracts";
 import DACProxyContainer from "../../containers/DACProxy";
 
 import { useState } from "react";
 
+import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
+
 const SupplyCoin = ({ coin }) => {
+  const { getBalances } = CompoundPositions.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
   const [loading, setLoading] = useState(false);
@@ -54,6 +57,7 @@ const SupplyCoin = ({ coin }) => {
           });
 
           setLoading(false);
+          getBalances();
         }}
       >
         {loading ? (

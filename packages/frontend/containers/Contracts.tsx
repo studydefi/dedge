@@ -9,6 +9,7 @@ import dacProxyFactory from "../../smart-contracts/artifacts/DACProxyFactory.jso
 import dedgeCompoundManager from "../../smart-contracts/artifacts/DedgeCompoundManager.json";
 import dedgeAddressRegistry from "../../smart-contracts/artifacts/AddressRegistry.json";
 import dedgeMakerManager from "../../smart-contracts/artifacts/DedgeMakerManager.json";
+import dedgeExitManager from "../../smart-contracts/artifacts/DedgeExitManager.json";
 
 const CONTRACTS = {
   makerProxyRegistry: legos.maker.proxyRegistry,
@@ -29,6 +30,7 @@ const DEDGE_CONTRACTS = {
   dedgeCompoundManager,
   dedgeAddressRegistry,
   dedgeMakerManager,
+  dedgeExitManager
 };
 
 type Contracts = Record<string, ethers.Contract>;
