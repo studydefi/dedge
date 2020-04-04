@@ -140,7 +140,7 @@
       "type": "function"
     },
     {
-      "constant": true,
+      "constant": false,
       "inputs": [
         {
           "internalType": "address",
@@ -157,7 +157,7 @@
         }
       ],
       "payable": false,
-      "stateMutability": "view",
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -182,12 +182,12 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOfUnderlying\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"borrowAmount\",\"type\":\"uint256\"}],\"name\":\"borrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"borrowBalanceCurrent\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"borrowBalanceStored\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"mint\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemTokens\",\"type\":\"uint256\"}],\"name\":\"redeem\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemAmount\",\"type\":\"uint256\"}],\"name\":\"redeemUnderlying\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"repayBorrow\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"}],\"name\":\"repayBorrowBehalf\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICEther.sol\":\"ICEther\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICEther.sol\":{\"keccak256\":\"0x61133ebb707c7447471f78998f97a8b21569d0b07ea2217638d869a5b0da1bc0\",\"urls\":[\"bzz-raw://f6321a3a4c07f45e078e585113527e89cc1e7e63622d89ee898da7abbdfaea88\",\"dweb:/ipfs/Qmbminmq1MQWnNEaJxK8nEKKYhyoUEhRVxEASXJLnj2ALq\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOfUnderlying\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"borrowAmount\",\"type\":\"uint256\"}],\"name\":\"borrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"borrowBalanceCurrent\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"borrowBalanceStored\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"mint\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemTokens\",\"type\":\"uint256\"}],\"name\":\"redeem\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemAmount\",\"type\":\"uint256\"}],\"name\":\"redeemUnderlying\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"repayBorrow\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"}],\"name\":\"repayBorrowBehalf\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICEther.sol\":\"ICEther\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICEther.sol\":{\"keccak256\":\"0xa65d6eb1f4bae0350a65a2148fc83c6cab8952d11b19c39e4ab5c27d1d48773e\",\"urls\":[\"bzz-raw://84d98fe4bf18381ad57769601c6b53135c0e5ff5f191a62cd129cb5a815efc79\",\"dweb:/ipfs/QmaoXTSmkuT5u2HkEkggYzEE4mBA1MZp5yDrDKWU6Y8jgm\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.5.16;\n\ncontract ICEther {\n    function mint() external payable;\n    function borrow(uint borrowAmount) external returns (uint);\n    function redeem(uint redeemTokens) external returns (uint);\n    function redeemUnderlying(uint redeemAmount) external returns (uint);\n    function repayBorrow() external payable;\n    function repayBorrowBehalf(address borrower) external payable;\n    function borrowBalanceCurrent(address account) external returns (uint);\n    function borrowBalanceStored(address account) external view returns (uint256);\n    function balanceOfUnderlying(address account) external view returns (uint);\n    function balanceOf(address owner) external view returns (uint256);\n}",
+  "source": "pragma solidity 0.5.16;\n\ncontract ICEther {\n    function mint() external payable;\n    function borrow(uint borrowAmount) external returns (uint);\n    function redeem(uint redeemTokens) external returns (uint);\n    function redeemUnderlying(uint redeemAmount) external returns (uint);\n    function repayBorrow() external payable;\n    function repayBorrowBehalf(address borrower) external payable;\n    function borrowBalanceCurrent(address account) external returns (uint);\n    function borrowBalanceStored(address account) external view returns (uint256);\n    function balanceOfUnderlying(address account) external returns (uint);\n    function balanceOf(address owner) external view returns (uint256);\n}",
   "sourcePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICEther.sol",
   "ast": {
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICEther.sol",
@@ -791,7 +791,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 724,
-                  "src": "628:4:7",
+                  "src": "623:4:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -802,7 +802,7 @@
                     "id": 721,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "628:4:7",
+                    "src": "623:4:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -812,11 +812,11 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "627:6:7"
+              "src": "622:6:7"
             },
             "scope": 732,
-            "src": "559:75:7",
-            "stateMutability": "view",
+            "src": "559:70:7",
+            "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           },
@@ -839,7 +839,7 @@
                   "name": "owner",
                   "nodeType": "VariableDeclaration",
                   "scope": 731,
-                  "src": "658:13:7",
+                  "src": "653:13:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -850,7 +850,7 @@
                     "id": 725,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "658:7:7",
+                    "src": "653:7:7",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -861,7 +861,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "657:15:7"
+              "src": "652:15:7"
             },
             "returnParameters": {
               "id": 730,
@@ -873,7 +873,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 731,
-                  "src": "696:7:7",
+                  "src": "691:7:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -884,7 +884,7 @@
                     "id": 728,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "696:7:7",
+                    "src": "691:7:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -894,20 +894,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "695:9:7"
+              "src": "690:9:7"
             },
             "scope": 732,
-            "src": "639:66:7",
+            "src": "634:66:7",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
         "scope": 733,
-        "src": "25:682:7"
+        "src": "25:677:7"
       }
     ],
-    "src": "0:707:7"
+    "src": "0:702:7"
   },
   "legacyAST": {
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICEther.sol",
@@ -1511,7 +1511,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 724,
-                  "src": "628:4:7",
+                  "src": "623:4:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1522,7 +1522,7 @@
                     "id": 721,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "628:4:7",
+                    "src": "623:4:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1532,11 +1532,11 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "627:6:7"
+              "src": "622:6:7"
             },
             "scope": 732,
-            "src": "559:75:7",
-            "stateMutability": "view",
+            "src": "559:70:7",
+            "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           },
@@ -1559,7 +1559,7 @@
                   "name": "owner",
                   "nodeType": "VariableDeclaration",
                   "scope": 731,
-                  "src": "658:13:7",
+                  "src": "653:13:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1570,7 +1570,7 @@
                     "id": 725,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "658:7:7",
+                    "src": "653:7:7",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1581,7 +1581,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "657:15:7"
+              "src": "652:15:7"
             },
             "returnParameters": {
               "id": 730,
@@ -1593,7 +1593,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 731,
-                  "src": "696:7:7",
+                  "src": "691:7:7",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1604,7 +1604,7 @@
                     "id": 728,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "696:7:7",
+                    "src": "691:7:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1614,20 +1614,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "695:9:7"
+              "src": "690:9:7"
             },
             "scope": 732,
-            "src": "639:66:7",
+            "src": "634:66:7",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
         "scope": 733,
-        "src": "25:682:7"
+        "src": "25:677:7"
       }
     ],
-    "src": "0:707:7"
+    "src": "0:702:7"
   },
   "compiler": {
     "name": "solc",
@@ -1635,7 +1635,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T11:42:49.844Z",
+  "updatedAt": "2020-04-03T06:25:13.465Z",
   "devdoc": {
     "methods": {}
   },

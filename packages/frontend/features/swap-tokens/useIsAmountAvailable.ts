@@ -14,12 +14,14 @@ const useIsAmountAvailable = (
     return { isAmountAvailable: false };
   }
 
-  if (thingToSwap === "debt") {
-    const result = parseFloat(amount) < parseFloat(tokenBalance.borrow);
-    return { isAmountAvailable: result };
-  }
-  const result = parseFloat(amount) < parseFloat(tokenBalance.supply);
-  return { isAmountAvailable: result };
+  const canSwapAmount =
+    thingToSwap === "debt"
+      ? parseFloat(tokenBalance.borrow)
+      : 0.95 * parseFloat(tokenBalance.supply);
+
+  const result = parseFloat(amount) <= canSwapAmount;
+
+  return { isAmountAvailable: result, canSwapAmount };
 };
 
 export default useIsAmountAvailable;

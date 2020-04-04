@@ -8,14 +8,15 @@ import {
   wallet,
   legos,
   newCTokenContract,
-  sleep,
   tryAndWait,
   openVault,
+  allCTokens,
   getTokenFromUniswapAndApproveProxyTransfer
 } from "./common";
 
 import {
   dacProxyFactoryAddress,
+  dedgeCompoundManagerAddress,
   dedgeMakerManagerAddress,
   addressRegistryAddress
 } from "../build/DeployedAddresses.json";
@@ -39,8 +40,7 @@ const cUsdcContract = newCTokenContract(legos.compound.cUSDC.address);
 // Importing the vault results in withdrawing the internal funds
 // and sending the vault to the ONE_ADDRESS
 // (this is because address(0) is not allowed)
-const ONE_ADDRESS = '0x0000000000000000000000000000000000000001'
-
+const ONE_ADDRESS = "0x0000000000000000000000000000000000000001";
 
 describe("DedgeMakerManager", () => {
   const dacProxyFactoryContract = new ethers.Contract(
@@ -73,14 +73,17 @@ describe("DedgeMakerManager", () => {
     amount: number,
     decimalPlaces: number = 18
   ) => {
-    // Sleeps for 0.5 sec to avoid invalid nonce
-    await sleep(500);
-
     // Get initial supply/borrow balance
-    const supplyInitial = await ilkCTokenContract.balanceOfUnderlying(
+    const supplyInitial = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      ilkCTokenContract.signer,
+      ilkCTokenContract.address,
       dacProxyContract.address
     );
-    const borrowInitial = await cDaiContract.borrowBalanceStored(
+
+    // Borrow is always DAI
+    const borrowInitial = await dedgeHelpers.compound.getCTokenBorrowBalance(
+      ilkCTokenContract.signer,
+      cDaiContract.address,
       dacProxyContract.address
     );
 
@@ -123,10 +126,16 @@ describe("DedgeMakerManager", () => {
     );
 
     // Gets final balance
-    const supplyFinal = await ilkCTokenContract.balanceOfUnderlying(
+    const supplyFinal = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      ilkCTokenContract.signer,
+      ilkCTokenContract.address,
       dacProxyContract.address
     );
-    const borrowFinal = await cDaiContract.borrowBalanceStored(
+
+    // Borrow is always DAI
+    const borrowFinal = await dedgeHelpers.compound.getCTokenBorrowBalance(
+      ilkCTokenContract.signer,
+      cDaiContract.address,
       dacProxyContract.address
     );
 
@@ -137,7 +146,11 @@ describe("DedgeMakerManager", () => {
 
   before(async () => {
     // Builds DAC Proxy
-    await dacProxyFactoryContract.build({ gasLimit: 4000000 });
+    await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
+      dacProxyFactoryContract,
+      dedgeCompoundManagerAddress,
+      allCTokens
+    );
     const dacProxyAddress = await dacProxyFactoryContract.proxies(
       wallet.address
     );
@@ -146,9 +159,6 @@ describe("DedgeMakerManager", () => {
       dacProxyDef.abi,
       wallet
     );
-
-    // Sleeps for 0.5 sec to avoid invalid nonce
-    await sleep(500);
 
     // Also builds MakerDAO's proxy
     let dsProxyAddress = await makerProxyRegistryContract.proxies(
@@ -205,9 +215,6 @@ describe("DedgeMakerManager", () => {
       3 // Trade 3 ETH for BAT
     );
 
-    // Sleeps for 0.5 sec to avoid invalid nonce
-    await sleep(500);
-
     const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
       ONE_ADDRESS,
       makerDssCdpManagerContract
@@ -241,9 +248,6 @@ describe("DedgeMakerManager", () => {
       ilkCTokenUnderlying,
       3 // Trade 3 ETH for USDC
     );
-
-    // Sleeps for 0.5 sec to avoid invalid nonce
-    await sleep(500);
 
     const initialVaultCount = await dedgeHelpers.maker.getVaultIds(
       ONE_ADDRESS,

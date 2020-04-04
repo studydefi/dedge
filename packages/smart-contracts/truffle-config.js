@@ -18,7 +18,7 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 // const infuraKey = "fj4jll3k.....";
 //
 // const fs = require('fs');
@@ -45,10 +45,25 @@ module.exports = {
     // options below to some value.
     //
     development: {
-      host: "127.0.0.1",     // Localhost (default: none)
-      port: 8545,            // Standard Ethereum port (default: none)
-      network_id: "*",       // Any network (default: none)
+      host: "127.0.0.1", // Localhost (default: none)
+      port: 8545, // Standard Ethereum port (default: none)
+      network_id: "*" // Any network (default: none)
     },
+
+    remote: {
+      skipDryRun: true,
+      // Can't be a function otherwise it'll throw a JSON RPC error for some reason
+      // https://github.com/trufflesuite/truffle/issues/852#issuecomment-522367001
+      // Using 0's as private key because it'll throw an error if the private keys
+      // are undefined as this is instanciating a class....
+      provider: new HDWalletProvider(
+        [process.env.DEPLOYER_PRIVATEKEY || "0".repeat(64)],
+        process.env.REMOTE_URL || "http://127.0.0.1:8545",
+        0,
+        1
+      ),
+      network_id: "*"
+    }
 
     // Another network with more advanced options...
     // advanced: {
@@ -87,15 +102,16 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.5.16",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.5.16", // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
-      settings: {          // See the solidity docs for advice about optimization and evmVersion
-       optimizer: {
-         enabled: false,
-         runs: 200
-       },
-       evmVersion: "constantinople"
+      settings: {
+        // See the solidity docs for advice about optimization and evmVersion
+        optimizer: {
+          enabled: true,
+          runs: 200
+        },
+        evmVersion: "constantinople"
       }
     }
   }
-}
+};

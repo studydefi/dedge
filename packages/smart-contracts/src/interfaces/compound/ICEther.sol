@@ -9,6 +9,6 @@ contract ICEther {
     function repayBorrowBehalf(address borrower) external payable;
     function borrowBalanceCurrent(address account) external returns (uint);
     function borrowBalanceStored(address account) external view returns (uint256);
-    function balanceOfUnderlying(address account) external view returns (uint);
+    function balanceOfUnderlying(address account) external returns (uint);
     function balanceOf(address owner) external view returns (uint256);
 }

@@ -23,7 +23,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"cToken\",\"type\":\"address\"}],\"name\":\"getUnderlyingPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICompoundPriceOracle.sol\":\"ICompoundPriceOracle\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICompoundPriceOracle.sol\":{\"keccak256\":\"0xb19ae717f5b05fbc0ffdf3a4b96cd71811071ab2d3c5f73ee8835541c5bd573b\",\"urls\":[\"bzz-raw://52efc7166851b50b539166f234babc41cf25a4cc2c5997c9bc3f801117b4ea47\",\"dweb:/ipfs/QmXv2P3p6adgTCHUMXdufESTbJEdbQ3DkLKRnsENRC1Dmx\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"cToken\",\"type\":\"address\"}],\"name\":\"getUnderlyingPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICompoundPriceOracle.sol\":\"ICompoundPriceOracle\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICompoundPriceOracle.sol\":{\"keccak256\":\"0xb19ae717f5b05fbc0ffdf3a4b96cd71811071ab2d3c5f73ee8835541c5bd573b\",\"urls\":[\"bzz-raw://52efc7166851b50b539166f234babc41cf25a4cc2c5997c9bc3f801117b4ea47\",\"dweb:/ipfs/QmXv2P3p6adgTCHUMXdufESTbJEdbQ3DkLKRnsENRC1Dmx\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -280,7 +280,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T11:42:49.846Z",
+  "updatedAt": "2020-04-03T06:25:13.468Z",
   "devdoc": {
     "methods": {}
   },

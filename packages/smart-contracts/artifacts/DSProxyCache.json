@@ -44,11 +44,11 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_code\",\"type\":\"bytes\"}],\"name\":\"read\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_code\",\"type\":\"bytes\"}],\"name\":\"write\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Proxy.sol\":\"DSProxyCache\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":{\"keccak256\":\"0x7636abae52593354ed288e67b6c2e5e1df218f753f6c253ae691cb5252274cf1\",\"urls\":[\"bzz-raw://d66e47ce74476c103bb8a1b11d618232276d4b57badfd7d96a45e9c881e83543\",\"dweb:/ipfs/QmXMWVNLRdiBHmnTx1c2DFvidnXpFuiy4CMh2T2avWEQ2h\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Note.sol\":{\"keccak256\":\"0xc1440658c9e69c115e90b60f1a3b424155d9f0fa495a689bce0a202d8daf1df7\",\"urls\":[\"bzz-raw://dc3c2c615db44839d9353908fa2935cab29e0739ef559f00397724b904e5187f\",\"dweb:/ipfs/Qma5uk2NoqVnZgZF3fCXPRfkZMbxfEKuYo6NABq79We1t1\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Proxy.sol\":{\"keccak256\":\"0x36bff82bc9233b5ee86b50df83efb4915c50d3c5716e9bc463b290ab87a4b6bb\",\"urls\":[\"bzz-raw://486f7dfeaa00779677f8e139c54fb3f7f8043f66fe344ec35bd5d3873205f77e\",\"dweb:/ipfs/QmUVwqSEod9L97Cqz1fPv9jXPescnR4vNXAm4zdf2gZmgv\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b50610334806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80637ed0c3b21461003b5780638bf4515c14610136575b600080fd5b6100f46004803603602081101561005157600080fd5b810190808035906020019064010000000081111561006e57600080fd5b82018360208201111561008057600080fd5b803590602001918460018302840111640100000000831117156100a257600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f820116905080830192505050505050509192919290505050610231565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101ef6004803603602081101561014c57600080fd5b810190808035906020019064010000000081111561016957600080fd5b82018360208201111561017b57600080fd5b8035906020019184600183028401116401000000008311171561019d57600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f8201169050808301925050505050505091929192905050506102b7565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008151602083016000f09050803b156001811461024e57610253565b600080fd5b506000828051906020012090508160008083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050919050565b6000808280519060200120905060008082815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1691505091905056fea265627a7a723158205c680b90a403d8f037d25bb23ad3d42a182a729375fb7624c7649d88b0d8024d64736f6c63430005100032",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c80637ed0c3b21461003b5780638bf4515c14610136575b600080fd5b6100f46004803603602081101561005157600080fd5b810190808035906020019064010000000081111561006e57600080fd5b82018360208201111561008057600080fd5b803590602001918460018302840111640100000000831117156100a257600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f820116905080830192505050505050509192919290505050610231565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101ef6004803603602081101561014c57600080fd5b810190808035906020019064010000000081111561016957600080fd5b82018360208201111561017b57600080fd5b8035906020019184600183028401116401000000008311171561019d57600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f8201169050808301925050505050505091929192905050506102b7565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008151602083016000f09050803b156001811461024e57610253565b600080fd5b506000828051906020012090508160008083815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050919050565b6000808280519060200120905060008082815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1691505091905056fea265627a7a723158205c680b90a403d8f037d25bb23ad3d42a182a729375fb7624c7649d88b0d8024d64736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_code\",\"type\":\"bytes\"}],\"name\":\"read\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_code\",\"type\":\"bytes\"}],\"name\":\"write\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Proxy.sol\":\"DSProxyCache\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":{\"keccak256\":\"0x7636abae52593354ed288e67b6c2e5e1df218f753f6c253ae691cb5252274cf1\",\"urls\":[\"bzz-raw://d66e47ce74476c103bb8a1b11d618232276d4b57badfd7d96a45e9c881e83543\",\"dweb:/ipfs/QmXMWVNLRdiBHmnTx1c2DFvidnXpFuiy4CMh2T2avWEQ2h\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Note.sol\":{\"keccak256\":\"0xc1440658c9e69c115e90b60f1a3b424155d9f0fa495a689bce0a202d8daf1df7\",\"urls\":[\"bzz-raw://dc3c2c615db44839d9353908fa2935cab29e0739ef559f00397724b904e5187f\",\"dweb:/ipfs/Qma5uk2NoqVnZgZF3fCXPRfkZMbxfEKuYo6NABq79We1t1\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Proxy.sol\":{\"keccak256\":\"0x36bff82bc9233b5ee86b50df83efb4915c50d3c5716e9bc463b290ab87a4b6bb\",\"urls\":[\"bzz-raw://486f7dfeaa00779677f8e139c54fb3f7f8043f66fe344ec35bd5d3873205f77e\",\"dweb:/ipfs/QmUVwqSEod9L97Cqz1fPv9jXPescnR4vNXAm4zdf2gZmgv\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610245806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80637ed0c3b21461003b5780638bf4515c146100fd575b600080fd5b6100e16004803603602081101561005157600080fd5b81019060208101813564010000000081111561006c57600080fd5b82018360208201111561007e57600080fd5b803590602001918460018302840111640100000000831117156100a057600080fd5b91908080601f0160208091040260200160405190810160405280939291908181526020018383808284376000920191909152509295506101a3945050505050565b604080516001600160a01b039092168252519081900360200190f35b6100e16004803603602081101561011357600080fd5b81019060208101813564010000000081111561012e57600080fd5b82018360208201111561014057600080fd5b8035906020019184600183028401116401000000008311171561016257600080fd5b91908080601f0160208091040260200160405190810160405280939291908181526020018383808284376000920191909152509295506101ee945050505050565b60008151602083016000f09050803b156001811461003657508151602092830120600090815291829052604090912080546001600160a01b0319166001600160a01b03831617905590565b805160209182012060009081529081905260409020546001600160a01b03169056fea265627a7a72315820a463b0981db8e6a179d563cefded0ff7df019aaf804d14d24bb7b25be7d3dd6f64736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c80637ed0c3b21461003b5780638bf4515c146100fd575b600080fd5b6100e16004803603602081101561005157600080fd5b81019060208101813564010000000081111561006c57600080fd5b82018360208201111561007e57600080fd5b803590602001918460018302840111640100000000831117156100a057600080fd5b91908080601f0160208091040260200160405190810160405280939291908181526020018383808284376000920191909152509295506101a3945050505050565b604080516001600160a01b039092168252519081900360200190f35b6100e16004803603602081101561011357600080fd5b81019060208101813564010000000081111561012e57600080fd5b82018360208201111561014057600080fd5b8035906020019184600183028401116401000000008311171561016257600080fd5b91908080601f0160208091040260200160405190810160405280939291908181526020018383808284376000920191909152509295506101ee945050505050565b60008151602083016000f09050803b156001811461003657508151602092830120600090815291829052604090912080546001600160a01b0319166001600160a01b03831617905590565b805160209182012060009081529081905260409020546001600160a01b03169056fea265627a7a72315820a463b0981db8e6a179d563cefded0ff7df019aaf804d14d24bb7b25be7d3dd6f64736f6c63430005100032",
   "sourceMap": "4235:619:21:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4235:619:21;;;;;;;",
-  "deployedSourceMap": "4235:619:21:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4235:619:21;;;;;;;;;;;;;;;;;;;;;;;;4449:403;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;4449:403:21;;;;;;;;;;21:11:-1;8;5:28;2:2;;;46:1;43;36:12;2:2;4449:403:21;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;4449:403:21;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;39:11;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;4449:403:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;93:3;85:6;81:16;74:27;137:4;133:9;126:4;121:3;117:14;113:30;106:37;;169:3;161:6;157:16;147:26;;4449:403:21;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;4303:140;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;4303:140:21;;;;;;;;;;21:11:-1;8;5:28;2:2;;;46:1;43;36:12;2:2;4303:140:21;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;4303:140:21;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;39:11;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;4303:140:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;93:3;85:6;81:16;74:27;137:4;133:9;126:4;121:3;117:14;113:30;106:37;;169:3;161:6;157:16;147:26;;4303:140:21;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;4449:403;4500:14;4593:5;4587:12;4580:4;4573:5;4569:16;4566:1;4559:41;4549:51;;4639:6;4627:19;4620:27;4665:1;4660:105;;;;4613:152;;4660:105;4749:1;4746;4739:12;4613:152;;4784:12;4809:5;4799:16;;;;;;4784:31;;4839:6;4825:5;:11;4831:4;4825:11;;;;;;;;;;;;:20;;;;;;;;;;;;;;;;;;4449:403;;;;:::o;4303:140::-;4358:7;4377:12;4402:5;4392:16;;;;;;4377:31;;4425:5;:11;4431:4;4425:11;;;;;;;;;;;;;;;;;;;;;4418:18;;;4303:140;;;:::o",
+  "deployedSourceMap": "4235:619:21:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4235:619:21;;;;;;;;;;;;;;;;;;;;;;;;4449:403;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;4449:403:21;;;;;;;;21:11:-1;5:28;;2:2;;;46:1;43;36:12;2:2;4449:403:21;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;4449:403:21;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;39:11;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;4449:403:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;4449:403:21;;-1:-1:-1;4449:403:21;;-1:-1:-1;;;;;4449:403:21:i;:::-;;;;-1:-1:-1;;;;;4449:403:21;;;;;;;;;;;;;;4303:140;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;4303:140:21;;;;;;;;21:11:-1;5:28;;2:2;;;46:1;43;36:12;2:2;4303:140:21;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;4303:140:21;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;39:11;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;4303:140:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;4303:140:21;;-1:-1:-1;4303:140:21;;-1:-1:-1;;;;;4303:140:21:i;4449:403::-;4500:14;4593:5;4587:12;4580:4;4573:5;4569:16;4566:1;4559:41;4549:51;;4639:6;4627:19;4620:27;4665:1;4660:105;;;;-1:-1:-1;4799:16:21;;;;;;;4784:12;4825:11;;;;;;;;;;;:20;;-1:-1:-1;;;;;;4825:20:21;-1:-1:-1;;;;;4825:20:21;;;;;:11;4449:403::o;4303:140::-;4392:16;;;;;;;4358:7;4425:11;;;;;;;;;;;-1:-1:-1;;;;;4425:11:21;;4303:140::o",
   "source": "// proxy.sol - execute actions atomically through the proxy's identity\n\n// Copyright (C) 2017  DappHub, LLC\n\n// This program is free software: you can redistribute it and/or modify\n// it under the terms of the GNU General Public License as published by\n// the Free Software Foundation, either version 3 of the License, or\n// (at your option) any later version.\n\n// This program is distributed in the hope that it will be useful,\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n// GNU General Public License for more details.\n\n// You should have received a copy of the GNU General Public License\n// along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\npragma solidity >=0.5.0 <0.6.0;\n\nimport \"./Auth.sol\";\nimport \"./Note.sol\";\n\n// DSProxy\n// Allows code execution using a persistant identity This can be very\n// useful to execute a sequence of atomic actions. Since the owner of\n// the proxy can be changed, this allows for dynamic ownership models\n// i.e. a multisig\ncontract DSProxy is DSAuth, DSNote {\n    DSProxyCache public cache;  // global cache for contracts\n\n    constructor(address _cacheAddr) public {\n        setCache(_cacheAddr);\n    }\n\n    function() external payable {\n    }\n\n    // use the proxy to execute calldata _data on contract _code\n    function execute(bytes memory _code, bytes memory _data)\n        public\n        payable\n        returns (address target, bytes memory response)\n    {\n        target = cache.read(_code);\n        if (target == address(0)) {\n            // deploy contract & store its address in cache\n            target = cache.write(_code);\n        }\n\n        response = execute(target, _data);\n    }\n\n    function execute(address _target, bytes memory _data)\n        public\n        auth\n        note\n        payable\n        returns (bytes memory response)\n    {\n        require(_target != address(0), \"ds-proxy-target-address-required\");\n\n        // call contract in current context\n        assembly {\n            let succeeded := delegatecall(sub(gas, 5000), _target, add(_data, 0x20), mload(_data), 0, 0)\n            let size := returndatasize\n\n            response := mload(0x40)\n            mstore(0x40, add(response, and(add(add(size, 0x20), 0x1f), not(0x1f))))\n            mstore(response, size)\n            returndatacopy(add(response, 0x20), 0, size)\n\n            switch iszero(succeeded)\n            case 1 {\n                // throw if delegatecall failed\n                revert(add(response, 0x20), size)\n            }\n        }\n    }\n\n    //set new cache\n    function setCache(address _cacheAddr)\n        public\n        auth\n        note\n        returns (bool)\n    {\n        require(_cacheAddr != address(0), \"ds-proxy-cache-address-required\");\n        cache = DSProxyCache(_cacheAddr);  // overwrite cache\n        return true;\n    }\n}\n\n// DSProxyFactory\n// This factory deploys new proxy instances through build()\n// Deployed proxy addresses are logged\ncontract DSProxyFactory {\n    event Created(address indexed sender, address indexed owner, address proxy, address cache);\n    mapping(address=>address) public proxies;\n    DSProxyCache public cache;\n\n    constructor() public {\n        cache = new DSProxyCache();\n    }\n\n    // deploys a new proxy instance\n    // sets owner of proxy to caller\n    function build() public returns (address payable proxy) {\n        proxy = build(msg.sender);\n    }\n\n    // deploys a new proxy instance\n    // sets custom owner of proxy\n    function build(address owner) public returns (address payable proxy) {\n        proxy = address(new DSProxy(address(cache)));\n        emit Created(msg.sender, owner, address(proxy), address(cache));\n        DSProxy(proxy).setOwner(owner);\n        proxies[owner] = proxy;\n    }\n}\n\n// DSProxyCache\n// This global cache stores addresses of contracts previously deployed\n// by a proxy. This saves gas from repeat deployment of the same\n// contracts and eliminates blockchain bloat.\n\n// By default, all proxies deployed from the same factory store\n// contracts in the same cache. The cache a proxy instance uses can be\n// changed.  The cache uses the sha3 hash of a contract's bytecode to\n// lookup the address\ncontract DSProxyCache {\n    mapping(bytes32 => address) cache;\n\n    function read(bytes memory _code) public view returns (address) {\n        bytes32 hash = keccak256(_code);\n        return cache[hash];\n    }\n\n    function write(bytes memory _code) public returns (address target) {\n        assembly {\n            target := create(0, add(_code, 0x20), mload(_code))\n            switch iszero(extcodesize(target))\n            case 1 {\n                // throw if contract failed to deploy\n                revert(0, 0)\n            }\n        }\n        bytes32 hash = keccak256(_code);\n        cache[hash] = target;\n    }\n}",
   "sourcePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Proxy.sol",
   "ast": {
@@ -1006,10 +1006,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7315,
-                        7316
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7316,
+                      "referencedDeclaration": 7831,
                       "src": "1913:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1393,10 +1393,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7315,
-                        7316
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7316,
+                      "referencedDeclaration": 7831,
                       "src": "2730:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2018,7 +2018,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7312,
+                            "referencedDeclaration": 7827,
                             "src": "3436:3:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -2329,7 +2329,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7827,
                           "src": "3676:3:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -2906,7 +2906,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 7306,
+                      "referencedDeclaration": 7821,
                       "src": "4392:9:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -3169,7 +3169,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 7306,
+                      "referencedDeclaration": 7821,
                       "src": "4799:9:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -4310,10 +4310,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7315,
-                        7316
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7316,
+                      "referencedDeclaration": 7831,
                       "src": "1913:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4697,10 +4697,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7315,
-                        7316
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7316,
+                      "referencedDeclaration": 7831,
                       "src": "2730:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -5322,7 +5322,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 7312,
+                            "referencedDeclaration": 7827,
                             "src": "3436:3:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -5633,7 +5633,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7827,
                           "src": "3676:3:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -6210,7 +6210,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 7306,
+                      "referencedDeclaration": 7821,
                       "src": "4392:9:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -6473,7 +6473,7 @@
                       "name": "keccak256",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 7306,
+                      "referencedDeclaration": 7821,
                       "src": "4799:9:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_keccak256_pure$_t_bytes_memory_ptr_$returns$_t_bytes32_$",
@@ -6665,7 +6665,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T11:42:49.889Z",
+  "updatedAt": "2020-04-03T06:25:13.521Z",
   "devdoc": {
     "methods": {}
   },

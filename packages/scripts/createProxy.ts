@@ -5,19 +5,14 @@ import { dedgeHelpers } from "dedge-smart-contracts/helpers/index";
 import {
   wallet,
   legos,
-  sleep,
-  tryAndWait,
-  newCTokenContract,
-  getTokenFromUniswapAndApproveProxyTransfer
 } from "dedge-smart-contracts/test/common";
 
 import {
   dacProxyFactoryAddress,
   dedgeCompoundManagerAddress
-} from "dedge-smart-contracts/build/DeployedAddresses.json";
+} from "dedge-smart-contracts/artifacts/DeployedAddresses.json";
 
 import dacProxyFactoryDef from "dedge-smart-contracts/artifacts/DACProxyFactory.json";
-import dedgeCompoundManagerDef from "dedge-smart-contracts/artifacts/DedgeCompoundManager.json";
 
 if (process.argv.length !== 3) {
   console.log(

@@ -33,7 +33,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"bytes4\",\"name\":\"sig\",\"type\":\"bytes4\"}],\"name\":\"canCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":\"DSAuthority\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":{\"keccak256\":\"0x7636abae52593354ed288e67b6c2e5e1df218f753f6c253ae691cb5252274cf1\",\"urls\":[\"bzz-raw://d66e47ce74476c103bb8a1b11d618232276d4b57badfd7d96a45e9c881e83543\",\"dweb:/ipfs/QmXMWVNLRdiBHmnTx1c2DFvidnXpFuiy4CMh2T2avWEQ2h\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"bytes4\",\"name\":\"sig\",\"type\":\"bytes4\"}],\"name\":\"canCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":\"DSAuthority\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/dapphub/Auth.sol\":{\"keccak256\":\"0x7636abae52593354ed288e67b6c2e5e1df218f753f6c253ae691cb5252274cf1\",\"urls\":[\"bzz-raw://d66e47ce74476c103bb8a1b11d618232276d4b57badfd7d96a45e9c881e83543\",\"dweb:/ipfs/QmXMWVNLRdiBHmnTx1c2DFvidnXpFuiy4CMh2T2avWEQ2h\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -448,7 +448,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 7312,
+                        "referencedDeclaration": 7827,
                         "src": "1074:3:17",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -491,7 +491,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7827,
                           "src": "1111:3:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -998,7 +998,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7312,
+                              "referencedDeclaration": 7827,
                               "src": "1489:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1027,7 +1027,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7312,
+                              "referencedDeclaration": 7827,
                               "src": "1501:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1119,10 +1119,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7315,
-                        7316
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7316,
+                      "referencedDeclaration": 7831,
                       "src": "1468:7:17",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1209,7 +1209,7 @@
                           "name": "this",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7368,
+                          "referencedDeclaration": 7883,
                           "src": "1663:4:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -1461,7 +1461,7 @@
                                       "name": "this",
                                       "nodeType": "Identifier",
                                       "overloadedDeclarations": [],
-                                      "referencedDeclaration": 7368,
+                                      "referencedDeclaration": 7883,
                                       "src": "1905:4:17",
                                       "typeDescriptions": {
                                         "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -2208,7 +2208,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 7312,
+                        "referencedDeclaration": 7827,
                         "src": "1074:3:17",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -2251,7 +2251,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7312,
+                          "referencedDeclaration": 7827,
                           "src": "1111:3:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -2758,7 +2758,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7312,
+                              "referencedDeclaration": 7827,
                               "src": "1489:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -2787,7 +2787,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 7312,
+                              "referencedDeclaration": 7827,
                               "src": "1501:3:17",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -2879,10 +2879,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        7315,
-                        7316
+                        7830,
+                        7831
                       ],
-                      "referencedDeclaration": 7316,
+                      "referencedDeclaration": 7831,
                       "src": "1468:7:17",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2969,7 +2969,7 @@
                           "name": "this",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7368,
+                          "referencedDeclaration": 7883,
                           "src": "1663:4:17",
                           "typeDescriptions": {
                             "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -3221,7 +3221,7 @@
                                       "name": "this",
                                       "nodeType": "Identifier",
                                       "overloadedDeclarations": [],
-                                      "referencedDeclaration": 7368,
+                                      "referencedDeclaration": 7883,
                                       "src": "1905:4:17",
                                       "typeDescriptions": {
                                         "typeIdentifier": "t_contract$_DSAuth_$2924",
@@ -3566,7 +3566,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T11:42:49.868Z",
+  "updatedAt": "2020-04-03T06:25:13.492Z",
   "devdoc": {
     "methods": {}
   },

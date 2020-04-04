@@ -22,7 +22,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"getFlashLoanFeesInBips\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{},\"title\":\"ILendingPoolAddressesProvider interface\"},\"userdoc\":{\"methods\":{},\"notice\":\"provides the interface to fetch the LendingPoolCore address\"}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol\":\"ILendingPoolParametersProvider\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol\":{\"keccak256\":\"0x90ace0fd5238a92b39b3fad095c046c2707c3027116c7d5f7e80863ca74eb00d\",\"urls\":[\"bzz-raw://068f20bedbbe8f4faff599106162f7c7ede426a689f22c16dc9643bd17268755\",\"dweb:/ipfs/QmVSCkLZ8JD17DvsWtYMBcuZdF3JZpZM9khMbvYFarYGTs\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"getFlashLoanFeesInBips\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{},\"title\":\"ILendingPoolAddressesProvider interface\"},\"userdoc\":{\"methods\":{},\"notice\":\"provides the interface to fetch the LendingPoolCore address\"}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol\":\"ILendingPoolParametersProvider\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolParametersProvider.sol\":{\"keccak256\":\"0x90ace0fd5238a92b39b3fad095c046c2707c3027116c7d5f7e80863ca74eb00d\",\"urls\":[\"bzz-raw://068f20bedbbe8f4faff599106162f7c7ede426a689f22c16dc9643bd17268755\",\"dweb:/ipfs/QmVSCkLZ8JD17DvsWtYMBcuZdF3JZpZM9khMbvYFarYGTs\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -275,7 +275,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T11:42:49.843Z",
+  "updatedAt": "2020-04-03T06:25:13.465Z",
   "devdoc": {
     "methods": {},
     "title": "ILendingPoolAddressesProvider interface"

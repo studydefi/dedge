@@ -52,7 +52,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"constant\":true,\"inputs\":[],\"name\":\"addressesProvider\",\"outputs\":[{\"internalType\":\"contract ILendingPoolAddressesProvider\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_reserve\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_fee\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_params\",\"type\":\"bytes\"}],\"name\":\"executeOperation\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/aave/FlashLoanReceiverBase.sol\":\"FlashLoanReceiverBase\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/IERC20.sol\":{\"keccak256\":\"0xe3762e63e74657a066e6fe281ec694e366ca86f6378470304c646b4e785e09f3\",\"urls\":[\"bzz-raw://67607850cbce7ffa66356dd28412e64ff58f62fa7c709f5fa28306b8be9050a7\",\"dweb:/ipfs/QmUaFhH5a6rQ8yJG2A6zJJ1ds9txqxr8ytxd2s7bhiNX35\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/ISafeERC20.sol\":{\"keccak256\":\"0xec78efb83d1275fbeb9d431938447eaabbff72deea196deea04b4873ee5a9f54\",\"urls\":[\"bzz-raw://7b50edf0121dc6286c5b93fd7ddc85edfbb719c91faf3ffd22957436c5b4763c\",\"dweb:/ipfs/QmSRUJaEp3QP71SG1V668qzXAzEj7YezhJ6AKdNqunH6dj\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/IFlashLoanReceiver.sol\":{\"keccak256\":\"0xbd9ee17614d720229da04b4d481b2e6669b5fd9217bc278a93b39a62e2383fde\",\"urls\":[\"bzz-raw://4827232c7582d13c0237ae80b47e2f3dd85499372d80a15c0f31599bb99e26a5\",\"dweb:/ipfs/QmX3mCBdQcCvL9WF5FwToZZpj6VBtkaoN9aZ1tszp7oVjt\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolAddressesProvider.sol\":{\"keccak256\":\"0x0b99a26eeba60b8201f6ffd0d9d00bc5562ace9e7998534fd3887d7ba72b7d88\",\"urls\":[\"bzz-raw://9a36c107f3471548d6a13d28e995cb71ef42bafd55bf759b7c1b0ba0fda7170c\",\"dweb:/ipfs/Qme6SJJ3A9MwVwzk6CJC9gN8jAWLkgWQUwzZU4k6eD4BNy\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/aave/FlashLoanReceiverBase.sol\":{\"keccak256\":\"0x0a3802a7d1bf99d7ccb8046f2632f0a3fa42ebea5e1033cc13eb843b32cbf4c3\",\"urls\":[\"bzz-raw://68a6bcf9ccfe8d72448c3d3dadd328b14a741ba9d24e5aa20ad82b72c7108a7b\",\"dweb:/ipfs/QmeprLqp3jFqbxmNwuZ8Vm2EdeKp5idQZi4VSCLQZa28qY\"]},\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x640b6dee7a4b830bdfd52b5031a07fc2b12209f5b2e29e5d364a7d37f69d8076\",\"urls\":[\"bzz-raw://31113152e1ddb78fe7a4197f247591ca894e93f916867beb708d8e747b6cc74f\",\"dweb:/ipfs/QmbZaJyXdpsYGykVhHH9qpVGQg9DGCxE2QufbCUy3daTgq\"]},\"@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0x1a8e5072509c5ea7365eb1d48030b9be865140c8fb779968da0a459a0e174a11\",\"urls\":[\"bzz-raw://03335b7b07c7c8c8d613cfdd8ec39a0b5ec133ee510bf2fe6cc5a496767bef4b\",\"dweb:/ipfs/Qmebp4nzPja645c9yXSdJkGq96oU3am3LUnG2K3R7XxyKf\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"constant\":true,\"inputs\":[],\"name\":\"addressesProvider\",\"outputs\":[{\"internalType\":\"contract ILendingPoolAddressesProvider\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"_reserve\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_fee\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_params\",\"type\":\"bytes\"}],\"name\":\"executeOperation\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/aave/FlashLoanReceiverBase.sol\":\"FlashLoanReceiverBase\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/IERC20.sol\":{\"keccak256\":\"0xe3762e63e74657a066e6fe281ec694e366ca86f6378470304c646b4e785e09f3\",\"urls\":[\"bzz-raw://67607850cbce7ffa66356dd28412e64ff58f62fa7c709f5fa28306b8be9050a7\",\"dweb:/ipfs/QmUaFhH5a6rQ8yJG2A6zJJ1ds9txqxr8ytxd2s7bhiNX35\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/ISafeERC20.sol\":{\"keccak256\":\"0xec78efb83d1275fbeb9d431938447eaabbff72deea196deea04b4873ee5a9f54\",\"urls\":[\"bzz-raw://7b50edf0121dc6286c5b93fd7ddc85edfbb719c91faf3ffd22957436c5b4763c\",\"dweb:/ipfs/QmSRUJaEp3QP71SG1V668qzXAzEj7YezhJ6AKdNqunH6dj\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/IFlashLoanReceiver.sol\":{\"keccak256\":\"0xbd9ee17614d720229da04b4d481b2e6669b5fd9217bc278a93b39a62e2383fde\",\"urls\":[\"bzz-raw://4827232c7582d13c0237ae80b47e2f3dd85499372d80a15c0f31599bb99e26a5\",\"dweb:/ipfs/QmX3mCBdQcCvL9WF5FwToZZpj6VBtkaoN9aZ1tszp7oVjt\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/aave/ILendingPoolAddressesProvider.sol\":{\"keccak256\":\"0x0b99a26eeba60b8201f6ffd0d9d00bc5562ace9e7998534fd3887d7ba72b7d88\",\"urls\":[\"bzz-raw://9a36c107f3471548d6a13d28e995cb71ef42bafd55bf759b7c1b0ba0fda7170c\",\"dweb:/ipfs/Qme6SJJ3A9MwVwzk6CJC9gN8jAWLkgWQUwzZU4k6eD4BNy\"]},\"/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/lib/aave/FlashLoanReceiverBase.sol\":{\"keccak256\":\"0x0a3802a7d1bf99d7ccb8046f2632f0a3fa42ebea5e1033cc13eb843b32cbf4c3\",\"urls\":[\"bzz-raw://68a6bcf9ccfe8d72448c3d3dadd328b14a741ba9d24e5aa20ad82b72c7108a7b\",\"dweb:/ipfs/QmeprLqp3jFqbxmNwuZ8Vm2EdeKp5idQZi4VSCLQZa28qY\"]},\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x640b6dee7a4b830bdfd52b5031a07fc2b12209f5b2e29e5d364a7d37f69d8076\",\"urls\":[\"bzz-raw://31113152e1ddb78fe7a4197f247591ca894e93f916867beb708d8e747b6cc74f\",\"dweb:/ipfs/QmbZaJyXdpsYGykVhHH9qpVGQg9DGCxE2QufbCUy3daTgq\"]},\"@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0x1a8e5072509c5ea7365eb1d48030b9be865140c8fb779968da0a459a0e174a11\",\"urls\":[\"bzz-raw://03335b7b07c7c8c8d613cfdd8ec39a0b5ec133ee510bf2fe6cc5a496767bef4b\",\"dweb:/ipfs/Qmebp4nzPja645c9yXSdJkGq96oU3am3LUnG2K3R7XxyKf\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -165,10 +165,10 @@
               "id": 2044,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 7153,
+              "referencedDeclaration": 7737,
               "src": "292:8:15",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$7153",
+                "typeIdentifier": "t_contract$_SafeMath_$7737",
                 "typeString": "library SafeMath"
               }
             },
@@ -1457,10 +1457,10 @@
               "id": 2044,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 7153,
+              "referencedDeclaration": 7737,
               "src": "292:8:15",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$7153",
+                "typeIdentifier": "t_contract$_SafeMath_$7737",
                 "typeString": "library SafeMath"
               }
             },
@@ -2649,7 +2649,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-29T11:42:49.857Z",
+  "updatedAt": "2020-04-03T06:25:13.481Z",
   "devdoc": {
     "methods": {}
   },

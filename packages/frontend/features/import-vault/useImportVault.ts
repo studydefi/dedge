@@ -1,23 +1,26 @@
 import { ethers } from "ethers";
+import { useState } from "react";
 
 import { legos } from "money-legos/dist";
 import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 
 import ContractsContainer from "../../containers/Contracts";
 import DACProxyContainer from "../../containers/DACProxy";
-import { useState } from "react";
+import VaultsContainer from "../../containers/Vaults";
 
 const useImportVault = selectedVaultId => {
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
+  const { getVaults } = VaultsContainer.useContainer();
 
-  const [canImportVault, setCanImportVault] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const importVault = async () => {
+    setLoading(true);
     const {
       makerCdpManager,
       dedgeAddressRegistry,
-      dedgeMakerManager
+      dedgeMakerManager,
     } = contracts;
 
     const ilkBytes32 = await makerCdpManager.ilks(selectedVaultId.toString());
@@ -40,32 +43,29 @@ const useImportVault = selectedVaultId => {
       console.error("Invalid ilk", ilk);
     }
 
-    await dedgeHelpers.maker.importMakerVault(
+    const tx = await dedgeHelpers.maker.importMakerVault(
       proxy,
       dedgeMakerManager.address,
       dedgeAddressRegistry.address,
       selectedVaultId.toString(),
       ilkCTokenEquilavent,
       ilkJoinAddress,
-      decimals
-    );
-  };
-
-  const getCanImportVault = async selectedVaultId => {
-    const { makerCdpManager } = contracts;
-
-    setCanImportVault(false)
-
-    const can = await dedgeHelpers.maker.isUserAllowedVault(
-      proxy.address,
-      selectedVaultId,
-      makerCdpManager
+      decimals,
     );
 
-    setCanImportVault(can);
+    window.toastProvider.addMessage(`Import vault #${selectedVaultId}...`, {
+      secondaryMessage: "Check progress on Etherscan",
+      actionHref: `https://etherscan.io/tx/${tx.hash}`,
+      actionText: "Check",
+      variant: "processing",
+    });
+
+    await tx.wait();
+    setLoading(false);
+    getVaults();
   };
 
-  return { importVault, getCanImportVault, canImportVault };
+  return { importVault, loading };
 };
 
 export default useImportVault;

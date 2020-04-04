@@ -5,7 +5,11 @@ import dedgeCompoundManagerDef from "../artifacts/DedgeCompoundManager.json";
 
 import { Address, EncoderFunction } from "./types";
 
+import { getLegos, networkIds } from "money-legos";
+
 import axios from "axios";
+
+const legos = getLegos(networkIds.mainnet);
 
 const IDedgeCompoundManager = new ethers.utils.Interface(
   dedgeCompoundManagerDef.abi
@@ -19,7 +23,7 @@ const swapOperation = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   // struct SwapOperationCalldata {
   //     address addressRegistryAddress;
@@ -50,9 +54,11 @@ const swapOperation = (
     ]
   );
 
-  return dacProxy.execute(dedgeCompoundManager, swapOperationCalldata, {
-    gasLimit
-  });
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    swapOperationCalldata,
+    overrides
+  );
 };
 
 const swapDebt = (
@@ -62,7 +68,7 @@ const swapDebt = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   return swapOperation(
     (x: any[]): string =>
@@ -73,7 +79,7 @@ const swapDebt = (
     oldCToken,
     oldTokenUnderlyingDeltaWei,
     newCToken,
-    gasLimit
+    overrides
   );
 };
 
@@ -84,7 +90,7 @@ const swapCollateral = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  gasLimit: number = 4000000
+  overrides: any = { gasLimit: 4000000 }
 ): Promise<any> => {
   return swapOperation(
     (x: any[]): string =>
@@ -95,11 +101,11 @@ const swapCollateral = (
     oldCToken,
     oldTokenUnderlyingDeltaWei,
     newCToken,
-    gasLimit
+    overrides
   );
 };
 
-const getAccountInformation = async (address: Address): Promise<any> => {
+const getAccountInformationViaAPI = async (address: Address): Promise<any> => {
   // Get account information
   const compoundResp = await axios.get(
     `https://api.compound.finance/api/v2/account?addresses[]=${address}`
@@ -129,12 +135,170 @@ const getAccountInformation = async (address: Address): Promise<any> => {
     supplyBalanceUSD: supplyValueInEth * ethInUSD,
     currentBorrowPercentage,
     ethInUSD,
-    liquidationPriceUSD: currentBorrowPercentage * ethInUSD
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
+  };
+};
+
+const getAccountSnapshot = async (
+  signer: ethers.Signer,
+  cToken: Address,
+  owner: Address
+) => {
+  const newCTokenContract = (curCToken: Address) =>
+    new ethers.Contract(curCToken, legos.compound.cTokenAbi, signer);
+
+  const [
+    err,
+    cTokenBalance,
+    borrowBalance,
+    exchangeRateMantissa
+  ] = await newCTokenContract(cToken).getAccountSnapshot(owner);
+
+  const expScale = new BigNumber(10).pow(18);
+
+  if (err.toString() !== "0") {
+    throw new Error(
+      `Error on getAccountSnapshot: ${err}, go to https://compound.finance/docs/ctokens#ctoken-error-codes for more info`
+    );
+  }
+
+  return {
+    balanceOfUnderlying: cTokenBalance.mul(exchangeRateMantissa).div(expScale),
+    borrowBalance
+  };
+};
+
+const getCTokenBalanceOfUnderlying = async (
+  signer: ethers.Signer,
+  cToken: Address,
+  owner: Address
+) => {
+  const { balanceOfUnderlying } = await getAccountSnapshot(
+    signer,
+    cToken,
+    owner
+  );
+  return balanceOfUnderlying;
+};
+
+const getCTokenBorrowBalance = async (
+  signer: ethers.Signer,
+  cToken: Address,
+  owner: Address
+) => {
+  const { borrowBalance } = await getAccountSnapshot(signer, cToken, owner);
+  return borrowBalance;
+};
+
+const getAccountInformation = async (
+  signer: ethers.Signer,
+  dacProxy: Address
+) => {
+  const newCTokenContract = (curCToken: Address) =>
+    new ethers.Contract(curCToken, legos.compound.cTokenAbi, signer);
+
+  const comptrollerContract = new ethers.Contract(
+    legos.compound.comptroller.address,
+    legos.compound.comptroller.abi,
+    signer
+  );
+
+  const uniswapFactoryContract = new ethers.Contract(
+    legos.uniswap.factory.address,
+    legos.uniswap.factory.abi,
+    signer
+  );
+
+  const enteredMarkets = await comptrollerContract.getAssetsIn(dacProxy);
+
+  const getTokenToEthPrice = async (cToken, amountWei) => {
+    if (cToken === legos.compound.cEther.address) {
+      return amountWei;
+    }
+
+    const tokenAddress = await newCTokenContract(cToken).underlying();
+
+    const uniswapExchangeAddress = await uniswapFactoryContract.getExchange(
+      tokenAddress
+    );
+
+    const uniswapExchangeContract = new ethers.Contract(
+      uniswapExchangeAddress,
+      legos.uniswap.exchange.abi,
+      signer
+    );
+
+    return await uniswapExchangeContract.getEthToTokenOutputPrice(
+      amountWei.toString()
+    );
+  };
+
+  const debtCollateralInTokens: [
+    Address,
+    BigNumber,
+    BigNumber
+  ][] = await Promise.all(
+    enteredMarkets.map(async (x: Address) => {
+      const { balanceOfUnderlying, borrowBalance } = await getAccountSnapshot(
+        signer,
+        x,
+        dacProxy
+      );
+
+      return [x, borrowBalance, balanceOfUnderlying];
+    })
+  );
+
+  const debtsInEth = await Promise.all(
+    debtCollateralInTokens
+      .filter((x: [Address, BigNumber, BigNumber]) => x[1] > new BigNumber(0))
+      .map((x: [Address, BigNumber, BigNumber]) =>
+        getTokenToEthPrice(x[0], x[1])
+      )
+  );
+
+  const collateralInEth = await Promise.all(
+    debtCollateralInTokens
+      .filter((x: [Address, BigNumber, BigNumber]) => x[2] > new BigNumber(0))
+      .map((x: [Address, BigNumber, BigNumber]) =>
+        getTokenToEthPrice(x[0], x[2])
+      )
+  );
+
+  const ethersBorrowed = debtsInEth.reduce(
+    (a, b) => a.add(b),
+    new BigNumber(0)
+  );
+  const ethersSupplied = collateralInEth.reduce(
+    (a, b) => a.add(b),
+    new BigNumber(0)
+  );
+
+  const currentBorrowPercentage = ethersBorrowed / ethersSupplied;
+
+  // Get ethereum price in USD
+  const coingeckoResp = await axios.get(
+    "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+  );
+  const ethInUSD = parseFloat(coingeckoResp.data.ethereum.usd);
+
+  const wei2Float = x => parseFloat(ethers.utils.formatEther(x.toString()));
+
+  return {
+    borrowBalanceUSD: wei2Float(ethersBorrowed) * ethInUSD,
+    supplyBalanceUSD: wei2Float(ethersSupplied) * ethInUSD,
+    currentBorrowPercentage,
+    ethInUSD,
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
   };
 };
 
 export default {
   swapCollateral,
   swapDebt,
-  getAccountInformation
+  getAccountInformationViaAPI,
+  getAccountInformation,
+  getAccountSnapshot,
+  getCTokenBalanceOfUnderlying,
+  getCTokenBorrowBalance
 };

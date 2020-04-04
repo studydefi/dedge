@@ -10,7 +10,7 @@ import { dedgeHelpers } from "../../smart-contracts/dist/helpers";
 
 function useDACProxy() {
   const { signer } = Connection.useContainer();
-  const { contracts } = Contracts.useContainer();
+  const { contracts, ready } = Contracts.useContainer();
 
   const [proxy, setProxyContract] = useState(null);
   const [proxyAddress, setProxyAddress] = useState(null);
@@ -64,7 +64,7 @@ function useDACProxy() {
       variant: "processing",
     });
 
-    const receipt = await tx.wait();
+    await tx.wait();
 
     window.toastProvider.addMessage("Smart Wallet created", {
       variant: "success",
@@ -76,7 +76,7 @@ function useDACProxy() {
 
   // fetch proxy address
   useEffect(() => {
-    if (contracts.dacProxyFactory) {
+    if (ready) {
       fetchProxyAddress();
     }
   }, [signer, contracts]);

@@ -7,7 +7,6 @@ import { dedgeHelpers } from "../helpers/index";
 import {
   provider,
   legos,
-  sleep,
   tryAndWait,
   newCTokenContract,
   getTokenFromUniswapAndApproveProxyTransfer
@@ -83,12 +82,16 @@ describe("DedgeCompoundManager", () => {
     oldCTokenAddress: string,
     newCTokenAddress: string
   ) => {
-    const initialOldSupply = await newCTokenContract(
-      oldCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
-    const initialNewSupply = await newCTokenContract(
-      newCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const initialOldSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      oldCTokenAddress,
+      dacProxyContract.address
+    );
+    const initialNewSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      newCTokenAddress,
+      dacProxyContract.address
+    );
 
     await tryAndWait(
       dedgeHelpers.compound.swapCollateral(
@@ -101,12 +104,16 @@ describe("DedgeCompoundManager", () => {
       )
     );
 
-    const finalOldSupply = await newCTokenContract(
-      oldCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
-    const finalNewSupply = await newCTokenContract(
-      newCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const finalOldSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      oldCTokenAddress,
+      dacProxyContract.address
+    );
+    const finalNewSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      newCTokenAddress,
+      dacProxyContract.address
+    );
 
     expect(finalOldSupply.lt(initialOldSupply)).eq(true);
     expect(finalNewSupply.gt(initialNewSupply)).eq(true);
@@ -116,12 +123,16 @@ describe("DedgeCompoundManager", () => {
     oldCTokenAddress: string,
     newCTokenAddress: string
   ) => {
-    const initialOldSupply = await newCTokenContract(
-      oldCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
-    const initialNewSupply = await newCTokenContract(
-      newCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const initialOldSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      oldCTokenAddress,
+      dacProxyContract.address
+    );
+    const initialNewSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      newCTokenAddress,
+      dacProxyContract.address
+    );
 
     const clearDustCollateralCallback = IDedgeCompoundManager.functions.clearCollateralDust.encode(
       [
@@ -142,12 +153,16 @@ describe("DedgeCompoundManager", () => {
       )
     );
 
-    const finalOldSupply = await newCTokenContract(
-      oldCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
-    const finalNewSupply = await newCTokenContract(
-      newCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const finalOldSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      oldCTokenAddress,
+      dacProxyContract.address
+    );
+    const finalNewSupply = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      newCTokenAddress,
+      dacProxyContract.address
+    );
 
     expect(finalOldSupply.lt(initialOldSupply)).eq(true);
     expect(finalNewSupply.gt(initialNewSupply)).eq(true);
@@ -183,8 +198,6 @@ describe("DedgeCompoundManager", () => {
     );
 
     // Supplies 10 ETH and borrows 500 DAI from compound via ds-proxy
-    await sleep(500);
-
     const ethToSupply = 10;
     const daiToBorrow = 500;
     const supplyEthAndBorrowCalldata = IDedgeCompoundManager.functions.supplyETHAndBorrow.encode(
@@ -206,8 +219,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Swapping Debt (Borrow) DAI -> BAT", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cDAI.address;
     const newCTokenAddress = legos.compound.cBAT.address;
 
@@ -215,8 +226,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Swapping Debt (Borrow) BAT -> ETH", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cBAT.address;
     const newCTokenAddress = legos.compound.cEther.address;
 
@@ -224,8 +233,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Swapping Debt (Borrow) ETH -> DAI", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cEther.address;
     const newCTokenAddress = legos.compound.cDAI.address;
 
@@ -233,8 +240,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Swapping Collateral (Supply) ETH -> USDC", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cEther.address;
     const newCTokenAddress = legos.compound.cUSDC.address;
 
@@ -242,8 +247,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Swapping Collateral (Supply) USDC -> REP", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cUSDC.address;
     const newCTokenAddress = legos.compound.cREP.address;
 
@@ -251,8 +254,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Swapping Collateral (Supply) REP -> ETHER", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cREP.address;
     const newCTokenAddress = legos.compound.cEther.address;
 
@@ -260,8 +261,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Clearing Collateral (Supply) Dust USDC -> ETHER", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cUSDC.address;
     const newCTokenAddress = legos.compound.cEther.address;
 
@@ -269,8 +268,6 @@ describe("DedgeCompoundManager", () => {
   });
 
   it("Clearing Collateral (Supply) Dust REP -> ETHER", async () => {
-    await sleep(500);
-
     const oldCTokenAddress = legos.compound.cREP.address;
     const newCTokenAddress = legos.compound.cEther.address;
 
@@ -281,9 +278,11 @@ describe("DedgeCompoundManager", () => {
     const targetCTokenAddress = legos.compound.cEther.address;
     const targetAmount = ethers.utils.parseUnits("1");
 
-    const initialFunds = await newCTokenContract(
-      targetCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const initialFunds = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
 
     const calldata = IDedgeCompoundManager.functions.supplyThroughProxy.encode([
       targetCTokenAddress,
@@ -295,9 +294,11 @@ describe("DedgeCompoundManager", () => {
       value: targetAmount
     });
 
-    const finalFunds = await newCTokenContract(
-      targetCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const finalFunds = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
 
     expect(finalFunds.gt(initialFunds)).eq(true);
   });
@@ -314,9 +315,11 @@ describe("DedgeCompoundManager", () => {
       wallet // Compound test file has a different wallet for ensuring entering markets work
     );
 
-    const initialFunds = await newCTokenContract(
-      targetCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const initialFunds = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
 
     const calldata = IDedgeCompoundManager.functions.supplyThroughProxy.encode([
       targetCTokenAddress,
@@ -324,14 +327,71 @@ describe("DedgeCompoundManager", () => {
     ]);
 
     await dacProxyContract.execute(dedgeCompoundManagerAddress, calldata, {
-      gasLimit: 4000000,
-      value: targetAmount
+      gasLimit: 4000000
     });
 
-    const finalFunds = await newCTokenContract(
-      targetCTokenAddress
-    ).balanceOfUnderlying(dacProxyContract.address);
+    const finalFunds = await dedgeHelpers.compound.getCTokenBalanceOfUnderlying(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
 
     expect(finalFunds.gt(initialFunds)).eq(true);
+  });
+
+  it("borrowThroughProxy (ETH)", async () => {
+    const targetCTokenAddress = legos.compound.cEther.address;
+    const targetAmount = ethers.utils.parseUnits("1");
+
+    const initialBorrowed = await dedgeHelpers.compound.getCTokenBorrowBalance(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
+
+    const calldata = IDedgeCompoundManager.functions.borrowThroughProxy.encode([
+      targetCTokenAddress,
+      targetAmount
+    ]);
+
+    await dacProxyContract.execute(dedgeCompoundManagerAddress, calldata, {
+      gasLimit: 4000000
+    });
+
+    const finalBorrowed = await dedgeHelpers.compound.getCTokenBorrowBalance(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
+
+    expect(finalBorrowed.gt(initialBorrowed)).eq(true);
+  });
+
+  it("borrowThroughProxy (DAI)", async () => {
+    const targetCTokenAddress = legos.compound.cDAI.address;
+    const targetAmount = ethers.utils.parseUnits("50");
+
+    const initialBorrowed = await dedgeHelpers.compound.getCTokenBorrowBalance(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
+
+    const calldata = IDedgeCompoundManager.functions.borrowThroughProxy.encode([
+      targetCTokenAddress,
+      targetAmount
+    ]);
+
+    await dacProxyContract.execute(dedgeCompoundManagerAddress, calldata, {
+      gasLimit: 4000000
+    });
+
+    const finalBorrowed = await dedgeHelpers.compound.getCTokenBorrowBalance(
+      wallet,
+      targetCTokenAddress,
+      dacProxyContract.address
+    );
+
+    expect(finalBorrowed.gt(initialBorrowed)).eq(true);
   });
 });
