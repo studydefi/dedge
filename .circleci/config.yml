@@ -16,7 +16,7 @@ jobs:
             npx ganache-cli -f https://mainnet.infura.io/v3/${INFURA_PROJECT_ID} -i 5777 -d &> ganache-output.log &
             cd packages/smart-contracts
             npx truffle migrate --reset --network development
-            npx mocha
+            npm run test
           
 
 workflows:
