@@ -1,49 +1,31 @@
-// import Connection from "../containers/Connection";
-// import DACProxy from "../containers/DACProxy";
+import amplitude from "amplitude-js";
+import {
+  AmplitudeProvider,
+  Amplitude,
+  LogOnMount,
+} from "@amplitude/react-amplitude";
 
 import Layout from "../features/common/Layout";
 import Topbar from "../features/topbar/Topbar";
 import Content from "../features/common/Content";
-
 import Dashboard from "../features/dashboard/Dashboard";
 
+const AMPLITUDE_KEY = "94433c5552c59d4145fc10e5d7a994bb";
+
 const Home = () => {
-  // const { signer, error, connect } = Connection.useContainer();
-  // const { proxyAddress } = DACProxy.useContainer();
-
-  // // no connection yet or have not looked up proxyAddress yet
-  // if (!signer || proxyAddress === null) {
-  //   return (
-  //     <Layout>
-  //       <Content>
-  //         <PleaseConnect connect={connect} error={error} />
-  //       </Content>
-  //     </Layout>
-  //   );
-  // }
-
-  // // user does not have a proxyAddress with us
-  // if (
-  //   proxyAddress === "0x0000000000000000000000000000000000000000"
-  // ) {
-  //   return (
-  //     <Layout>
-  //       <Topbar />
-  //       <Content>
-  //         <PleaseProxy />
-  //       </Content>
-  //     </Layout>
-  //   );
-  // }
-
-  // user has a proxyAddress, they are good to go
   return (
-    <Layout>
-      <Topbar />
-      <Content>
-        <Dashboard />
-      </Content>
-    </Layout>
+    <AmplitudeProvider
+      amplitudeInstance={amplitude.getInstance()}
+      apiKey={AMPLITUDE_KEY}
+    >
+      <Layout>
+        <Topbar />
+        <Content>
+          <LogOnMount eventType="dashboard loaded" />
+          <Dashboard />
+        </Content>
+      </Layout>
+    </AmplitudeProvider>
   );
 };
 
