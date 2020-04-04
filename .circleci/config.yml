@@ -12,12 +12,11 @@ jobs:
           name: "Test Smart Contracts"
           no_output_timeout: 30m
           command: |
-            npm install -g lerna truffle ganache-cli mocha
-            lerna bootstrap
-            ganache-cli -f https://mainnet.infura.io/v3/${INFURA_PROJECT_ID} -i 5777 -d &> ganache-output.log &
+            npx lerna bootstrap
+            npx ganache-cli -f https://mainnet.infura.io/v3/${INFURA_PROJECT_ID} -i 5777 -d &> ganache-output.log &
             cd packages/smart-contracts
-            truffle migrate --reset --network development
-            mocha
+            npx truffle migrate --reset --network development
+            npx mocha
           
 
 workflows:
