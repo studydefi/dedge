@@ -28,6 +28,6 @@
     "compile": "truffle compile",
     "test": "mocha",
     "deploy-and-test": "truffle migrate --reset --network development && mocha",
-    "build": "tsc"
+    "build:helpers": "tsc"
   }
 }
