@@ -1,6 +1,8 @@
 // import Connection from "../containers/Connection";
 // import DACProxy from "../containers/DACProxy";
 
+import Head from "next/head";
+
 import Layout from "../features/common/Layout";
 import Topbar from "../features/topbar/Topbar";
 import Content from "../features/common/Content";
@@ -38,12 +40,21 @@ const Home = () => {
 
   // user has a proxyAddress, they are good to go
   return (
-    <Layout>
-      <Topbar />
-      <Content>
-        <Dashboard />
-      </Content>
-    </Layout>
+    <>
+      <Head>
+        <title>Dedge.exchange</title>
+        <meta name="description" content="Swap your debt AND collateral positions from Compound Finance!"/>
+        <meta name="keywords" content="Ethereum, DeFI, debt and collateral swapper, makerdao, compound finance"/>
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </Head>
+
+      <Layout>
+        <Topbar />
+        <Content>
+          <Dashboard />
+        </Content>
+      </Layout>
+    </>
   );
 };
 
