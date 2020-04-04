@@ -40,7 +40,7 @@ const swapOperation = (
     0,
     0,
     0, // Doesn't matter as the right data will be injected in later on
-    swapOperationStructData
+    swapOperationStructData,
   ]);
 
   const swapOperationCalldata = IDedgeCompoundManager.functions.swapOperation.encode(
@@ -50,7 +50,7 @@ const swapOperation = (
       addressRegistry,
       oldCToken,
       oldTokenUnderlyingDeltaWei.toString(),
-      executeOperationCalldataParams
+      executeOperationCalldataParams,
     ]
   );
 
@@ -135,7 +135,7 @@ const getAccountInformationViaAPI = async (address: Address): Promise<any> => {
     supplyBalanceUSD: supplyValueInEth * ethInUSD,
     currentBorrowPercentage,
     ethInUSD,
-    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75, // 75% is the collateral factor
   };
 };
 
@@ -151,7 +151,7 @@ const getAccountSnapshot = async (
     err,
     cTokenBalance,
     borrowBalance,
-    exchangeRateMantissa
+    exchangeRateMantissa,
   ] = await newCTokenContract(cToken).getAccountSnapshot(owner);
 
   const expScale = new BigNumber(10).pow(18);
@@ -164,7 +164,7 @@ const getAccountSnapshot = async (
 
   return {
     balanceOfUnderlying: cTokenBalance.mul(exchangeRateMantissa).div(expScale),
-    borrowBalance
+    borrowBalance,
   };
 };
 
@@ -282,16 +282,115 @@ const getAccountInformation = async (
   );
   const ethInUSD = parseFloat(coingeckoResp.data.ethereum.usd);
 
-  const wei2Float = x => parseFloat(ethers.utils.formatEther(x.toString()));
+  const wei2Float = (x) => parseFloat(ethers.utils.formatEther(x.toString()));
 
   return {
     borrowBalanceUSD: wei2Float(ethersBorrowed) * ethInUSD,
     supplyBalanceUSD: wei2Float(ethersSupplied) * ethInUSD,
     currentBorrowPercentage,
     ethInUSD,
-    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75 // 75% is the collateral factor
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75, // 75% is the collateral factor
   };
 };
+
+const supplyThroughProxy = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  cToken: Address,
+  amountWei: string,
+  overrides: any = { gasLimit: 4000000 }
+) => {
+  const calldata = IDedgeCompoundManager.functions.supplyThroughProxy.encode([
+    cToken,
+    amountWei,
+  ]);
+
+  // If its ether we need to send it via overrides
+  if (cToken === legos.compound.cEther.address) {
+    return dacProxy.execute(
+      dedgeCompoundManager,
+      calldata,
+      Object.assign(overrides, {
+        value: amountWei,
+      })
+    );
+  }
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    calldata,
+    overrides
+  );
+};
+
+const borrowThroughProxy = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  cToken: Address,
+  amountWei: string,
+  overrides: any = { gasLimit: 4000000 }
+) => {
+  const calldata = IDedgeCompoundManager.functions.borrowThroughProxy.encode([
+    cToken,
+    amountWei,
+  ]);
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    calldata,
+    overrides
+  );
+};
+
+const withdrawThroughProxy = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  cToken: Address,
+  amountWei: string,
+  overrides: any = { gasLimit: 4000000 }
+) => {
+  const calldata = IDedgeCompoundManager.functions.redeemUnderlyingThroughProxy.encode([
+    cToken,
+    amountWei,
+  ]);
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    calldata,
+    overrides
+  );
+};
+
+const repayThroughProxy = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  cToken: Address,
+  amountWei: string,
+  overrides: any = { gasLimit: 4000000 }
+) => {
+  const calldata = IDedgeCompoundManager.functions.repayBorrowThroughProxy.encode([
+    cToken,
+    amountWei,
+  ]);
+
+  // If its ether we need to send it via overrides
+  if (cToken === legos.compound.cEther.address) {
+    return dacProxy.execute(
+      dedgeCompoundManager,
+      calldata,
+      Object.assign(overrides, {
+        value: amountWei,
+      })
+    );
+  }
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    calldata,
+    overrides
+  );
+};
+
 
 export default {
   swapCollateral,
@@ -300,5 +399,9 @@ export default {
   getAccountInformation,
   getAccountSnapshot,
   getCTokenBalanceOfUnderlying,
-  getCTokenBorrowBalance
+  getCTokenBorrowBalance,
+  supplyThroughProxy,
+  borrowThroughProxy,
+  withdrawThroughProxy,
+  repayThroughProxy
 };

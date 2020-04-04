@@ -10,6 +10,7 @@ import CoinsContainer from "../../containers/Coins";
 import useIsAmountAvailable from "./useIsAmountAvailable";
 
 const Container = styled(Box)`
+  margin-right: 16px;
   box-shadow: 2px 2px rgba(255, 0, 0, 0.5), 1px -2px rgba(0, 0, 255, 0.5),
     -1px 0px rgba(250, 180, 40, 0.5);
 `;
