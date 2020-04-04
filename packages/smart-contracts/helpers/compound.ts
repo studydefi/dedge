@@ -342,6 +342,7 @@ const borrowThroughProxy = async (
   );
 };
 
+<<<<<<< HEAD
 const withdrawThroughProxy = async (
   dacProxy: ethers.Contract,
   dedgeCompoundManager: Address,
@@ -392,6 +393,8 @@ const repayThroughProxy = async (
 };
 
 
+=======
+>>>>>>> e6b9f81eae54c37754658e776c184e1158cb1cac
 export default {
   swapCollateral,
   swapDebt,
@@ -401,7 +404,11 @@ export default {
   getCTokenBalanceOfUnderlying,
   getCTokenBorrowBalance,
   supplyThroughProxy,
+<<<<<<< HEAD
   borrowThroughProxy,
   withdrawThroughProxy,
   repayThroughProxy
+=======
+  borrowThroughProxy
+>>>>>>> e6b9f81eae54c37754658e776c184e1158cb1cac
 };

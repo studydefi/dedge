@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "next -p 14124",
-    "build": "next build",
+    "build": "npm run build:deps && next build && next export",
+    "build:deps": "(cd ../smart-contracts && npm run build:helpers) && (cd ../money-legos && npm run build)",
     "start": "next start"
   },
   "keywords": [],
