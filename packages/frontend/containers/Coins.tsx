@@ -16,6 +16,7 @@ const COINS = {
     symbol: "BAT",
     icon: "Bat",
     stable: false,
+    address: legos.erc20.bat.address,
     cTokenEquilaventAddress: legos.compound.cBAT.address,
   },
   dai: {
@@ -23,6 +24,7 @@ const COINS = {
     symbol: "DAI",
     icon: "Dai",
     stable: true,
+    address: legos.erc20.dai.address,
     cTokenEquilaventAddress: legos.compound.cDAI.address,
   },
   usdc: {
@@ -30,6 +32,7 @@ const COINS = {
     symbol: "USDC",
     icon: "Usd",
     stable: true,
+    address: legos.erc20.usdc.address,
     cTokenEquilaventAddress: legos.compound.cUSDC.address,
   },
   rep: {
@@ -37,6 +40,7 @@ const COINS = {
     symbol: "REP",
     icon: "Rep",
     stable: false,
+    address: legos.erc20.rep.address,
     cTokenEquilaventAddress: legos.compound.cREP.address,
   },
   zrx: {
@@ -44,6 +48,7 @@ const COINS = {
     symbol: "ZRX",
     icon: "Zrx",
     stable: false,
+    address: legos.erc20.zrx.address,
     cTokenEquilaventAddress: legos.compound.cZRX.address,
   },
   wbtc: {
@@ -51,6 +56,7 @@ const COINS = {
     symbol: "WBTC",
     icon: "Btc",
     stable: false,
+    address: legos.erc20.wbtc.address,
     cTokenEquilaventAddress: legos.compound.cWBTC.address,
   },
 };

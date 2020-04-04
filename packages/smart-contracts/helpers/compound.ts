@@ -342,6 +342,56 @@ const borrowThroughProxy = async (
   );
 };
 
+const withdrawThroughProxy = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  cToken: Address,
+  amountWei: string,
+  overrides: any = { gasLimit: 4000000 }
+) => {
+  const calldata = IDedgeCompoundManager.functions.redeemUnderlyingThroughProxy.encode([
+    cToken,
+    amountWei,
+  ]);
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    calldata,
+    overrides
+  );
+};
+
+const repayThroughProxy = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  cToken: Address,
+  amountWei: string,
+  overrides: any = { gasLimit: 4000000 }
+) => {
+  const calldata = IDedgeCompoundManager.functions.repayBorrowThroughProxy.encode([
+    cToken,
+    amountWei,
+  ]);
+
+  // If its ether we need to send it via overrides
+  if (cToken === legos.compound.cEther.address) {
+    return dacProxy.execute(
+      dedgeCompoundManager,
+      calldata,
+      Object.assign(overrides, {
+        value: amountWei,
+      })
+    );
+  }
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    calldata,
+    overrides
+  );
+};
+
+
 export default {
   swapCollateral,
   swapDebt,
@@ -351,5 +401,7 @@ export default {
   getCTokenBalanceOfUnderlying,
   getCTokenBorrowBalance,
   supplyThroughProxy,
-  borrowThroughProxy
+  borrowThroughProxy,
+  withdrawThroughProxy,
+  repayThroughProxy
 };

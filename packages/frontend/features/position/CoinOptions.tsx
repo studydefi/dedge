@@ -16,6 +16,8 @@ import CoinsContainer from "../../containers/Coins";
 
 import SupplyCoin from "./SupplyCoin";
 import BorrowCoin from "./BorrowCoin";
+import WithdrawCoin from "./WithdrawCoin";
+import RepayCoin from "./RepayCoin";
 
 const CoinOptions = ({ symbol }) => {
   const { hasProxy } = DACProxyContainer.useContainer();
@@ -46,6 +48,10 @@ const CoinOptions = ({ symbol }) => {
             <Flex mb="4" justifyContent="space-around" textAlign="center">
               <SupplyCoin coin={coin} />
               <BorrowCoin coin={coin} />
+            </Flex>
+            <Flex mb="4" justifyContent="space-around" textAlign="center">
+              <WithdrawCoin coin={coin} />
+              <RepayCoin coin={coin} />
             </Flex>
           </Box>
 
