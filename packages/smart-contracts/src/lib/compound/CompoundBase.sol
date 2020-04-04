@@ -20,7 +20,7 @@ contract CompoundBase {
         return c;
     }
 
-    function _transferFrom(
+    function _transferFromUnderlying(
         address sender,
         address recipient,
         address cToken,
@@ -29,11 +29,11 @@ contract CompoundBase {
         address underlying = ICToken(cToken).underlying();
         require(
             IERC20(underlying).transferFrom(sender, recipient, amount),
-            "cmpnd-mgr-transfer-from-failed"
+            "cmpnd-mgr-transferFrom-underlying-failed"
         );
     }
 
-    function _transfer(
+    function _transferUnderlying(
         address cToken,
         address recipient,
         uint amount
@@ -43,9 +43,20 @@ contract CompoundBase {
         } else {
             require(
                 IERC20(ICToken(cToken).underlying()).transfer(recipient, amount),
-                "cmpnd-mgr-transfer-failed"
+                "cmpnd-mgr-transfer-underlying-failed"
             );
         }
+    }
+
+    function _transfer(
+        address token,
+        address recipient,
+        uint amount
+    ) internal {
+        require(
+            IERC20(token).transfer(recipient, amount),
+            "cmpnd-mgr-transfer-failed"
+        );
     }
 
     function enterMarkets(
@@ -166,39 +177,29 @@ contract CompoundBase {
         address cToken,
         uint amount
     ) public payable {
-        // Gets initial CToken balance
-        uint initialBal = ICToken(cToken).balanceOf(address(this));
-
-        // If cToken isn't an ether address, we need to transferFrom
-        // If this fails, users needs to execute `approve(spender, amount)` to this proxy
         if (cToken != CEtherAddress) {
-            _transferFrom(msg.sender, address(this), cToken, amount);
+            _transferFromUnderlying(msg.sender, address(this), cToken, amount);
         }
         supply(cToken, amount);
-
-        // Sends CToken back to user
-        uint finalBal = ICToken(cToken).balanceOf(address(this));
-
-        _transfer(cToken, msg.sender, sub(finalBal, initialBal));
     }
 
     function repayBorrowThroughProxy(address cToken, uint amount) public payable {
         if (cToken != CEtherAddress) {
-            _transferFrom(msg.sender, address(this), cToken, amount);
+            _transferFromUnderlying(msg.sender, address(this), cToken, amount);
         }
         repayBorrow(cToken, amount);
     }
 
     function repayBorrowBehalfThroughProxy(address recipient, address cToken, uint amount) public payable {
         if (cToken != CEtherAddress) {
-            _transferFrom(msg.sender, address(this), cToken, amount);
+            _transferFromUnderlying(msg.sender, address(this), cToken, amount);
         }
         repayBorrowBehalf(recipient, cToken, amount);
     }
 
     function borrowThroughProxy(address cToken, uint amount) public {
         borrow(cToken, amount);
-        _transfer(cToken, msg.sender, amount);
+        _transferUnderlying(cToken, msg.sender, amount);
     }
 
     function redeemThroughProxy(
@@ -206,7 +207,7 @@ contract CompoundBase {
         uint amount
     ) public payable {
         redeem(cToken, amount);
-        _transfer(cToken, msg.sender, amount);
+        _transferUnderlying(cToken, msg.sender, amount);
     }
 
     function redeemUnderlyingThroughProxy(
@@ -214,6 +215,6 @@ contract CompoundBase {
         uint amount
     ) public payable {
         redeemUnderlying(cToken, amount);
-        _transfer(cToken, msg.sender, amount);
+        _transferUnderlying(cToken, msg.sender, amount);
     }
 }
