@@ -18,9 +18,9 @@ import {
   addressRegistryAddress
 } from "../build/DeployedAddresses.json";
 
-import dacProxyDef from "../artifacts/DACProxy.json";
-import dacProxyFactoryDef from "../artifacts/DACProxyFactory.json";
-import dedgeCompoundManagerDef from "../artifacts/DedgeCompoundManager.json";
+import dacProxyDef from "../build/DACProxy.json";
+import dacProxyFactoryDef from "../build/DACProxyFactory.json";
+import dedgeCompoundManagerDef from "../build/DedgeCompoundManager.json";
 
 chai.use(solidity);
 const { expect } = chai;
