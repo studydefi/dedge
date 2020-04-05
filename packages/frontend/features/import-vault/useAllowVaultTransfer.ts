@@ -18,6 +18,8 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
   const getAllowStatus = async () => {
     const { makerCdpManager } = contracts;
 
+    setImportAllowed(false);
+
     const allowed = await dedgeHelpers.maker.isUserAllowedVault(
       proxy.address,
       selectedVaultId,
