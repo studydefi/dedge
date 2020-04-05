@@ -47,6 +47,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         variant: "processing",
       });
       await tx.wait();
+      setLoading(false);
       window.toastProvider.addMessage(`Swap Debt Success!`, {
         variant: "success",
       });
