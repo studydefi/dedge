@@ -77,6 +77,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       variant: "processing",
     });
     await tx.wait();
+
     window.toastProvider.addMessage(`Swap Collateral Success!`, {
       variant: "success",
     });

@@ -17,3 +17,7 @@ Monorepo for the Decentralized Hedging protocol. This allows you to:
 
 ## Telegram
 https://t.me/dedgeexchange
+
+
+## Known Issues
+1. If exit positions fail, it is likely due to high slippages (i.e. you have to convert between too many tokens, might need to borrow more tokens change 105% to 125%)
