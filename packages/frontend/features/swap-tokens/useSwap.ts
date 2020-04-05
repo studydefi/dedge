@@ -1,5 +1,6 @@
 import useSwapOperation from "./useSwapOperation";
 import ContractsContainer from "../../containers/Contracts";
+import CoinContainer from "../../containers/Coins";
 import { ethers } from "ethers";
 import { Wei } from "../../types";
 import { useState } from "react";
@@ -7,6 +8,7 @@ import { useState } from "react";
 const inWei = (x: string, u = 18): Wei => ethers.utils.parseUnits(x, u);
 
 const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
+  const { COINS } = CoinContainer.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { swapDebt, swapCollateral } = useSwapOperation();
   const [loading, setLoading] = useState(false);
@@ -15,8 +17,20 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
     setLoading(true);
     const { cEther, cDai, cBat, cUsdc, cRep, cZrx, cWbtc } = contracts;
 
-    const amount: Wei =
-      fromTokenStr === "usdc" || fromTokenStr === "wbtc" ? inWei(amountToSwap, 6) : inWei(amountToSwap);
+    const COINS_ADDRESS_DECIMALS_MAP = {
+      [COINS.eth.symbol.toLowerCase()]: COINS.eth.decimals,
+      [COINS.dai.symbol.toLowerCase()]: COINS.dai.decimals,
+      [COINS.bat.symbol.toLowerCase()]: COINS.bat.decimals,
+      [COINS.usdc.symbol.toLowerCase()]: COINS.usdc.decimals,
+      [COINS.rep.symbol.toLowerCase()]: COINS.rep.decimals,
+      [COINS.zrx.symbol.toLowerCase()]: COINS.zrx.decimals,
+      [COINS.wbtc.symbol.toLowerCase()]: COINS.wbtc.decimals,
+    };
+
+    const amount: Wei = inWei(
+      amountToSwap,
+      COINS_ADDRESS_DECIMALS_MAP[fromTokenStr.toLowerCase()]
+    );
 
     const ADDRESS_MAP = {
       eth: cEther.address,
@@ -38,7 +52,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       const tx = await swapDebt(
         ADDRESS_MAP[fromTokenStr],
         ADDRESS_MAP[toTokenStr],
-        amount,
+        amount
       );
       window.toastProvider.addMessage(`Swapping debt...`, {
         secondaryMessage: "Check progress on Etherscan",
@@ -68,7 +82,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
     const tx = await swapCollateral(
       ADDRESS_MAP[fromTokenStr],
       ADDRESS_MAP[toTokenStr],
-      amount,
+      amount
     );
     window.toastProvider.addMessage(`Swapping collateral...`, {
       secondaryMessage: "Check progress on Etherscan",
