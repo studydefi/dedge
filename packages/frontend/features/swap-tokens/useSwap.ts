@@ -41,8 +41,9 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         actionText: "Check",
         variant: "processing",
       });
-      setLoading(false);
       await tx.wait();
+      setLoading(false);
+      
       return;
     }
 
@@ -58,9 +59,10 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       actionText: "Check",
       variant: "processing",
     });
+    await tx.wait();
     setLoading(false);
 
-    return tx.wait();
+    return;
   };
 
   return { swapFunction, loading };
