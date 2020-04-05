@@ -33,7 +33,13 @@ const MetaMask = ({ size = "small", outline = true }) => {
   if (!address) {
     return (
       <Container ml="2">
-        <MyButton size={size} onClick={connect}>
+        <MyButton
+          size={size}
+          onClick={() => {
+            window.analytics.track("Connect", { via: "MetaMask" });
+            connect();
+          }}
+        >
           Connect with MetaMask
         </MyButton>
       </Container>
