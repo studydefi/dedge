@@ -30,6 +30,11 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
 
     // perform swap debt
     if (thingToSwap === "debt") {
+      window.analytics.track("Swap Debt Start", {
+        from: fromTokenStr,
+        to: toTokenStr,
+        amount: amountToSwap,
+      });
       const tx = await swapDebt(
         ADDRESS_MAP[fromTokenStr],
         ADDRESS_MAP[toTokenStr],
@@ -43,11 +48,23 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       });
       await tx.wait();
       setLoading(false);
-      
+      window.toastProvider.addMessage(`Swap Debt Success!`, {
+        variant: "success",
+      });
+      window.analytics.track("Swap Debt Success", {
+        from: fromTokenStr,
+        to: toTokenStr,
+        amount: amountToSwap,
+      });
       return;
     }
 
     // perform swap collateral
+    window.analytics.track("Swap Collateral Start", {
+      from: fromTokenStr,
+      to: toTokenStr,
+      amount: amountToSwap,
+    });
     const tx = await swapCollateral(
       ADDRESS_MAP[fromTokenStr],
       ADDRESS_MAP[toTokenStr],
@@ -60,8 +77,16 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       variant: "processing",
     });
     await tx.wait();
-    setLoading(false);
 
+    window.toastProvider.addMessage(`Swap Collateral Success!`, {
+      variant: "success",
+    });
+    window.analytics.track("Swap Collateral Success", {
+      from: fromTokenStr,
+      to: toTokenStr,
+      amount: amountToSwap,
+    });
+    setLoading(false);
     return;
   };
 

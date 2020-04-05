@@ -8,5 +8,6 @@ declare global {
   interface Window {
     ethereum: Provider | undefined;
     toastProvider: any;
+    analytics: any;
   }
 }

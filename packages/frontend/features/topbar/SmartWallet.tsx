@@ -59,14 +59,20 @@ const SmartWallet = ({ size = "small", outline = true }) => {
           placement="bottom"
         >
           {loading ? (
-            <MyButton size={size} onClick={createProxy}>
+            <MyButton size={size}>
               <Flex alignItems="center">
                 <span>Creating Smart Wallet</span>{" "}
                 <Loader color={outline ? "normal" : "white"} ml="2" />
               </Flex>
             </MyButton>
           ) : (
-            <MyButton size={size} onClick={createProxy}>
+            <MyButton
+              size={size}
+              onClick={() => {
+                window.analytics.track("Create Proxy");
+                createProxy();
+              }}
+            >
               Create Smart Wallet
             </MyButton>
           )}
