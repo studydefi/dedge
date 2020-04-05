@@ -129,7 +129,7 @@ describe("DedgeExitManager", () => {
     await tryAndWait(
       dedgeHelpers.exit.exitPositionToETH(
         wallet.address,
-        etherToBorrowWeiBN.mul(99).div(100), // Just so it passes everytime
+        etherToBorrowWeiBN, // Borrow 105% due to slippages
         dacProxyContract,
         addressRegistryAddress,
         dedgeExitManagerAddress,
