@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { getLegos, networkIds } from "money-legos";
-import { wallet } from "dedge-smart-contracts/test/common";
+import { wallet, newERC20Contract, newCTokenContract } from "dedge-smart-contracts/test/common";
 
 import { dacProxyFactoryAddress } from "dedge-smart-contracts/artifacts/DeployedAddresses.json";
 import { dedgeHelpers } from "dedge-smart-contracts/helpers";
@@ -20,23 +20,32 @@ if (process.argv.length !== 3) {
 
 const addr = process.argv[2];
 
+const legos = getLegos(networkIds.mainnet)
+
 const main = async () => {
-  const {
-    borrowBalanceUSD,
-    supplyBalanceUSD,
-    currentBorrowPercentage,
-    ethInUSD,
-    liquidationPriceUSD
-  } = await dedgeHelpers.compound.getAccountInformation(
+  // const {
+  //   borrowBalanceUSD,
+  //   supplyBalanceUSD,
+  //   currentBorrowPercentage,
+  //   ethInUSD,
+  //   liquidationPriceUSD
+  // } = await dedgeHelpers.compound.getAccountInformation(
+  //   wallet,
+  //   addr
+  // )
+
+  // console.log(`Borrow balance: ${borrowBalanceUSD}`)
+  // console.log(`Supply balance: ${supplyBalanceUSD}`)
+  // console.log(`Borrow %: ${currentBorrowPercentage}`)
+  // console.log(`ETH USD: ${ethInUSD}`)
+  // console.log(`Liquidation price: ${liquidationPriceUSD}`)
+  const amount = await dedgeHelpers.compound.getCTokenBorrowBalance(
     wallet,
+    legos.compound.cWBTC.address,
     addr
   )
 
-  console.log(`Borrow balance: ${borrowBalanceUSD}`)
-  console.log(`Supply balance: ${supplyBalanceUSD}`)
-  console.log(`Borrow %: ${currentBorrowPercentage}`)
-  console.log(`ETH USD: ${ethInUSD}`)
-  console.log(`Liquidation price: ${liquidationPriceUSD}`)
+  console.log(`Borrowed WBTC: ${ethers.utils.formatUnits(amount.toString(), 8)}`)
 };
 
 main();

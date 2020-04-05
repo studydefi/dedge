@@ -73,17 +73,24 @@ function useCompoundPositions() {
     const process = (x, u = 18) =>
       ethers.utils.formatUnits(x.toString(), u).toString();
 
-    const coinContracts = [cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc];
+    const coinAndContracts: [any, ethers.Contract][] = [
+      [COINS.eth, cEther],
+      [COINS.bat, cBat],
+      [COINS.dai, cDai],
+      [COINS.usdc, cUsdc],
+      [COINS.rep, cRep],
+      [COINS.zrx, cZrx],
+      [COINS.wbtc, cWbtc]
+    ];
 
     const [eth, bat, dai, usdc, rep, zrx, wbtc] = await Promise.all(
-      coinContracts.map(cToken =>
+      coinAndContracts.map(([coin, cToken]) =>
         dedgeHelpers.compound
           .getAccountSnapshot(signer, cToken.address, proxyAddress)
           .then(res => {
-            const isUsdc = cToken.address === cUsdc.address;
             return {
-              borrow: process(res.borrowBalance, isUsdc ? 6 : 18),
-              supply: process(res.balanceOfUnderlying, isUsdc ? 6 : 18),
+              borrow: process(res.borrowBalance, coin.decimals),
+              supply: process(res.balanceOfUnderlying, coin.decimals),
             };
           }),
       ),

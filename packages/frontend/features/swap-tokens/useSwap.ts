@@ -16,7 +16,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
     const { cEther, cDai, cBat, cUsdc, cRep, cZrx, cWbtc } = contracts;
 
     const amount: Wei =
-      fromTokenStr === "usdc" ? inWei(amountToSwap, 6) : inWei(amountToSwap);
+      fromTokenStr === "usdc" || fromTokenStr === "wbtc" ? inWei(amountToSwap, 6) : inWei(amountToSwap);
 
     const ADDRESS_MAP = {
       eth: cEther.address,
