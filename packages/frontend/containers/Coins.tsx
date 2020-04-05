@@ -35,7 +35,7 @@ const COINS = {
     symbol: "USDC",
     icon: "Usd",
     stable: true,
-    decimals: 8,
+    decimals: 6,
     address: legos.erc20.usdc.address,
     cTokenEquilaventAddress: legos.compound.cUSDC.address,
   },
