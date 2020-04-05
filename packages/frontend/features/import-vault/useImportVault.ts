@@ -8,7 +8,7 @@ import ContractsContainer from "../../containers/Contracts";
 import DACProxyContainer from "../../containers/DACProxy";
 import VaultsContainer from "../../containers/Vaults";
 
-const useImportVault = selectedVaultId => {
+const useImportVault = (selectedVaultId) => {
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
   const { getVaults } = VaultsContainer.useContainer();
@@ -16,6 +16,7 @@ const useImportVault = selectedVaultId => {
   const [loading, setLoading] = useState(false);
 
   const importVault = async () => {
+    window.analytics.track("Import Vault Start", { selectedVaultId });
     setLoading(true);
     const {
       makerCdpManager,
@@ -53,7 +54,7 @@ const useImportVault = selectedVaultId => {
       decimals,
     );
 
-    window.toastProvider.addMessage(`Import vault #${selectedVaultId}...`, {
+    window.toastProvider.addMessage(`Importing vault #${selectedVaultId}...`, {
       secondaryMessage: "Check progress on Etherscan",
       actionHref: `https://etherscan.io/tx/${tx.hash}`,
       actionText: "Check",
@@ -61,6 +62,11 @@ const useImportVault = selectedVaultId => {
     });
 
     await tx.wait();
+    window.toastProvider.addMessage(`Vault #${selectedVaultId} imported!`, {
+      variant: "success",
+    });
+    window.analytics.track("Import Vault Success", { selectedVaultId });
+
     setLoading(false);
     getVaults();
   };

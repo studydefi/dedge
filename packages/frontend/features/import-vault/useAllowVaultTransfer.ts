@@ -28,6 +28,7 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
   };
 
   const allow = async () => {
+    window.analytics.track("Allow Vault Start", { selectedVaultId });
     setLoading(true);
     console.log("allow", selectedVaultId);
     const {
@@ -65,6 +66,7 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
       `Vault #${selectedVaultId} allowance approved`,
       { variant: "success" },
     );
+    window.analytics.track("Allow Vault Success", { selectedVaultId });
 
     setLoading(false);
     getAllowStatus();
