@@ -9,7 +9,7 @@ import {
   dedgeCompoundManagerAddress
 } from "../build/DeployedAddresses.json";
 
-import dacProxyFactoryDef from "../artifacts/DACProxyFactory.json";
+import dacProxyFactoryDef from "../build/DACProxyFactory.json";
 
 import { dedgeHelpers } from "../helpers/index";
 

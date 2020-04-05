@@ -1,0 +1,25 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+
+      - run:
+          name: "Test Smart Contracts"
+          no_output_timeout: 30m
+          command: |
+            npx lerna bootstrap
+            npx ganache-cli -f https://mainnet.infura.io/v3/${INFURA_PROJECT_ID} -i 5777 -d &> ganache-output.log &
+            cd packages/smart-contracts
+            npx truffle migrate --reset --network development
+            npm run test
+          
+
+workflows:
+    build-and-test:
+      jobs:
+        - build-and-test
