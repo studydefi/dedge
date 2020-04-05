@@ -58,9 +58,6 @@ const ImportButton = () => {
 
   const handleImportVaultClicked = async () => {
     await importVault();
-    window.toastProvider.addMessage(`Vault #${selectedVaultId} imported!`, {
-      variant: "success",
-    });
     closeModal();
   };
 
@@ -68,7 +65,14 @@ const ImportButton = () => {
   if (vaultIds.length === 0) {
     return (
       <Box>
-        <Button onClick={openModal}>Import position from MakerDAO</Button>
+        <Button
+          onClick={() => {
+            window.analytics.track("Import Vault Modal Open (No Vaults)");
+            openModal();
+          }}
+        >
+          Import position from MakerDAO
+        </Button>
 
         <Modal isOpen={isOpen}>
           <Card width={"640px"} p={0}>
@@ -94,7 +98,16 @@ const ImportButton = () => {
   // case 3: vaults are found
   return (
     <Box>
-      <Button onClick={openModal}>Import position from MakerDAO</Button>
+      <Button
+        onClick={() => {
+          window.analytics.track("Import Vault Modal Open (Has Vaults)", {
+            vaultIds,
+          });
+          openModal();
+        }}
+      >
+        Import position from MakerDAO
+      </Button>
 
       <Modal isOpen={isOpen}>
         <Card width={"640px"} p={0}>
@@ -106,7 +119,7 @@ const ImportButton = () => {
             <Box mb="4">
               <Heading.h5 mb="2">1. Select your Vault</Heading.h5>
               <Select
-                onChange={x => setSelectedVaultId(x.target.value)}
+                onChange={(x) => setSelectedVaultId(x.target.value)}
                 value={selectedVaultId}
                 required
               >

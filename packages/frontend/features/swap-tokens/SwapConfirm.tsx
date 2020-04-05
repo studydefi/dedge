@@ -94,9 +94,6 @@ const SwapConfirm = ({
               disabled={loading}
               onClick={async () => {
                 await swapFunction();
-                window.toastProvider.addMessage(`Swap completed!`, {
-                  variant: "success",
-                });
                 getBalances();
                 closeModal();
               }}
