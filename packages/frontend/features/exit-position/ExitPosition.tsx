@@ -7,7 +7,7 @@ import {
   Text,
   Button,
   Heading,
-  Card
+  Card,
 } from "rimble-ui";
 
 // components
@@ -39,7 +39,14 @@ const ExitPositionsButton = () => {
 
   return (
     <Box>
-      <Button onClick={openModal}>Exit Positions</Button>
+      <Button
+        onClick={() => {
+          window.analytics.track("Exit Positions Modal Click");
+          openModal();
+        }}
+      >
+        Exit Positions
+      </Button>
 
       <Modal isOpen={isOpen}>
         <Card width={"640px"} p={0}>
@@ -69,6 +76,7 @@ const ExitPositionsButton = () => {
               ml={3}
               disabled={loading}
               onClick={async () => {
+                window.analytics.track("Exit Positions Start");
                 setLoading(true);
 
                 const { dedgeAddressRegistry, dedgeExitManager } = contracts;
@@ -79,7 +87,7 @@ const ExitPositionsButton = () => {
                   collateralMarkets,
                 } = await dedgeHelpers.exit.getExitPositionParameters(
                   signer,
-                  proxy.address
+                  proxy.address,
                 );
 
                 const tx = await dedgeHelpers.exit.exitPositionToETH(
@@ -89,7 +97,7 @@ const ExitPositionsButton = () => {
                   dedgeAddressRegistry.address,
                   dedgeExitManager.address,
                   debtMarkets,
-                  collateralMarkets
+                  collateralMarkets,
                 );
                 window.toastProvider.addMessage(`Exiting positions...`, {
                   secondaryMessage: "Check progress on Etherscan",
@@ -103,6 +111,7 @@ const ExitPositionsButton = () => {
                   variant: "success",
                 });
 
+                window.analytics.track("Exit Positions Success");
                 setLoading(false);
                 getBalances();
                 closeModal();
