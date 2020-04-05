@@ -41,6 +41,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         actionText: "Check",
         variant: "processing",
       });
+      setLoading(false);
       await tx.wait();
       return;
     }
