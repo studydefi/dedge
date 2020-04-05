@@ -86,6 +86,7 @@ function useDACProxy() {
     if (proxyAddress) {
       const { abi } = legos.dappsys.dsProxy;
       const proxyContract = new ethers.Contract(proxyAddress, abi, signer);
+      window.analytics.identify(proxyAddress)
       setProxyContract(proxyContract);
     }
   }, [proxyAddress, signer]);
