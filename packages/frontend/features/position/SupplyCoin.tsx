@@ -54,7 +54,7 @@ const SupplyCoin = ({ coin }) => {
     <Box>
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
-        <Field required={true} label={`Amount of ${coin.symbol} to supply`}>
+        <Field required={true} label={`Amount of ${coin.symbol} to Supply`}>
           {canTransfer === false || canTransfer === null ? (
             <Input required={true} type="hidden" />
           ) : (

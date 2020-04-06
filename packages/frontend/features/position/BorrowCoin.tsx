@@ -20,7 +20,7 @@ const BorrowCoin = ({ coin }) => {
     <Box>
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
-        <Field label={`Amount of ${coin.symbol} to borrow`}>
+        <Field label={`Amount of ${coin.symbol} to Borrow`}>
           <Input
             type="number"
             required={true}
