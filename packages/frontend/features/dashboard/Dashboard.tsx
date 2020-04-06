@@ -74,7 +74,15 @@ const Dashboard = () => {
             href="https://studydefi.com/introducing-dedge/"
           >
             blog post
-          </Link>{" "}
+          </Link>
+          , chat with us on{" "}
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://t.me/dedgeexchange"
+          >
+            Telegram
+          </Link>,{" "}
           and follow{" "}
           <Link
             target="_blank"
