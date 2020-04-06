@@ -18,13 +18,15 @@ const BorrowCoin = ({ coin }) => {
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
 
+  // So we only fetch the latest data
+  // and our `getNewLiquidationPrice` doesn't clobber with one another
+  const [getLiquidationCallId, setGetLiquidationCallId] = useState(null);
   const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
     false
   );
   const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
 
   const getNewLiquidationPrice = async () => {
-    setGettingNewLiquidationPrice(true);
     const {
       liquidationPriceUSD,
     } = await dedgeHelpers.compound.getPostActionAccountInformationPreAction(
@@ -42,7 +44,13 @@ const BorrowCoin = ({ coin }) => {
     if (amount !== "") {
       try {
         parseFloat(amount);
-        getNewLiquidationPrice();
+        if (getLiquidationCallId !== null) {
+          clearTimeout(getLiquidationCallId);
+        }
+        setGettingNewLiquidationPrice(true);
+        setGetLiquidationCallId(
+          setTimeout(() => getNewLiquidationPrice(), 500)
+        );
       } catch (e) {}
     }
   }, [amount]);
@@ -108,12 +116,8 @@ const BorrowCoin = ({ coin }) => {
       <br />
 
       <Text>
-        New liqudation price:{' $ '}
-        {gettingNewLiquidationPrice ? (
-          `...`
-        ) : (
-          newLiquidationPrice.toString()
-        )}
+        New liqudation price:{" $ "}
+        {gettingNewLiquidationPrice ? `...` : newLiquidationPrice.toString()}
       </Text>
     </Box>
   );
