@@ -41,7 +41,7 @@ const BorrowCoin = ({ coin }) => {
             proxy,
             dedgeCompoundManager.address,
             coin.cTokenEquilaventAddress,
-            ethers.utils.parseUnits(amount, coin.symbol === "USDC" ? 6 : 18)
+            ethers.utils.parseUnits(amount, coin.decimals),
           );
           window.toastProvider.addMessage(`Borrowing ${coin.symbol}...`, {
             secondaryMessage: "Check progress on Etherscan",
@@ -55,7 +55,7 @@ const BorrowCoin = ({ coin }) => {
             `Successfully borrowed ${coin.symbol}!`,
             {
               variant: "success",
-            }
+            },
           );
 
           setLoading(false);

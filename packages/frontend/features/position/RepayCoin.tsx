@@ -31,7 +31,7 @@ const RepayCoin = ({ coin }) => {
     const tokenContract = new ethers.Contract(
       coin.address,
       legos.erc20.abi,
-      signer
+      signer,
     );
 
     const allowance = await tokenContract.allowance(address, proxyAddress);
@@ -80,7 +80,7 @@ const RepayCoin = ({ coin }) => {
             const tokenContract = new ethers.Contract(
               coin.address,
               legos.erc20.abi,
-              signer
+              signer,
             );
 
             const tx = await tokenContract.approve(proxyAddress, maxUINT);
@@ -96,7 +96,7 @@ const RepayCoin = ({ coin }) => {
               `Successfully approved ${coin.symbol}!`,
               {
                 variant: "success",
-              }
+              },
             );
 
             setTransferLoading(false);
@@ -128,7 +128,7 @@ const RepayCoin = ({ coin }) => {
               proxy,
               dedgeCompoundManager.address,
               coin.cTokenEquilaventAddress,
-              ethers.utils.parseUnits(amount, coin.symbol === "USDC" ? 6 : 18)
+              ethers.utils.parseUnits(amount, coin.decimals),
             );
             window.toastProvider.addMessage(`Repaying ${coin.symbol}...`, {
               secondaryMessage: "Check progress on Etherscan",
@@ -142,7 +142,7 @@ const RepayCoin = ({ coin }) => {
               `Successfully repayed ${coin.symbol}!`,
               {
                 variant: "success",
-              }
+              },
             );
 
             setLoading(false);
