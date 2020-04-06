@@ -45,13 +45,23 @@ const CoinOptions = ({ symbol }) => {
 
           <Box p={4}>
             <Heading.h3 mb="4">Options for {coin.name}</Heading.h3>
+
+            <Heading.h5 mb="4" textAlign="center">
+              Borrow or Repay Debt
+            </Heading.h5>
+            <Flex mb="4" justifyContent="space-around" textAlign="center">
+              <BorrowCoin coin={coin} />
+              <RepayCoin coin={coin} />
+            </Flex>
+
+            <hr />
+
+            <Heading.h5 my="4" textAlign="center">
+              Supply or Withdraw Collateral
+            </Heading.h5>
             <Flex mb="4" justifyContent="space-around" textAlign="center">
               <SupplyCoin coin={coin} />
-              <BorrowCoin coin={coin} />
-            </Flex>
-            <Flex mb="4" justifyContent="space-around" textAlign="center">
               <WithdrawCoin coin={coin} />
-              <RepayCoin coin={coin} />
             </Flex>
           </Box>
 

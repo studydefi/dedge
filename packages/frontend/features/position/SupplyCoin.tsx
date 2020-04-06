@@ -2,7 +2,7 @@ import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 import { ethers } from "ethers";
 import { legos } from "money-legos/dist";
 
-import { Button, Loader, Box, Flex, Field, Input } from "rimble-ui";
+import { Button, Text, Loader, Box, Flex, Field, Input } from "rimble-ui";
 
 import CompoundPositions from "../../containers/CompoundPositions";
 import ContractsContainer from "../../containers/Contracts";
@@ -54,7 +54,7 @@ const SupplyCoin = ({ coin }) => {
     <Box>
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
-        <Field required={true} label={`Amount of ${coin.symbol} to supply`}>
+        <Field required={true} label={`Amount of ${coin.symbol} to Supply`}>
           {canTransfer === false || canTransfer === null ? (
             <Input required={true} type="hidden" />
           ) : (
@@ -69,53 +69,56 @@ const SupplyCoin = ({ coin }) => {
         </Field>
       </Box>
       {canTransfer === false || canTransfer === null ? (
-        <Button
-          ml={3}
-          disabled={canTransfer || canTransfer === null}
-          onClick={async () => {
-            const maxUINT =
-              "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
-            setTransferLoading(true);
+        <>
+          <Text>This action must be approved first:</Text>
+          <Button
+            ml={3}
+            disabled={canTransfer || canTransfer === null}
+            onClick={async () => {
+              const maxUINT =
+                "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+              setTransferLoading(true);
 
-            const tokenContract = new ethers.Contract(
-              coin.address,
-              legos.erc20.abi,
-              signer,
-            );
+              const tokenContract = new ethers.Contract(
+                coin.address,
+                legos.erc20.abi,
+                signer,
+              );
 
-            const tx = await tokenContract.approve(proxyAddress, maxUINT);
-            window.toastProvider.addMessage(`Approving ${coin.symbol}...`, {
-              secondaryMessage: "Check progress on Etherscan",
-              actionHref: `https://etherscan.io/tx/${tx.hash}`,
-              actionText: "Check",
-              variant: "processing",
-            });
-            await tx.wait();
+              const tx = await tokenContract.approve(proxyAddress, maxUINT);
+              window.toastProvider.addMessage(`Approving ${coin.symbol}...`, {
+                secondaryMessage: "Check progress on Etherscan",
+                actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                actionText: "Check",
+                variant: "processing",
+              });
+              await tx.wait();
 
-            window.toastProvider.addMessage(
-              `Successfully approved ${coin.symbol}!`,
-              {
-                variant: "success",
-              },
-            );
+              window.toastProvider.addMessage(
+                `Successfully approved ${coin.symbol}!`,
+                {
+                  variant: "success",
+                },
+              );
 
-            setTransferLoading(false);
+              setTransferLoading(false);
 
-            getCanTransfer();
-          }}
-        >
-          {canTransfer === null ? (
-            <Flex alignItems="center">
-              <span>Checking...</span> <Loader color="white" ml="2" />
-            </Flex>
-          ) : transferLoading ? (
-            <Flex alignItems="center">
-              <span>Approving...</span> <Loader color="white" ml="2" />
-            </Flex>
-          ) : (
-            "Approve Transfer"
-          )}
-        </Button>
+              getCanTransfer();
+            }}
+          >
+            {canTransfer === null ? (
+              <Flex alignItems="center">
+                <span>Checking...</span> <Loader color="white" ml="2" />
+              </Flex>
+            ) : transferLoading ? (
+              <Flex alignItems="center">
+                <span>Approving...</span> <Loader color="white" ml="2" />
+              </Flex>
+            ) : (
+              "Allow Action"
+            )}
+          </Button>
+        </>
       ) : (
         <Button
           ml={3}
