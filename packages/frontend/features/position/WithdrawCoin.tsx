@@ -18,13 +18,15 @@ const WithdrawCoin = ({ coin }) => {
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
 
+  // So we only fetch the latest data
+  // and our `getNewLiquidationPrice` doesn't clobber with one another
+  const [getLiquidationCallId, setGetLiquidationCallId] = useState(null);
   const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
     false
   );
   const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
 
   const getNewLiquidationPrice = async () => {
-    setGettingNewLiquidationPrice(true);
     const {
       liquidationPriceUSD,
     } = await dedgeHelpers.compound.getPostActionAccountInformationPreAction(
@@ -32,11 +34,26 @@ const WithdrawCoin = ({ coin }) => {
       proxy.address,
       coin.cTokenEquilaventAddress,
       ethers.utils.parseUnits(amount, coin.decimals),
-      dedgeHelpers.compound.CTOKEN_ACTIONS.Borrow
+      dedgeHelpers.compound.CTOKEN_ACTIONS.Withdraw
     );
     setNewLiquidationPrice(liquidationPriceUSD.toFixed(2));
     setGettingNewLiquidationPrice(false);
   };
+
+  useEffect(() => {
+    if (amount !== "") {
+      try {
+        parseFloat(amount);
+        if (getLiquidationCallId !== null) {
+          clearTimeout(getLiquidationCallId);
+        }
+        setGettingNewLiquidationPrice(true);
+        setGetLiquidationCallId(
+          setTimeout(() => getNewLiquidationPrice(), 500)
+        );
+      } catch (e) {}
+    }
+  }, [amount]);
 
   useEffect(() => {
     if (amount !== "") {

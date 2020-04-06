@@ -22,13 +22,15 @@ const RepayCoin = ({ coin }) => {
   const [transferLoading, setTransferLoading] = useState(false);
   const [canTransfer, setCanTransfer] = useState(null);
 
+  // So we only fetch the latest data
+  // and our `getNewLiquidationPrice` doesn't clobber with one another
+  const [getLiquidationCallId, setGetLiquidationCallId] = useState(null);
   const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
     false
   );
   const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
 
   const getNewLiquidationPrice = async () => {
-    setGettingNewLiquidationPrice(true);
     const {
       liquidationPriceUSD,
     } = await dedgeHelpers.compound.getPostActionAccountInformationPreAction(
@@ -41,6 +43,21 @@ const RepayCoin = ({ coin }) => {
     setNewLiquidationPrice(liquidationPriceUSD.toFixed(2));
     setGettingNewLiquidationPrice(false);
   };
+
+  useEffect(() => {
+    if (amount !== "") {
+      try {
+        parseFloat(amount);
+        if (getLiquidationCallId !== null) {
+          clearTimeout(getLiquidationCallId);
+        }
+        setGettingNewLiquidationPrice(true);
+        setGetLiquidationCallId(
+          setTimeout(() => getNewLiquidationPrice(), 500)
+        );
+      } catch (e) {}
+    }
+  }, [amount]);
 
   const getCanTransfer = async () => {
     if (coin.symbol === "ETH") {
