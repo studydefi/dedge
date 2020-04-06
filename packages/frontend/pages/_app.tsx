@@ -41,11 +41,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
             <meta
               property="og:title"
-              content="Dedge | Swap Collateral and Debt Instantly"
+              content="Dedge | Swap Debt and Collateral Instantly"
             />
             <meta
               property="og:description"
-              content="Profit even when it's a bear market, swap debt and collateral instantly, powered by flash loans."
+              content="Swap debt and collateral instantly on Compound, powered by flash loans."
             />
             <meta
               property="og:image"
