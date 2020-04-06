@@ -65,9 +65,9 @@ const Dashboard = () => {
           </Text>
         </Box>
         <hr />
+        <Box>Please note that this is beta software, use at your own risk.</Box>
         <Box>
-          Please note that this is beta software, use at your own risk. For more
-          details, refer to our{" "}
+          For more details, refer to our{" "}
           <Link
             target="_blank"
             rel="noopener noreferrer"
@@ -75,7 +75,23 @@ const Dashboard = () => {
           >
             blog post
           </Link>
-          .
+          , chat with us on{" "}
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://t.me/dedgeexchange"
+          >
+            Telegram
+          </Link>,{" "}
+          and follow{" "}
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://twitter.com/dedge_exchange"
+          >
+            @dedge_exchange
+          </Link>{" "}
+          on Twitter!
         </Box>
       </Flash>
 
@@ -118,71 +134,18 @@ const Dashboard = () => {
         </DataDisplay>
       </Contents>
 
-      <Modal isOpen={isModalOpen}>
-        <Card width={"640px"} p={0}>
-          <ModalCloseIcon onClick={() => setIsModalOpen(false)} />
-
-          <Box p={4}>
-            <Heading.h3 mb="4">FAQ</Heading.h3>
-
-            <Box>
-              <Heading.h5 mb="2">
-                Q: Does your cat have an Instagram page?
-              </Heading.h5>
-              <Text>
-                <a href="https://www.instagram.com/mr.miso.oz">Yes</a>
-              </Text>
-            </Box>
-
-            <br />
-
-            <Box mb="4">
-              <Heading.h5 mb="2">Q: How can I import a Maker vault?</Heading.h5>
-              <Text>
-                1. Create a vault with MakerDAO (if you haven't) <br />
-                2. Create a smart-wallet on dedge.exchange <br />
-                3. Import that vault into dedge.exchange <br />
-                4. Start swapping your debt/collateral!
-              </Text>
-            </Box>
-
-            <Box mb="4">
-              <Heading.h5 mb="2">
-                Q: How can I supply/borrow/withdraw/repay?
-              </Heading.h5>
-              <Text>
-                1. Create a smart-wallet on dedge.exchange (if you haven't)
-                <br />
-                2. Click on the "..." button on the options column
-              </Text>
-            </Box>
-
-            <Box>
-              <Heading.h5 mb="2">
-                Q: Does Dedge have access to my funds?
-              </Heading.h5>
-              <Text>No</Text>
-            </Box>
-
-            <br />
-
-            <Box>
-              <Heading.h5 mb="2">Q: What is the smart wallet for?</Heading.h5>
-              <Text>
-                The smart wallet allows us to perform atomic transactions on
-                your behalf. For example, taking out a loan and repaying your
-                debt.
-              </Text>
-            </Box>
-          </Box>
-
-          <ModalBottom>
-            <Button.Outline onClick={() => setIsModalOpen(false)}>
-              Close
-            </Button.Outline>
-          </ModalBottom>
-        </Card>
-      </Modal>
+      <Flex justifyContent="center" p="4">
+        <Text>
+          A product by{" "}
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="http://studydefi.com/"
+          >
+            StudyDeFi
+          </Link>
+        </Text>
+      </Flex>
     </Container>
   );
 };
