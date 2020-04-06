@@ -5,6 +5,7 @@ import {
   Button,
   Heading,
   Text,
+  Link,
   Flex,
   Flash,
 } from "rimble-ui";
@@ -66,8 +67,15 @@ const Dashboard = () => {
         <hr />
         <Box>
           Please note that this is beta software, use at your own risk. For more
-          details, refer to our
-          <Button.Text onClick={() => setIsModalOpen(true)}>FAQ.</Button.Text>
+          details, refer to our{" "}
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://studydefi.com/introducing-dedge/"
+          >
+            blog post
+          </Link>
+          .
         </Box>
       </Flash>
 
@@ -118,7 +126,9 @@ const Dashboard = () => {
             <Heading.h3 mb="4">FAQ</Heading.h3>
 
             <Box>
-              <Heading.h5 mb="2">Q: Does your cat have an Instagram page?</Heading.h5>
+              <Heading.h5 mb="2">
+                Q: Does your cat have an Instagram page?
+              </Heading.h5>
               <Text>
                 <a href="https://www.instagram.com/mr.miso.oz">Yes</a>
               </Text>
@@ -137,15 +147,20 @@ const Dashboard = () => {
             </Box>
 
             <Box mb="4">
-              <Heading.h5 mb="2">Q: How can I supply/borrow/withdraw/repay?</Heading.h5>
+              <Heading.h5 mb="2">
+                Q: How can I supply/borrow/withdraw/repay?
+              </Heading.h5>
               <Text>
-                1. Create a smart-wallet on dedge.exchange (if you haven't)<br />
+                1. Create a smart-wallet on dedge.exchange (if you haven't)
+                <br />
                 2. Click on the "..." button on the options column
               </Text>
             </Box>
 
             <Box>
-              <Heading.h5 mb="2">Q: Does Dedge have access to my funds?</Heading.h5>
+              <Heading.h5 mb="2">
+                Q: Does Dedge have access to my funds?
+              </Heading.h5>
               <Text>No</Text>
             </Box>
 
