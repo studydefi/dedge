@@ -51,6 +51,19 @@ function MyApp({ Component, pageProps }: AppProps) {
               property="og:image"
               content="https://dedge.exchange/screenshot.png"
             />
+            <meta
+              name="twitter:title"
+              content="Dedge | Swap Debt and Collateral Instantly"
+            />
+            <meta
+              name="twitter:description"
+              content="Swap debt and collateral instantly on Compound, powered by flash loans."
+            />
+            <meta
+              name="twitter:image"
+              content="https://dedge.exchange/screenshot.png"
+            />
+            <meta name="twitter:card" content="summary_large_image" />
             <meta property="og:url" content="https://dedge.exchange" />
             <script
               dangerouslySetInnerHTML={{
