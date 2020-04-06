@@ -22,6 +22,26 @@ const SupplyCoin = ({ coin }) => {
   const [transferLoading, setTransferLoading] = useState(false);
   const [canTransfer, setCanTransfer] = useState(null);
 
+  const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
+    false
+  );
+  const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
+
+  const getNewLiquidationPrice = async () => {
+    setGettingNewLiquidationPrice(true);
+    const {
+      liquidationPriceUSD,
+    } = await dedgeHelpers.compound.getPostActionAccountInformationPreAction(
+      signer,
+      proxy.address,
+      coin.cTokenEquilaventAddress,
+      ethers.utils.parseUnits(amount, coin.decimals),
+      dedgeHelpers.compound.CTOKEN_ACTIONS.Supply
+    );
+    setNewLiquidationPrice(liquidationPriceUSD.toFixed(2));
+    setGettingNewLiquidationPrice(false);
+  };
+
   const getCanTransfer = async () => {
     if (coin.symbol === "ETH") {
       setCanTransfer(true);
@@ -31,7 +51,7 @@ const SupplyCoin = ({ coin }) => {
     const tokenContract = new ethers.Contract(
       coin.address,
       legos.erc20.abi,
-      signer,
+      signer
     );
 
     const allowance = await tokenContract.allowance(address, proxyAddress);
@@ -49,6 +69,15 @@ const SupplyCoin = ({ coin }) => {
       getCanTransfer();
     }
   }, [proxy]);
+
+  useEffect(() => {
+    if (amount !== "") {
+      try {
+        parseFloat(amount);
+        getNewLiquidationPrice();
+      } catch (e) {}
+    }
+  }, [amount]);
 
   return (
     <Box>
@@ -82,7 +111,7 @@ const SupplyCoin = ({ coin }) => {
               const tokenContract = new ethers.Contract(
                 coin.address,
                 legos.erc20.abi,
-                signer,
+                signer
               );
 
               const tx = await tokenContract.approve(proxyAddress, maxUINT);
@@ -98,7 +127,7 @@ const SupplyCoin = ({ coin }) => {
                 `Successfully approved ${coin.symbol}!`,
                 {
                   variant: "success",
-                },
+                }
               );
 
               setTransferLoading(false);
@@ -120,46 +149,58 @@ const SupplyCoin = ({ coin }) => {
           </Button>
         </>
       ) : (
-        <Button
-          ml={3}
-          disabled={loading || !canTransfer}
-          onClick={async () => {
-            setLoading(true);
+        <>
+          <Button
+            ml={3}
+            disabled={loading || !canTransfer}
+            onClick={async () => {
+              setLoading(true);
 
-            const { dedgeCompoundManager } = contracts;
-            const tx = await dedgeHelpers.compound.supplyThroughProxy(
-              proxy,
-              dedgeCompoundManager.address,
-              coin.cTokenEquilaventAddress,
-              ethers.utils.parseUnits(amount, coin.decimals),
-            );
-            window.toastProvider.addMessage(`Supplying ${coin.symbol}...`, {
-              secondaryMessage: "Check progress on Etherscan",
-              actionHref: `https://etherscan.io/tx/${tx.hash}`,
-              actionText: "Check",
-              variant: "processing",
-            });
-            await tx.wait();
+              const { dedgeCompoundManager } = contracts;
+              const tx = await dedgeHelpers.compound.supplyThroughProxy(
+                proxy,
+                dedgeCompoundManager.address,
+                coin.cTokenEquilaventAddress,
+                ethers.utils.parseUnits(amount, coin.decimals)
+              );
+              window.toastProvider.addMessage(`Supplying ${coin.symbol}...`, {
+                secondaryMessage: "Check progress on Etherscan",
+                actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                actionText: "Check",
+                variant: "processing",
+              });
+              await tx.wait();
 
-            window.toastProvider.addMessage(
-              `Successfully supplied ${coin.symbol}!`,
-              {
-                variant: "success",
-              },
-            );
+              window.toastProvider.addMessage(
+                `Successfully supplied ${coin.symbol}!`,
+                {
+                  variant: "success",
+                }
+              );
 
-            setLoading(false);
-            getBalances();
-          }}
-        >
-          {loading ? (
-            <Flex alignItems="center">
-              <span>Supplying...</span> <Loader color="white" ml="2" />
-            </Flex>
-          ) : (
-            "Supply"
-          )}
-        </Button>
+              setLoading(false);
+              getBalances();
+            }}
+          >
+            {loading ? (
+              <Flex alignItems="center">
+                <span>Supplying...</span> <Loader color="white" ml="2" />
+              </Flex>
+            ) : (
+              "Supply"
+            )}
+          </Button>
+
+          <br />
+          <br />
+
+          <Text>
+            New liqudation price:{" $ "}
+            {gettingNewLiquidationPrice
+              ? `...`
+              : newLiquidationPrice.toString()}
+          </Text>
+        </>
       )}
     </Box>
   );

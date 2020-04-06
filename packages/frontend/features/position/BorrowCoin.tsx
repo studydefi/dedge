@@ -1,20 +1,51 @@
 import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 import { ethers } from "ethers";
 
-import { Button, Loader, Box, Flex, Field, Input } from "rimble-ui";
+import { Button, Loader, Box, Flex, Field, Input, Text } from "rimble-ui";
 
 import CompoundPositions from "../../containers/CompoundPositions";
 import ContractsContainer from "../../containers/Contracts";
 import DACProxyContainer from "../../containers/DACProxy";
+import ConnectionContainer from "../../containers/Connection";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const BorrowCoin = ({ coin }) => {
   const { getBalances } = CompoundPositions.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
+  const { signer } = ConnectionContainer.useContainer();
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("");
+
+  const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
+    false
+  );
+  const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
+
+  const getNewLiquidationPrice = async () => {
+    setGettingNewLiquidationPrice(true);
+    const {
+      liquidationPriceUSD,
+    } = await dedgeHelpers.compound.getPostActionAccountInformationPreAction(
+      signer,
+      proxy.address,
+      coin.cTokenEquilaventAddress,
+      ethers.utils.parseUnits(amount, coin.decimals),
+      dedgeHelpers.compound.CTOKEN_ACTIONS.Borrow
+    );
+    setNewLiquidationPrice(liquidationPriceUSD.toFixed(2));
+    setGettingNewLiquidationPrice(false);
+  };
+
+  useEffect(() => {
+    if (amount !== "") {
+      try {
+        parseFloat(amount);
+        getNewLiquidationPrice();
+      } catch (e) {}
+    }
+  }, [amount]);
 
   return (
     <Box>
@@ -26,7 +57,9 @@ const BorrowCoin = ({ coin }) => {
             required={true}
             placeholder="1337"
             value={amount}
-            onChange={(e) => setAmount(e.target.value.toString())}
+            onChange={(e) => {
+              setAmount(e.target.value.toString());
+            }}
           />
         </Field>
       </Box>
@@ -41,7 +74,7 @@ const BorrowCoin = ({ coin }) => {
             proxy,
             dedgeCompoundManager.address,
             coin.cTokenEquilaventAddress,
-            ethers.utils.parseUnits(amount, coin.decimals),
+            ethers.utils.parseUnits(amount, coin.decimals)
           );
           window.toastProvider.addMessage(`Borrowing ${coin.symbol}...`, {
             secondaryMessage: "Check progress on Etherscan",
@@ -55,7 +88,7 @@ const BorrowCoin = ({ coin }) => {
             `Successfully borrowed ${coin.symbol}!`,
             {
               variant: "success",
-            },
+            }
           );
 
           setLoading(false);
@@ -70,6 +103,18 @@ const BorrowCoin = ({ coin }) => {
           "Borrow"
         )}
       </Button>
+
+      <br />
+      <br />
+
+      <Text>
+        New liqudation price:{' $ '}
+        {gettingNewLiquidationPrice ? (
+          `...`
+        ) : (
+          newLiquidationPrice.toString()
+        )}
+      </Text>
     </Box>
   );
 };
