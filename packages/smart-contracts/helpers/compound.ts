@@ -481,7 +481,6 @@ const repayThroughProxy = async (
     return dacProxy.execute(
       dedgeCompoundManager,
       calldata,
-      dacProxy.provider,
       Object.assign(newOverrides, {
         value: amountWei,
       })
