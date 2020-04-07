@@ -65,7 +65,7 @@ const ExitPositionsButton = () => {
 
             <Box>
               <Text fontSize="0" color="#999">
-                Service Fee: 0.0135% (0.09% to AAVE for flash loan)
+                Service Fee: 0.135% (0.09% to AAVE for flash loan)
               </Text>
             </Box>
           </Box>
