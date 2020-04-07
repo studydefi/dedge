@@ -104,7 +104,7 @@ const exitPositionToETH = (
   dedgeExitManager: Address,
   debtMarkets: [Address, BigNumber][],
   collateralMarkets: [Address, BigNumber][],
-  overrides: any = { gasLimit: 8000000 }
+  overrides: any = { gasLimit: 6000000 }
 ): Promise<any> => {
   // struct DebtMarket {
   //     address cToken;
