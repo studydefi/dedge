@@ -97,7 +97,7 @@ const swapOperation = async (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  overrides: any = { gasLimit: 1250000 }
+  overrides: any = { gasLimit: 2000000 }
 ): Promise<any> => {
   // struct SwapOperationCalldata {
   //     address addressRegistryAddress;
@@ -143,7 +143,7 @@ const swapDebt = async (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  overrides: any = { gasLimit: 1250000 }
+  overrides: any = { gasLimit: 2000000 }
 ): Promise<any> => {
   const gasPrice = await getCustomGasPrice(dacProxy.provider);
 
@@ -167,7 +167,7 @@ const swapCollateral = async (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  overrides: any = { gasLimit: 1250000 }
+  overrides: any = { gasLimit: 2000000 }
 ): Promise<any> => {
   const gasPrice = await getCustomGasPrice(dacProxy.provider);
 
@@ -399,7 +399,7 @@ const supplyThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 200000 }
+  overrides: any = { gasLimit: 750000 }
 ) => {
   // Example Tx https://etherscan.io/tx/0xf546b8b3dd630edbb68ad73a8242046810a1f77b3124783d5c0dcf5c682c39ab
   const calldata = IDedgeCompoundManager.functions.supplyThroughProxy.encode([
@@ -429,7 +429,7 @@ const borrowThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 500000 }
+  overrides: any = { gasLimit: 750000 }
 ) => {
   // Example tx: https://etherscan.io/tx/0x252bfd4c18e17d9be90f4b5adad4f56aaa418e88d2ae9a6a2ee0f663b392522a
   const calldata = IDedgeCompoundManager.functions.borrowThroughProxy.encode([
@@ -448,7 +448,7 @@ const withdrawThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 600000 }
+  overrides: any = { gasLimit: 750000 }
 ) => {
   // Example tx: https://etherscan.io/tx/0xee15818020c43a5888f8c728fcff8fd0f7edbdf59a886b13a5a7174c1933ce0d
   const calldata = IDedgeCompoundManager.functions.redeemUnderlyingThroughProxy.encode(
@@ -466,7 +466,7 @@ const repayThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 200000 }
+  overrides: any = { gasLimit: 750000 }
 ) => {
   // Example Tx: https://etherscan.io/tx/0x6747cf008846dd8880ee76b44ab7c966748919b54ceb096a42539cba4f83dfd3
   const calldata = IDedgeCompoundManager.functions.repayBorrowThroughProxy.encode(
@@ -476,7 +476,7 @@ const repayThroughProxy = async (
   const gasPrice = await getCustomGasPrice(dacProxy.provider);
   const newOverrides = Object.assign({ gasPrice }, overrides);
 
-  // If its ether we need to send it via overrides
+  // If its ether we need to send it via ov600000errides
   if (cToken === legos.compound.cEther.address) {
     return dacProxy.execute(
       dedgeCompoundManager,

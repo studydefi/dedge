@@ -57,7 +57,7 @@ const importMakerVault = async (
   ilkCTokenEquilavent: Address,
   ilkJoinAddress: Address,
   decimalPlaces: number = 18,
-  overrides: any = { gasLimit: 1400000 }
+  overrides: any = { gasLimit: 2000000 }
 ): Promise<any> => {
   // struct ImportMakerVaultCallData {
   //     address addressRegistryAddress;
