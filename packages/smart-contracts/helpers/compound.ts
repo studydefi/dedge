@@ -6,6 +6,7 @@ import dedgeCompoundManagerDef from "../artifacts/DedgeCompoundManager.json";
 import { Address, EncoderFunction } from "./types";
 
 import { getLegos, networkIds } from "money-legos";
+import { getCustomGasPrice } from "./common";
 
 import axios from "axios";
 
@@ -23,9 +24,11 @@ const calcCompoundPosition = async (
   borrowBalanceEth: BigNumber,
   supplyBalanceEth: BigNumber
 ) => {
-  const wei2Float = (x: BigNumber): number => parseFloat(ethers.utils.formatEther(x.toString()));
+  const wei2Float = (x: BigNumber): number =>
+    parseFloat(ethers.utils.formatEther(x.toString()));
 
-  const currentBorrowPercentage = wei2Float(borrowBalanceEth) / wei2Float(supplyBalanceEth);
+  const currentBorrowPercentage =
+    wei2Float(borrowBalanceEth) / wei2Float(supplyBalanceEth);
 
   // Get eth price
   const coingeckoResp = await axios.get(
@@ -42,7 +45,7 @@ const calcCompoundPosition = async (
     supplyBalanceUSD: wei2Float(supplyBalanceEth) * ethInUSD,
     currentBorrowPercentage,
     ethInUSD,
-    liquidationPriceUSD: currentBorrowPercentage * ethInUSD / 0.75, // 75% is the collateral factor
+    liquidationPriceUSD: (currentBorrowPercentage * ethInUSD) / 0.75, // 75% is the collateral factor
   };
 };
 
@@ -86,7 +89,7 @@ const IDedgeCompoundManager = new ethers.utils.Interface(
   dedgeCompoundManagerDef.abi
 );
 
-const swapOperation = (
+const swapOperation = async (
   swapFunctionEncoder: EncoderFunction,
   dacProxy: ethers.Contract,
   dedgeCompoundManager: Address,
@@ -94,13 +97,14 @@ const swapOperation = (
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 1250000 }
 ): Promise<any> => {
   // struct SwapOperationCalldata {
   //     address addressRegistryAddress;
   //     address oldCTokenAddress;
   //     address newCTokenAddress;
   // }
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
 
   const swapOperationStructData = ethers.utils.defaultAbiCoder.encode(
     ["address", "address", "address"],
@@ -128,19 +132,21 @@ const swapOperation = (
   return dacProxy.execute(
     dedgeCompoundManager,
     swapOperationCalldata,
-    overrides
+    Object.assign({ gasPrice }, overrides)
   );
 };
 
-const swapDebt = (
+const swapDebt = async (
   dacProxy: ethers.Contract,
   dedgeCompoundManager: Address,
   addressRegistry: Address,
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 1250000 }
 ): Promise<any> => {
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+
   return swapOperation(
     (x: any[]): string =>
       IDedgeCompoundManager.functions.swapDebtPostLoan.encode(x),
@@ -150,19 +156,21 @@ const swapDebt = (
     oldCToken,
     oldTokenUnderlyingDeltaWei,
     newCToken,
-    overrides
+    Object.assign({ gasPrice }, overrides)
   );
 };
 
-const swapCollateral = (
+const swapCollateral = async (
   dacProxy: ethers.Contract,
   dedgeCompoundManager: Address,
   addressRegistry: Address,
   oldCToken: Address,
   oldTokenUnderlyingDeltaWei: BigNumber,
   newCToken: Address,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 1250000 }
 ): Promise<any> => {
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+
   return swapOperation(
     (x: any[]): string =>
       IDedgeCompoundManager.functions.swapCollateralPostLoan.encode(x),
@@ -172,7 +180,7 @@ const swapCollateral = (
     oldCToken,
     oldTokenUnderlyingDeltaWei,
     newCToken,
-    overrides
+    Object.assign({ gasPrice }, overrides)
   );
 };
 
@@ -391,25 +399,29 @@ const supplyThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 200000 }
 ) => {
+  // Example Tx https://etherscan.io/tx/0xf546b8b3dd630edbb68ad73a8242046810a1f77b3124783d5c0dcf5c682c39ab
   const calldata = IDedgeCompoundManager.functions.supplyThroughProxy.encode([
     cToken,
     amountWei,
   ]);
+
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+  const newOverrides = Object.assign({ gasPrice }, overrides);
 
   // If its ether we need to send it via overrides
   if (cToken === legos.compound.cEther.address) {
     return dacProxy.execute(
       dedgeCompoundManager,
       calldata,
-      Object.assign(overrides, {
+      Object.assign(newOverrides, {
         value: amountWei,
       })
     );
   }
 
-  return dacProxy.execute(dedgeCompoundManager, calldata, overrides);
+  return dacProxy.execute(dedgeCompoundManager, calldata, newOverrides);
 };
 
 const borrowThroughProxy = async (
@@ -417,14 +429,18 @@ const borrowThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 500000 }
 ) => {
+  // Example tx: https://etherscan.io/tx/0x252bfd4c18e17d9be90f4b5adad4f56aaa418e88d2ae9a6a2ee0f663b392522a
   const calldata = IDedgeCompoundManager.functions.borrowThroughProxy.encode([
     cToken,
     amountWei,
   ]);
 
-  return dacProxy.execute(dedgeCompoundManager, calldata, overrides);
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+  const newOverrides = Object.assign({ gasPrice }, overrides);
+
+  return dacProxy.execute(dedgeCompoundManager, calldata, newOverrides);
 };
 
 const withdrawThroughProxy = async (
@@ -432,13 +448,17 @@ const withdrawThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 600000 }
 ) => {
+  // Example tx: https://etherscan.io/tx/0xee15818020c43a5888f8c728fcff8fd0f7edbdf59a886b13a5a7174c1933ce0d
   const calldata = IDedgeCompoundManager.functions.redeemUnderlyingThroughProxy.encode(
     [cToken, amountWei]
   );
 
-  return dacProxy.execute(dedgeCompoundManager, calldata, overrides);
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+  const newOverrides = Object.assign({ gasPrice }, overrides);
+
+  return dacProxy.execute(dedgeCompoundManager, calldata, newOverrides);
 };
 
 const repayThroughProxy = async (
@@ -446,24 +466,29 @@ const repayThroughProxy = async (
   dedgeCompoundManager: Address,
   cToken: Address,
   amountWei: string,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 200000 }
 ) => {
+  // Example Tx: https://etherscan.io/tx/0x6747cf008846dd8880ee76b44ab7c966748919b54ceb096a42539cba4f83dfd3
   const calldata = IDedgeCompoundManager.functions.repayBorrowThroughProxy.encode(
     [cToken, amountWei]
   );
+
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+  const newOverrides = Object.assign({ gasPrice }, overrides);
 
   // If its ether we need to send it via overrides
   if (cToken === legos.compound.cEther.address) {
     return dacProxy.execute(
       dedgeCompoundManager,
       calldata,
-      Object.assign(overrides, {
+      dacProxy.provider,
+      Object.assign(newOverrides, {
         value: amountWei,
       })
     );
   }
 
-  return dacProxy.execute(dedgeCompoundManager, calldata, overrides);
+  return dacProxy.execute(dedgeCompoundManager, calldata, newOverrides);
 };
 
 export default {

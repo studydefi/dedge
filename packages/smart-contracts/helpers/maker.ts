@@ -5,6 +5,7 @@ import dedgeMakerManagerDef from "../artifacts/DedgeMakerManager.json";
 import { legos } from "money-legos";
 
 import { Address } from "./types";
+import { getCustomGasPrice } from "./common";
 
 const IDssProxyActions = new ethers.utils.Interface(
   legos.maker.dssProxyActions.abi
@@ -48,7 +49,7 @@ const isUserAllowedVault = async (
   return owner === user || cdpCan.toString() === "1";
 };
 
-const importMakerVault = (
+const importMakerVault = async (
   dacProxy: ethers.Contract,
   dedgeMakerManager: Address,
   addressRegistry: Address,
@@ -56,7 +57,7 @@ const importMakerVault = (
   ilkCTokenEquilavent: Address,
   ilkJoinAddress: Address,
   decimalPlaces: number = 18,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 1400000 }
 ): Promise<any> => {
   // struct ImportMakerVaultCallData {
   //     address addressRegistryAddress;
@@ -65,6 +66,7 @@ const importMakerVault = (
   //     address collateralJoinAddress;
   //     uint8 collateralDecimals;
   // }
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
 
   const importMakerVaultPostLoanData = ethers.utils.defaultAbiCoder.encode(
     ["address", "uint", "address", "address", "uint8"],
@@ -73,7 +75,7 @@ const importMakerVault = (
       cdpId.toString(),
       ilkCTokenEquilavent,
       ilkJoinAddress,
-      decimalPlaces.toString()
+      decimalPlaces.toString(),
     ]
   );
 
@@ -82,7 +84,7 @@ const importMakerVault = (
       0,
       0,
       0, // Doesn't matter as the variables will be re-injected by `executeOption` anyway
-      importMakerVaultPostLoanData
+      importMakerVaultPostLoanData,
     ]
   );
 
@@ -92,14 +94,14 @@ const importMakerVault = (
       dacProxy.address,
       addressRegistry,
       cdpId,
-      executeOperationCalldataParams
+      executeOperationCalldataParams,
     ]
   );
 
   return dacProxy.execute(
     dedgeMakerManager,
     importMakerVaultCallbackdata,
-    overrides
+    Object.assign({ gasPrice }, overrides)
   );
 };
 
@@ -109,13 +111,13 @@ const dsProxyCdpAllowDacProxy = (
   dssCdpManager: Address, // DssCdpManager's address,
   dssProxyActions: Address, // Dss-ProxyAction's address
   cdpId: number,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 750000 }
 ): Promise<any> => {
   const allowDacProxyCallback = IDssProxyActions.functions.cdpAllow.encode([
     dssCdpManager,
     cdpId.toString(),
     dacProxy,
-    "1"
+    "1",
   ]);
 
   return dsProxy.execute(dssProxyActions, allowDacProxyCallback, overrides);
@@ -125,5 +127,5 @@ export default {
   importMakerVault,
   dsProxyCdpAllowDacProxy,
   getVaultIds,
-  isUserAllowedVault
+  isUserAllowedVault,
 };
