@@ -13,7 +13,7 @@ const transferETH = (
   dedgeGeneralManager: Address,
   target: Address,
   amountWei: BigNumber,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 750000 }
 ): Promise<any> => {
   const transferETHCallback = IDedgeGeneralManager.functions.transferETH.encode(
     [target, amountWei.toString()]
@@ -27,7 +27,7 @@ const transferERC20 = (
   erc20: Address,
   target: Address,
   amountWei: BigNumber,
-  overrides: any = { gasLimit: 4000000 }
+  overrides: any = { gasLimit: 750000 }
 ): Promise<any> => {
   const transferERC20Callback = IDedgeGeneralManager.functions.transferERC20.encode(
     [target, erc20, amountWei.toString()]

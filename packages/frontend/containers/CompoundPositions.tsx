@@ -66,7 +66,6 @@ function useCompoundPositions() {
   const getBalances = async () => {
     const { cEther, cBat, cDai, cUsdc, cRep, cZrx, cWbtc } = contracts;
 
-    console.log("fetching Compound balances");
     setLoading(true);
     clearTimeout(timeoutId);
 
