@@ -83,26 +83,45 @@ const BorrowCoin = ({ coin, hide }) => {
           setLoading(true);
 
           const { dedgeCompoundManager } = contracts;
-          const tx = await dedgeHelpers.compound.borrowThroughProxy(
-            proxy,
-            dedgeCompoundManager.address,
-            coin.cTokenEquilaventAddress,
-            ethers.utils.parseUnits(amount, coin.decimals),
-          );
-          window.toastProvider.addMessage(`Borrowing ${coin.symbol}...`, {
-            secondaryMessage: "Check progress on Etherscan",
-            actionHref: `https://etherscan.io/tx/${tx.hash}`,
-            actionText: "Check",
-            variant: "processing",
-          });
-          await tx.wait();
+          let tx = null;
 
-          window.toastProvider.addMessage(
-            `Successfully borrowed ${coin.symbol}!`,
-            {
-              variant: "success",
-            },
-          );
+          try {
+            tx = await dedgeHelpers.compound.borrowThroughProxy(
+              proxy,
+              dedgeCompoundManager.address,
+              coin.cTokenEquilaventAddress,
+              ethers.utils.parseUnits(amount, coin.decimals)
+            );
+            window.toastProvider.addMessage(`Borrowing ${coin.symbol}...`, {
+              secondaryMessage: "Check progress on Etherscan",
+              actionHref: `https://etherscan.io/tx/${tx.hash}`,
+              actionText: "Check",
+              variant: "processing",
+            });
+            await tx.wait();
+
+            window.toastProvider.addMessage(
+              `Successfully borrowed ${coin.symbol}!`,
+              {
+                variant: "success",
+              }
+            );
+          } catch (e) {
+            if (tx === null) {
+              window.toastProvider.addMessage(`Tx cancelled`, {
+                variant: "failure",
+              });
+            } else {
+              window.toastProvider.addMessage(`Failed to borrow...`, {
+                secondaryMessage: "Check reason on Etherscan",
+                actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                actionText: "Check",
+                variant: "failure",
+              });
+            }
+            setLoading(false);
+            return;
+          }
 
           setLoading(false);
           getBalances();

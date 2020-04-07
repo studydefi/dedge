@@ -44,28 +44,49 @@ const useImportVault = (selectedVaultId) => {
       console.error("Invalid ilk", ilk);
     }
 
-    const tx = await dedgeHelpers.maker.importMakerVault(
-      proxy,
-      dedgeMakerManager.address,
-      dedgeAddressRegistry.address,
-      selectedVaultId.toString(),
-      ilkCTokenEquilavent,
-      ilkJoinAddress,
-      decimals,
-    );
+    let tx = null;
+    try {
+      tx = await dedgeHelpers.maker.importMakerVault(
+        proxy,
+        dedgeMakerManager.address,
+        dedgeAddressRegistry.address,
+        selectedVaultId.toString(),
+        ilkCTokenEquilavent,
+        ilkJoinAddress,
+        decimals
+      );
 
-    window.toastProvider.addMessage(`Importing vault #${selectedVaultId}...`, {
-      secondaryMessage: "Check progress on Etherscan",
-      actionHref: `https://etherscan.io/tx/${tx.hash}`,
-      actionText: "Check",
-      variant: "processing",
-    });
+      window.toastProvider.addMessage(
+        `Importing vault #${selectedVaultId}...`,
+        {
+          secondaryMessage: "Check progress on Etherscan",
+          actionHref: `https://etherscan.io/tx/${tx.hash}`,
+          actionText: "Check",
+          variant: "processing",
+        }
+      );
 
-    await tx.wait();
-    window.toastProvider.addMessage(`Vault #${selectedVaultId} imported!`, {
-      variant: "success",
-    });
-    window.analytics.track("Import Vault Success", { selectedVaultId });
+      await tx.wait();
+      window.toastProvider.addMessage(`Vault #${selectedVaultId} imported!`, {
+        variant: "success",
+      });
+      window.analytics.track("Import Vault Success", { selectedVaultId });
+    } catch (e) {
+      if (tx === null) {
+        window.toastProvider.addMessage(`Tx cancelled`, {
+          variant: "failure",
+        });
+      } else {
+        window.toastProvider.addMessage(`Failed to import vault...`, {
+          secondaryMessage: "Check reason on Etherscan",
+          actionHref: `https://etherscan.io/tx/${tx.hash}`,
+          actionText: "Check",
+          variant: "failure",
+        });
+      }
+      setLoading(false);
+      return;
+    }
 
     setLoading(false);
     getVaults();

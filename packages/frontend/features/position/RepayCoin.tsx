@@ -136,6 +136,7 @@ const RepayCoin = ({ coin, hide }) => {
                 signer,
               );
 
+<<<<<<< HEAD
               const tx = await tokenContract.approve(proxyAddress, maxUINT);
               window.toastProvider.addMessage(`Approving ${coin.symbol}...`, {
                 secondaryMessage: "Check progress on Etherscan",
@@ -151,9 +152,43 @@ const RepayCoin = ({ coin, hide }) => {
                   variant: "success",
                 },
               );
+=======
+              let tx = null;
+              try {
+                tx = await tokenContract.approve(proxyAddress, maxUINT);
+                window.toastProvider.addMessage(`Approving ${coin.symbol}...`, {
+                  secondaryMessage: "Check progress on Etherscan",
+                  actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                  actionText: "Check",
+                  variant: "processing",
+                });
+                await tx.wait();
+
+                window.toastProvider.addMessage(
+                  `Successfully approved ${coin.symbol}!`,
+                  {
+                    variant: "success",
+                  }
+                );
+              } catch (e) {
+                if (tx === null) {
+                  window.toastProvider.addMessage(`Tx cancelled`, {
+                    variant: "failure",
+                  });
+                } else {
+                  window.toastProvider.addMessage(`Failed to approve ${coin.symbol}...`, {
+                    secondaryMessage: "Check reason on Etherscan",
+                    actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                    actionText: "Check",
+                    variant: "failure",
+                  });
+                }
+                setTransferLoading(false);
+                return;
+              }
+>>>>>>> handle logic if tx fails or if user cancels tx
 
               setTransferLoading(false);
-
               getCanTransfer();
             }}
           >
@@ -179,26 +214,48 @@ const RepayCoin = ({ coin, hide }) => {
               setLoading(true);
 
               const { dedgeCompoundManager } = contracts;
-              const tx = await dedgeHelpers.compound.repayThroughProxy(
-                proxy,
-                dedgeCompoundManager.address,
-                coin.cTokenEquilaventAddress,
-                ethers.utils.parseUnits(amount, coin.decimals),
-              );
-              window.toastProvider.addMessage(`Repaying ${coin.symbol}...`, {
-                secondaryMessage: "Check progress on Etherscan",
-                actionHref: `https://etherscan.io/tx/${tx.hash}`,
-                actionText: "Check",
-                variant: "processing",
-              });
-              await tx.wait();
+              let tx = null;
 
-              window.toastProvider.addMessage(
-                `Successfully repayed ${coin.symbol}!`,
-                {
-                  variant: "success",
-                },
-              );
+              try {
+                tx = await dedgeHelpers.compound.repayThroughProxy(
+                  proxy,
+                  dedgeCompoundManager.address,
+                  coin.cTokenEquilaventAddress,
+                  ethers.utils.parseUnits(amount, coin.decimals)
+                );
+                window.toastProvider.addMessage(`Repaying ${coin.symbol}...`, {
+                  secondaryMessage: "Check progress on Etherscan",
+                  actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                  actionText: "Check",
+                  variant: "processing",
+                });
+                await tx.wait();
+
+                window.toastProvider.addMessage(
+                  `Successfully repayed ${coin.symbol}!`,
+                  {
+                    variant: "success",
+                  }
+                );
+              } catch (e) {
+                if (tx === null) {
+                  window.toastProvider.addMessage(`Tx cancelled`, {
+                    variant: "failure",
+                  });
+                } else {
+                  window.toastProvider.addMessage(
+                    `Failed to repay...`,
+                    {
+                      secondaryMessage: "Check reason on Etherscan",
+                      actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                      actionText: "Check",
+                      variant: "failure",
+                    }
+                  );
+                }
+                setLoading(false);
+                return;
+              }
 
               setLoading(false);
               getBalances();
