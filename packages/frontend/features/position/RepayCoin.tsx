@@ -11,7 +11,7 @@ import DACProxyContainer from "../../containers/DACProxy";
 
 import { useState, useEffect } from "react";
 
-const RepayCoin = ({ coin }) => {
+const RepayCoin = ({ coin, hide }) => {
   const { getBalances } = CompoundPositions.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { signer, address } = ConnectionContainer.useContainer();
@@ -26,7 +26,7 @@ const RepayCoin = ({ coin }) => {
   // and our `getNewLiquidationPrice` doesn't clobber with one another
   const [getLiquidationCallId, setGetLiquidationCallId] = useState(null);
   const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
-    false
+    false,
   );
   const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
 
@@ -38,7 +38,7 @@ const RepayCoin = ({ coin }) => {
       proxy.address,
       coin.cTokenEquilaventAddress,
       ethers.utils.parseUnits(amount, coin.decimals),
-      dedgeHelpers.compound.CTOKEN_ACTIONS.Repay
+      dedgeHelpers.compound.CTOKEN_ACTIONS.Repay,
     );
     setNewLiquidationPrice(liquidationPriceUSD.toFixed(2));
     setGettingNewLiquidationPrice(false);
@@ -53,7 +53,7 @@ const RepayCoin = ({ coin }) => {
         }
         setGettingNewLiquidationPrice(true);
         setGetLiquidationCallId(
-          setTimeout(() => getNewLiquidationPrice(), 500)
+          setTimeout(() => getNewLiquidationPrice(), 500),
         );
       } catch (e) {}
     }
@@ -68,7 +68,7 @@ const RepayCoin = ({ coin }) => {
     const tokenContract = new ethers.Contract(
       coin.address,
       legos.erc20.abi,
-      signer
+      signer,
     );
 
     const allowance = await tokenContract.allowance(address, proxyAddress);
@@ -87,7 +87,6 @@ const RepayCoin = ({ coin }) => {
     }
   }, [proxy]);
 
-
   useEffect(() => {
     if (amount !== "") {
       try {
@@ -98,7 +97,12 @@ const RepayCoin = ({ coin }) => {
   }, [amount]);
 
   return (
-    <Flex alignItems="center" justifyContent="center" flexDirection="column">
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      flexDirection="column"
+      display={hide ? "none" : "flex"}
+    >
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
         <Field required={true} label={`Amount of ${coin.symbol} to Repay`}>
@@ -129,7 +133,7 @@ const RepayCoin = ({ coin }) => {
               const tokenContract = new ethers.Contract(
                 coin.address,
                 legos.erc20.abi,
-                signer
+                signer,
               );
 
               const tx = await tokenContract.approve(proxyAddress, maxUINT);
@@ -145,7 +149,7 @@ const RepayCoin = ({ coin }) => {
                 `Successfully approved ${coin.symbol}!`,
                 {
                   variant: "success",
-                }
+                },
               );
 
               setTransferLoading(false);
@@ -179,7 +183,7 @@ const RepayCoin = ({ coin }) => {
                 proxy,
                 dedgeCompoundManager.address,
                 coin.cTokenEquilaventAddress,
-                ethers.utils.parseUnits(amount, coin.decimals)
+                ethers.utils.parseUnits(amount, coin.decimals),
               );
               window.toastProvider.addMessage(`Repaying ${coin.symbol}...`, {
                 secondaryMessage: "Check progress on Etherscan",
@@ -193,7 +197,7 @@ const RepayCoin = ({ coin }) => {
                 `Successfully repayed ${coin.symbol}!`,
                 {
                   variant: "success",
-                }
+                },
               );
 
               setLoading(false);
@@ -209,7 +213,8 @@ const RepayCoin = ({ coin }) => {
             )}
           </Button>
 
-          <br /><br />
+          <br />
+          <br />
 
           <Text>
             New liqudation price:{" $ "}
