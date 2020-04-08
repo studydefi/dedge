@@ -4,18 +4,18 @@ import DACProxyContainer from "../../containers/DACProxy";
 import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 import { Address, Wei } from "../../types";
 
-const useSwapOperation = () => {
+const useClearDustOperation = () => {
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
 
-  const swapDebt = async (
+  const clearDustCollateral = async (
     fromCToken: Address,
     toCToken: Address,
     fromCTokenUnderlyingDelta: Wei,
   ) => {
     const { dedgeCompoundManager, dedgeAddressRegistry } = contracts;
 
-    return dedgeHelpers.compound.swapDebt(
+    return dedgeHelpers.compound.clearDustCollateral(
       proxy,
       dedgeCompoundManager.address,
       dedgeAddressRegistry.address,
@@ -25,14 +25,14 @@ const useSwapOperation = () => {
     );
   };
 
-  const swapCollateral = async (
+  const clearDustDebt = async (
     fromCToken: Address,
     toCToken: Address,
     fromCTokenUnderlyingDelta: Wei,
   ) => {
     const { dedgeCompoundManager, dedgeAddressRegistry } = contracts;
 
-    return dedgeHelpers.compound.swapCollateral(
+    return dedgeHelpers.compound.clearDustDebt(
       proxy,
       dedgeCompoundManager.address,
       dedgeAddressRegistry.address,
@@ -42,7 +42,7 @@ const useSwapOperation = () => {
     );
   };
 
-  return { swapDebt, swapCollateral };
+  return { clearDustDebt, clearDustCollateral };
 };
 
-export default useSwapOperation;
+export default useClearDustOperation;

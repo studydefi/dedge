@@ -490,6 +490,52 @@ const repayThroughProxy = async (
   return dacProxy.execute(dedgeCompoundManager, calldata, newOverrides);
 };
 
+const clearDustCollateral = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  addressRegistry: Address,
+  oldCToken: Address,
+  amountWei: BigNumber,
+  newCToken: Address,
+  overrides: any = { gasLimit: 1500000 }
+) => {
+  const clearDustCollateralCallback = IDedgeCompoundManager.functions.clearCollateralDust.encode(
+    [addressRegistry, oldCToken, amountWei, newCToken]
+  );
+
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+  const newOverrides = Object.assign({ gasPrice }, overrides);
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    clearDustCollateralCallback,
+    newOverrides
+  );
+};
+
+const clearDustDebt = async (
+  dacProxy: ethers.Contract,
+  dedgeCompoundManager: Address,
+  addressRegistry: Address,
+  oldCToken: Address,
+  amountWei: BigNumber,
+  newCToken: Address,
+  overrides: any = { gasLimit: 1500000 }
+) => {
+  const clearDustDebtCallback = IDedgeCompoundManager.functions.clearDebtDust.encode(
+    [addressRegistry, oldCToken, amountWei, newCToken]
+  );
+
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+  const newOverrides = Object.assign({ gasPrice }, overrides);
+
+  return dacProxy.execute(
+    dedgeCompoundManager,
+    clearDustDebtCallback,
+    newOverrides
+  );
+};
+
 export default {
   swapCollateral,
   swapDebt,
@@ -503,5 +549,7 @@ export default {
   borrowThroughProxy,
   withdrawThroughProxy,
   repayThroughProxy,
+  clearDustCollateral,
+  clearDustDebt,
   CTOKEN_ACTIONS,
 };

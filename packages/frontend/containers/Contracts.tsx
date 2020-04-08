@@ -12,6 +12,8 @@ import dedgeMakerManager from "../../smart-contracts/artifacts/DedgeMakerManager
 import dedgeExitManager from "../../smart-contracts/artifacts/DedgeExitManager.json";
 
 const CONTRACTS = {
+  compoundComptroller: legos.compound.comptroller,
+  compoundPriceOracle: legos.compound.priceOracle,
   makerProxyRegistry: legos.maker.proxyRegistry,
   makerProxyActions: legos.maker.dssProxyActions,
   makerCdpManager: legos.maker.dssCdpManager,

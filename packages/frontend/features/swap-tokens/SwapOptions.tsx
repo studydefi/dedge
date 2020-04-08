@@ -1,13 +1,10 @@
-import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
+import { Box, Flex, Button, Pill } from "rimble-ui";
 import styled from "styled-components";
 
-import Select from "../../components/Select";
-import SwapConfirm from "./SwapConfirm";
-
-import DACProxyContainer from "../../containers/DACProxy";
 import { useState } from "react";
-import CoinsContainer from "../../containers/Coins";
-import useIsAmountAvailable from "./useIsAmountAvailable";
+
+import Swap from "./Swap";
+import ClearDust from "./ClearDust";
 
 const Container = styled(Box)`
   margin-right: 16px;
@@ -15,136 +12,50 @@ const Container = styled(Box)`
     -1px 0px rgba(250, 180, 40, 0.5);
 `;
 
+enum SWAP_TAB_OPTIONS {
+  Swap,
+  ClearDust,
+}
+
 const SwapOptions = () => {
-  const { hasProxy } = DACProxyContainer.useContainer();
-  const { stableCoins, volatileCoins } = CoinsContainer.useContainer();
-
-  const [thingToSwap, setThingToSwap] = useState("debt");
-  const [fromTokenStr, setFromTokenStr] = useState("dai");
-  const [toTokenStr, setToTokenStr] = useState("eth");
-  const [amountToSwap, setAmountToSwap] = useState("");
-
-  const { isAmountAvailable, canSwapAmount } = useIsAmountAvailable(
-    amountToSwap,
-    fromTokenStr,
-    thingToSwap,
-  );
-
-  const disableConfirm =
-    !hasProxy || // not connected or no smart wallet
-    fromTokenStr === toTokenStr || // same token
-    !isAmountAvailable || // amount not available
-    amountToSwap === "" || // no amount specified
-    amountToSwap === "0";
-
-  const setMax = () => {
-    if (!hasProxy) return;
-    setAmountToSwap(canSwapAmount.toString());
-  };
+  const [selectedTab, setSelectedTab] = useState(SWAP_TAB_OPTIONS.Swap);
 
   return (
     <Container p="3">
-      <Box>
-        <Field label="I would like to swap" width="100%">
-          <Select
-            required
-            onChange={e => setThingToSwap(e.target.value)}
-            value={thingToSwap}
-          >
-            <option value="debt">Debt (borrowed)</option>
-            <option value="collateral">Collateral (supplied)</option>
-          </Select>
-        </Field>
+      <Box m="auto">
+        <Flex borderColor="#E8E8E8" justifyContent="center">
+          <Box my={3} textAlign="center">
+            {selectedTab === SWAP_TAB_OPTIONS.Swap ? (
+              <Pill mt={2} color="primary">
+                <Button.Text mainColor="#110C62">Swap</Button.Text>
+              </Pill>
+            ) : (
+              <Button.Text
+                mainColor="#988CF0"
+                onClick={() => setSelectedTab(SWAP_TAB_OPTIONS.Swap)}
+              >
+                Swap
+              </Button.Text>
+            )}
+            {selectedTab === SWAP_TAB_OPTIONS.ClearDust ? (
+              <Pill mt={2} color="primary">
+                <Button.Text mainColor="#110C62">Clear Dust</Button.Text>
+              </Pill>
+            ) : (
+              <Button.Text
+                mainColor="#988CF0"
+                onClick={() => setSelectedTab(SWAP_TAB_OPTIONS.ClearDust)}
+              >
+                Clear Dust
+              </Button.Text>
+            )}
+          </Box>
+        </Flex>
       </Box>
 
-      <Box>
-        <Field label="From" width="100%">
-          <Select
-            required
-            value={fromTokenStr}
-            onChange={e => setFromTokenStr(e.target.value)}
-          >
-            <optgroup label="Volatile Crypto">
-              {volatileCoins.map(coin => {
-                const { key, name } = coin;
-                return (
-                  <option key={key} value={key}>
-                    {name}
-                  </option>
-                );
-              })}
-            </optgroup>
-            <optgroup label="Stablecoin">
-              {stableCoins.map(coin => {
-                const { key, name } = coin;
-                return (
-                  <option key={key} value={key}>
-                    {name}
-                  </option>
-                );
-              })}
-            </optgroup>
-          </Select>
-        </Field>
-      </Box>
+      {selectedTab === SWAP_TAB_OPTIONS.Swap ? <Swap /> : null}
+      {selectedTab === SWAP_TAB_OPTIONS.ClearDust ? <ClearDust /> : null}
 
-      <Box>
-        <Field label="To" width="100%">
-          <Select
-            required
-            value={toTokenStr}
-            onChange={e => setToTokenStr(e.target.value)}
-          >
-            <optgroup label="Volatile Crypto">
-              {volatileCoins.map(coin => {
-                const { key, name } = coin;
-                return (
-                  <option key={key} value={key} disabled={key === fromTokenStr}>
-                    {name}
-                  </option>
-                );
-              })}
-            </optgroup>
-            <optgroup label="Stablecoin">
-              {stableCoins.map(coin => {
-                const { key, name } = coin;
-                return (
-                  <option key={key} value={key} disabled={key === fromTokenStr}>
-                    {name}
-                  </option>
-                );
-              })}
-            </optgroup>
-          </Select>
-        </Field>
-      </Box>
-
-      <Box mb="3">
-        <Field
-          mb="0"
-          label={`Amount of ${fromTokenStr.toLocaleUpperCase()} to swap`}
-        >
-          <Input
-            type="number"
-            required={true}
-            placeholder="1337"
-            value={amountToSwap}
-            onChange={e => setAmountToSwap(e.target.value.toString())}
-          />
-        </Field>
-        <Text textAlign="right" opacity={!hasProxy ? "0.5" : "1"}>
-          <Link onClick={setMax}>Set max</Link>
-        </Text>
-      </Box>
-
-      <SwapConfirm
-        thingToSwap={thingToSwap}
-        fromTokenStr={fromTokenStr}
-        toTokenStr={toTokenStr}
-        amountToSwap={amountToSwap}
-        disabled={disableConfirm}
-        outline={!hasProxy}
-      />
     </Container>
   );
 };
