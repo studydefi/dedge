@@ -5,7 +5,6 @@
 pragma solidity 0.5.16;
 pragma experimental ABIEncoderV2;
 
-
 import "../lib/compound/CompoundBase.sol";
 
 import "../lib/dapphub/Guard.sol";
@@ -27,18 +26,17 @@ import "../registries/AddressRegistry.sol";
 
 import "../proxies/DACProxy.sol";
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
-    using SafeMath for uint;
-
     struct SwapOperationCalldata {
         address addressRegistryAddress;
         address oldCTokenAddress;
         address newCTokenAddress;
     }
 
-    function _proxyGuardPermit(address payable proxyAddress, address src) internal {
+    function _proxyGuardPermit(address payable proxyAddress, address src)
+        internal
+    {
         address g = address(DACProxy(proxyAddress).authority());
 
         DSGuard(g).permit(
@@ -48,7 +46,9 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         );
     }
 
-    function _proxyGuardForbid(address payable proxyAddress, address src) internal {
+    function _proxyGuardForbid(address payable proxyAddress, address src)
+        internal
+    {
         address g = address(DACProxy(proxyAddress).authority());
 
         DSGuard(g).forbid(
@@ -59,19 +59,24 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
     }
 
     function swapDebtPostLoan(
-        uint _loanAmount,
-        uint _aaveFee,
-        uint _protocolFee,
+        uint256 _loanAmount,
+        uint256 _aaveFee,
+        uint256 _protocolFee,
         bytes calldata _data
     ) external {
-        SwapOperationCalldata memory soCalldata = abi.decode(_data, (SwapOperationCalldata));
+        SwapOperationCalldata memory soCalldata = abi.decode(
+            _data,
+            (SwapOperationCalldata)
+        );
 
-        AddressRegistry addressRegistry = AddressRegistry(soCalldata.addressRegistryAddress);
+        AddressRegistry addressRegistry = AddressRegistry(
+            soCalldata.addressRegistryAddress
+        );
 
         address oldCTokenAddress = soCalldata.oldCTokenAddress;
         address newCTokenAddress = soCalldata.newCTokenAddress;
 
-        uint debtAmount = _loanAmount.add(_aaveFee).add(_protocolFee);
+        uint256 debtAmount = _loanAmount.add(_aaveFee).add(_protocolFee);
 
         // Note: debtAmount = loanAmount + fees
         // 1. Has ETH from Aave flashloan
@@ -90,14 +95,16 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
             // Gets old token underlying and amount
             address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
 
-            uint oldTokenUnderlyingAmount = _ethToToken(
+            uint256 oldTokenUnderlyingAmount = _ethToToken(
                 oldTokenUnderlying,
                 _loanAmount
             );
 
             // Approves CToken proxy and repays them
-            IERC20(oldTokenUnderlying)
-                .approve(oldCTokenAddress, oldTokenUnderlyingAmount);
+            IERC20(oldTokenUnderlying).approve(
+                oldCTokenAddress,
+                oldTokenUnderlyingAmount
+            );
 
             // Repays CToken
             repayBorrow(oldCTokenAddress, oldTokenUnderlyingAmount);
@@ -114,7 +121,7 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
 
             // Calculates amount of old token underlying that needs to be borrowed
             // to repay debts
-            uint newTokenUnderlyingAmount = _getTokenToEthOutput(
+            uint256 newTokenUnderlyingAmount = _getTokenToEthOutput(
                 newTokenUnderlying,
                 debtAmount
             );
@@ -125,19 +132,28 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
             // Converts to ether
             // Note this part is a bit more strict as we need to have
             // enough ETH to repay Aave
-            _tokenToEth(newTokenUnderlying, newTokenUnderlyingAmount, debtAmount);
+            _tokenToEth(
+                newTokenUnderlying,
+                newTokenUnderlyingAmount,
+                debtAmount
+            );
         }
     }
 
     function swapCollateralPostLoan(
-        uint _loanAmount,
-        uint _aaveFee,
-        uint _protocolFee,
+        uint256 _loanAmount,
+        uint256 _aaveFee,
+        uint256 _protocolFee,
         bytes calldata _data
     ) external {
-        SwapOperationCalldata memory soCalldata = abi.decode(_data, (SwapOperationCalldata));
+        SwapOperationCalldata memory soCalldata = abi.decode(
+            _data,
+            (SwapOperationCalldata)
+        );
 
-        AddressRegistry addressRegistry = AddressRegistry(soCalldata.addressRegistryAddress);
+        AddressRegistry addressRegistry = AddressRegistry(
+            soCalldata.addressRegistryAddress
+        );
 
         address oldCTokenAddress = soCalldata.oldCTokenAddress;
         address newCTokenAddress = soCalldata.newCTokenAddress;
@@ -152,14 +168,14 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         // Steps 2 + 3
         // Converts ETH to newCToken underlying and supply
         // Unless old target underlying is already ether
-        uint repayAmount = _loanAmount.sub(_aaveFee).sub(_protocolFee);
+        uint256 repayAmount = _loanAmount.sub(_aaveFee).sub(_protocolFee);
 
         if (newCTokenAddress == addressRegistry.CEtherAddress()) {
             supply(newCTokenAddress, repayAmount);
         } else {
             // Gets new token underlying and converts ETH into newCToken underlying
             address newTokenUnderlying = ICToken(newCTokenAddress).underlying();
-            uint newTokenUnderlyingAmount = _ethToToken(
+            uint256 newTokenUnderlyingAmount = _ethToToken(
                 newTokenUnderlying,
                 repayAmount
             );
@@ -175,13 +191,20 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         } else {
             // Gets old token underlying and amount to redeem (based on uniswap)
             address oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
-            uint oldTokenUnderlyingAmount = _getTokenToEthOutput(oldTokenUnderlying, _loanAmount);
+            uint256 oldTokenUnderlyingAmount = _getTokenToEthOutput(
+                oldTokenUnderlying,
+                _loanAmount
+            );
 
             // Redeems them
             redeemUnderlying(oldCTokenAddress, oldTokenUnderlyingAmount);
 
             // Converts them into ETH
-            _tokenToEth(oldTokenUnderlying, oldTokenUnderlyingAmount, _loanAmount);
+            _tokenToEth(
+                oldTokenUnderlying,
+                oldTokenUnderlyingAmount,
+                _loanAmount
+            );
         }
     }
 
@@ -217,20 +240,28 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         address dedgeCompoundManagerAddress,
         address payable dacProxyAddress,
         address addressRegistryAddress,
-        address oldCTokenAddress,            // Old CToken address for [debt|collateral]
-        uint oldTokenUnderlyingDelta,        // Amount of old tokens to swap to new tokens
-        bytes calldata executeOperationCalldataParams
-    ) external {
+        address oldCTokenAddress, // Old CToken address for [debt|collateral]
+        uint256 oldTokenUnderlyingDelta, // Amount of old tokens to swap to new tokens
+        address newCTokenAddress,
+        bytes memory executeOperationCalldataParams
+    ) public payable {
+        require(
+            oldCTokenAddress != newCTokenAddress,
+            "swap-operation-same-address"
+        );
+
         // Calling from dacProxy context (msg.sender is dacProxy)
         // 1. Get amount of ETH obtained by selling that from Uniswap
         // 2. Flashloans ETH to dacProxy
 
         // Gets registries
-        AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
+        AddressRegistry addressRegistry = AddressRegistry(
+            addressRegistryAddress
+        );
 
         // 1. Get amount of ETH needed
         // If the old target is ether than the ethDebtAmount is just the delta
-        uint ethDebtAmount;
+        uint256 ethDebtAmount;
 
         if (oldCTokenAddress == addressRegistry.CEtherAddress()) {
             ethDebtAmount = oldTokenUnderlyingDelta;
@@ -244,7 +275,8 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
 
         // Injects the target address into calldataParams
         // so user proxy know which address it'll be calling `calldataParams` on
-        bytes memory addressAndExecuteOperationCalldataParams = abi.encodePacked(
+        bytes memory addressAndExecuteOperationCalldataParams = abi
+            .encodePacked(
             abi.encode(dedgeCompoundManagerAddress),
             executeOperationCalldataParams
         );
@@ -252,7 +284,8 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         ILendingPool lendingPool = ILendingPool(
             ILendingPoolAddressesProvider(
                 addressRegistry.AaveLendingPoolAddressProviderAddress()
-            ).getLendingPool()
+            )
+                .getLendingPool()
         );
 
         // Approve lendingPool to call proxy
@@ -270,82 +303,14 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         _proxyGuardForbid(dacProxyAddress, address(lendingPool));
     }
 
-    // Clears dust debt by swapping old debt into new debt
-    function clearDebtDust(
+    // Helper function to clear out collateral dust
+    // after swapping collateral
+    function _clearCollateralDust(
         address addressRegistryAddress,
         address oldCTokenAddress,
-        uint oldTokenUnderlyingDustAmount,
+        uint256 oldTokenUnderlyingAmount,
         address newCTokenAddress
-    ) public payable {
-        // i.e. Has 0.1 ETH (oldCToken) debt 900 DAI (newCToken)
-        // wants to have it all in DAI
-
-        // 0. Calculates 0.1 ETH equilavent in DAI
-        // 1. Borrows out 0.1 ETH equilavent in DAI (~10 DAI as of march 2020)
-        // 2. Convert 10 DAI into 0.1 ETH
-        // 3. Repay 0.1 ETH
-
-        require(oldCTokenAddress != newCTokenAddress, "clear-debt-same-address");
-
-        AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
-
-        uint borrowAmount;
-        address oldTokenUnderlying;
-        address newTokenUnderlying;
-
-        if (oldCTokenAddress == addressRegistry.CEtherAddress()) {
-            // ETH -> Token
-            newTokenUnderlying = ICToken(newCTokenAddress).underlying();
-
-            // Calculates ETH equilavent in token
-            borrowAmount = _getTokenToEthOutput(newTokenUnderlying, oldTokenUnderlyingDustAmount);
-
-            // Borrows out equilavent token
-            borrow(newCTokenAddress, borrowAmount);
-
-            // Converts token to ETH
-            _tokenToEth(newTokenUnderlying, borrowAmount, oldTokenUnderlyingDustAmount);
-        } else if (newCTokenAddress == addressRegistry.CEtherAddress()) {
-            // Token -> ETH
-            oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
-
-            // Calculates token equilavent in ETH
-            borrowAmount = _getEthToTokenOutput(oldTokenUnderlying, oldTokenUnderlyingDustAmount);
-
-            // Borrows out equilavent ETH
-            borrow(newCTokenAddress, borrowAmount);
-
-            // Converts ETH to token
-            _ethToToken(oldTokenUnderlying, borrowAmount, oldTokenUnderlyingDustAmount);
-        } else {
-            // token -> token
-            oldTokenUnderlying = ICToken(oldCTokenAddress).underlying();
-            newTokenUnderlying = ICToken(newCTokenAddress).underlying();
-
-            // Calculates eth borrow amount
-            uint ethAmount = _getEthToTokenOutput(oldTokenUnderlying, oldTokenUnderlyingDustAmount);
-
-            // Calculates token borrow amount
-            borrowAmount = _getTokenToEthOutput(newTokenUnderlying, ethAmount);
-
-            // Borrows out equilavent token
-            borrow(newCTokenAddress, borrowAmount);
-
-            // Converts old token to target token
-            _tokenToEth(newTokenUnderlying, borrowAmount, ethAmount);
-            _ethToToken(oldTokenUnderlying, ethAmount, oldTokenUnderlyingDustAmount);
-        }
-
-        // Repays borrowed
-        repayBorrow(oldCTokenAddress, oldTokenUnderlyingDustAmount);
-    }
-
-    function clearCollateralDust(
-        address addressRegistryAddress,
-        address oldCTokenAddress,
-        uint oldTokenUnderlyingAmount,
-        address newCTokenAddress
-    ) public payable {
+    ) internal {
         // i.e. Has 10 ETH collateral and 10 DAI collateral
         // wants to have it all in ETH
 
@@ -358,10 +323,15 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
         // 2. Convert it to other token
         // 3. Put other token in
 
-        require(oldCTokenAddress != newCTokenAddress, "clear-collateral-same-address");
+        require(
+            oldCTokenAddress != newCTokenAddress,
+            "clear-collateral-same-address"
+        );
 
-        uint supplyAmount;
-        AddressRegistry addressRegistry = AddressRegistry(addressRegistryAddress);
+        uint256 supplyAmount;
+        AddressRegistry addressRegistry = AddressRegistry(
+            addressRegistryAddress
+        );
 
         // Redeems collateral
         redeemUnderlying(oldCTokenAddress, oldTokenUnderlyingAmount);
@@ -389,5 +359,70 @@ contract DedgeCompoundManager is UniswapLiteBase, CompoundBase {
 
         // Supplies collateral
         supply(newCTokenAddress, supplyAmount);
+    }
+
+    // Due to the limitations of swap-collateral we can't swap 100% of the collateral,
+    // As such, we introduce a new function: "swapOperationAndClearCollateralDust"
+    // that performs a swap collateral operation and clears the underlying dust difference,
+    // IF the oldTokenUnderlyingDelta > 95% of underlyingDelta
+    function swapOperationAndClearCollateralDust(
+        address dedgeCompoundManagerAddress,
+        address payable dacProxyAddress,
+        address addressRegistryAddress,
+        address oldCTokenAddress, // Old CToken address for [debt|collateral]
+        uint256 oldTokenUnderlyingDelta, // Amount of old tokens to swap to new tokens
+        address newCTokenAddress,
+        bytes calldata executeOperationCalldataParams
+    ) external {
+        uint256 initialBorrowBalanceUnderlying = getBorrowBalanceUnderlying(
+            oldCTokenAddress,
+            dacProxyAddress
+        );
+
+        // If we wanna swap > 93% of our collateral,
+        // we need to swap then clear the dust as
+        // we can only flashloan and swap 93% of underlying
+        // due to slippages :(
+        uint256 oldTokenUnderlyingDeltaFixed = oldTokenUnderlyingDelta;
+        uint256 oldTokenUnderlyingDeltaThreshold = initialBorrowBalanceUnderlying.mul(95).div(100);
+        
+        if (oldTokenUnderlyingDelta > oldTokenUnderlyingDeltaThreshold) {
+            oldTokenUnderlyingDeltaFixed = oldTokenUnderlyingDeltaThreshold;
+        }
+
+        // Swap tokens via flashloans
+        swapOperation(
+            dedgeCompoundManagerAddress,
+            dacProxyAddress,
+            addressRegistryAddress,
+            oldCTokenAddress,
+            oldTokenUnderlyingDeltaFixed,
+            newCTokenAddress,
+            executeOperationCalldataParams
+        );
+
+        // Re calculate borrow balance underlying
+        uint256 postSwapBorrowBalanceUnderlying = getBorrowBalanceUnderlying(
+            oldCTokenAddress,
+            dacProxyAddress
+        );
+
+        // How much was swapped?
+        uint256 oldTokenSwappedDelta = initialBorrowBalanceUnderlying.sub(
+            postSwapBorrowBalanceUnderlying
+        );
+
+        // If how much we swapped is not gte then `oldTokenUnderlyingDelta`
+        // We will clear the dust between the delta of the two
+        // NOTE: Assumption is that user has borrowing power
+        //       to borrow 7.5% of their collateral
+        if (oldTokenSwappedDelta < oldTokenUnderlyingDelta) {
+            _clearCollateralDust(
+                addressRegistryAddress,
+                oldCTokenAddress,
+                oldTokenUnderlyingDelta.sub(oldTokenSwappedDelta),
+                newCTokenAddress
+            );
+        }
     }
 }

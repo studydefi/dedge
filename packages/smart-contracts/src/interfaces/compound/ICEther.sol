@@ -11,4 +11,5 @@ contract ICEther {
     function borrowBalanceStored(address account) external view returns (uint256);
     function balanceOfUnderlying(address account) external returns (uint);
     function balanceOf(address owner) external view returns (uint256);
+    function getAccountSnapshot(address account) external view returns (uint, uint, uint, uint);
 }
