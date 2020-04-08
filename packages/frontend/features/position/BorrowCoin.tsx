@@ -22,7 +22,7 @@ const BorrowCoin = ({ coin }) => {
   // and our `getNewLiquidationPrice` doesn't clobber with one another
   const [getLiquidationCallId, setGetLiquidationCallId] = useState(null);
   const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
-    false
+    false,
   );
   const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
 
@@ -34,7 +34,7 @@ const BorrowCoin = ({ coin }) => {
       proxy.address,
       coin.cTokenEquilaventAddress,
       ethers.utils.parseUnits(amount, coin.decimals),
-      dedgeHelpers.compound.CTOKEN_ACTIONS.Borrow
+      dedgeHelpers.compound.CTOKEN_ACTIONS.Borrow,
     );
     setNewLiquidationPrice(liquidationPriceUSD.toFixed(2));
     setGettingNewLiquidationPrice(false);
@@ -49,14 +49,14 @@ const BorrowCoin = ({ coin }) => {
         }
         setGettingNewLiquidationPrice(true);
         setGetLiquidationCallId(
-          setTimeout(() => getNewLiquidationPrice(), 500)
+          setTimeout(() => getNewLiquidationPrice(), 500),
         );
       } catch (e) {}
     }
   }, [amount]);
 
   return (
-    <Box>
+    <Flex alignItems="center" justifyContent="center" flexDirection="column">
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
         <Field label={`Amount of ${coin.symbol} to Borrow`}>
@@ -82,7 +82,7 @@ const BorrowCoin = ({ coin }) => {
             proxy,
             dedgeCompoundManager.address,
             coin.cTokenEquilaventAddress,
-            ethers.utils.parseUnits(amount, coin.decimals)
+            ethers.utils.parseUnits(amount, coin.decimals),
           );
           window.toastProvider.addMessage(`Borrowing ${coin.symbol}...`, {
             secondaryMessage: "Check progress on Etherscan",
@@ -96,7 +96,7 @@ const BorrowCoin = ({ coin }) => {
             `Successfully borrowed ${coin.symbol}!`,
             {
               variant: "success",
-            }
+            },
           );
 
           setLoading(false);
@@ -119,7 +119,7 @@ const BorrowCoin = ({ coin }) => {
         New liqudation price:{" $ "}
         {gettingNewLiquidationPrice ? `...` : newLiquidationPrice.toString()}
       </Text>
-    </Box>
+    </Flex>
   );
 };
 

@@ -115,7 +115,7 @@ const CoinOptions = ({ symbol }) => {
 
             <br />
 
-            <Flex justifyContent="space-around" textAlign="center">
+            <Flex justifyContent="space-around" textAlign="center" height="280px">
               {selectedTab === TAB_OPTIONS.Borrow ? (
                 <BorrowCoin coin={coin} />
               ) : null}
