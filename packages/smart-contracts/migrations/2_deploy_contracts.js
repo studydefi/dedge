@@ -9,12 +9,12 @@ const DedgeMakerManager = artifacts.require("DedgeMakerManager");
 const AddressRegistry = artifacts.require("AddressRegistry");
 
 module.exports = async deployer => {
-    await deployer.deploy(DACProxyFactory)
-    await deployer.deploy(DedgeCompoundManager)
-    await deployer.deploy(DedgeGeneralManager)
-    await deployer.deploy(DedgeExitManager)
-    await deployer.deploy(DedgeMakerManager)
-    await deployer.deploy(AddressRegistry)
+    await deployer.deploy(DACProxyFactory, { overwrite: false })
+    await deployer.deploy(DedgeCompoundManager, { overwrite: true })
+    await deployer.deploy(DedgeGeneralManager, { overwrite: false })
+    await deployer.deploy(DedgeExitManager, { overwrite: false })
+    await deployer.deploy(DedgeMakerManager, { overwrite: false })
+    await deployer.deploy(AddressRegistry, { overwrite: false })
 
     // Saves to a file if needed
     const data = JSON.stringify({
