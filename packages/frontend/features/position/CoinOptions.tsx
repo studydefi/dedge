@@ -62,24 +62,28 @@ const CoinOptions = ({ symbol }) => {
                       <Button.Text mainColor="#110C62">Borrow</Button.Text>
                     </Pill>
                   ) : (
-                    <Button.Text
-                      mainColor="#988CF0"
-                      onClick={() => setSelectedTab(TAB_OPTIONS.Borrow)}
-                    >
-                      Borrow
-                    </Button.Text>
+                    <Pill mt={2} color="white">
+                      <Button.Text
+                        mainColor="#988CF0"
+                        onClick={() => setSelectedTab(TAB_OPTIONS.Borrow)}
+                      >
+                        Borrow
+                      </Button.Text>
+                    </Pill>
                   )}
                   {selectedTab === TAB_OPTIONS.Repay ? (
                     <Pill mt={2} color="primary">
                       <Button.Text mainColor="#110C62">Repay</Button.Text>
                     </Pill>
                   ) : (
-                    <Button.Text
-                      mainColor="#988CF0"
-                      onClick={() => setSelectedTab(TAB_OPTIONS.Repay)}
-                    >
-                      Repay
-                    </Button.Text>
+                    <Pill mt={2} color="white">
+                      <Button.Text
+                        mainColor="#988CF0"
+                        onClick={() => setSelectedTab(TAB_OPTIONS.Repay)}
+                      >
+                        Repay
+                      </Button.Text>
+                    </Pill>
                   )}
                 </Box>
 
@@ -90,24 +94,28 @@ const CoinOptions = ({ symbol }) => {
                       <Button.Text mainColor="#110C62">Supply</Button.Text>
                     </Pill>
                   ) : (
-                    <Button.Text
-                      mainColor="#988CF0"
-                      onClick={() => setSelectedTab(TAB_OPTIONS.Supply)}
-                    >
-                      Supply
-                    </Button.Text>
+                    <Pill mt={2} color="white">
+                      <Button.Text
+                        mainColor="#988CF0"
+                        onClick={() => setSelectedTab(TAB_OPTIONS.Supply)}
+                      >
+                        Supply
+                      </Button.Text>
+                    </Pill>
                   )}
                   {selectedTab === TAB_OPTIONS.Withdraw ? (
                     <Pill mt={2} color="primary">
                       <Button.Text mainColor="#110C62">Withdraw</Button.Text>
                     </Pill>
                   ) : (
-                    <Button.Text
-                      mainColor="#988CF0"
-                      onClick={() => setSelectedTab(TAB_OPTIONS.Withdraw)}
-                    >
-                      Withdraw
-                    </Button.Text>
+                    <Pill mt={2} color="white">
+                      <Button.Text
+                        mainColor="#988CF0"
+                        onClick={() => setSelectedTab(TAB_OPTIONS.Withdraw)}
+                      >
+                        Withdraw
+                      </Button.Text>
+                    </Pill>
                   )}
                 </Box>
               </Flex>
