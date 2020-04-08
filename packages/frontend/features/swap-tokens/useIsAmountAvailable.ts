@@ -3,7 +3,7 @@ import CompoundPositions from "../../containers/CompoundPositions";
 const useIsAmountAvailable = (
   amount: string,
   tokenStr: string,
-  thingToSwap: string,
+  thingToSwap: string
 ) => {
   const { compoundPositions } = CompoundPositions.useContainer();
 
@@ -17,7 +17,7 @@ const useIsAmountAvailable = (
   const canSwapAmount =
     thingToSwap === "debt"
       ? parseFloat(tokenBalance.borrow)
-      : 0.95 * parseFloat(tokenBalance.supply);
+      : parseFloat(tokenBalance.supply);
 
   const result = parseFloat(amount) <= canSwapAmount;
 
