@@ -74,7 +74,7 @@ function useDACProxy() {
       });
     } catch (e) {
       if (tx === null) {
-        window.toastProvider.addMessage(`Tx cancelled`, {
+        window.toastProvider.addMessage(`Transaction cancelled`, {
           variant: "failure",
         });
       } else {

@@ -71,7 +71,7 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
       window.analytics.track("Allow Vault Success", { selectedVaultId });
     } catch (e) {
       if (tx === null) {
-        window.toastProvider.addMessage(`Tx cancelled`, {
+        window.toastProvider.addMessage(`Transaction cancelled`, {
           variant: "failure",
         });
       } else {
