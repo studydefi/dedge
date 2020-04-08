@@ -87,29 +87,50 @@ const ExitPositionsButton = () => {
                   collateralMarkets,
                 } = await dedgeHelpers.exit.getExitPositionParameters(
                   signer,
-                  proxy.address,
+                  proxy.address
                 );
 
-                const tx = await dedgeHelpers.exit.exitPositionToETH(
-                  address,
-                  etherToBorrowWeiBN,
-                  proxy,
-                  dedgeAddressRegistry.address,
-                  dedgeExitManager.address,
-                  debtMarkets,
-                  collateralMarkets,
-                );
-                window.toastProvider.addMessage(`Exiting positions...`, {
-                  secondaryMessage: "Check progress on Etherscan",
-                  actionHref: `https://etherscan.io/tx/${tx.hash}`,
-                  actionText: "Check",
-                  variant: "processing",
-                });
-                await tx.wait();
+                let tx = null;
+                try {
+                  tx = await dedgeHelpers.exit.exitPositionToETH(
+                    address,
+                    etherToBorrowWeiBN,
+                    proxy,
+                    dedgeAddressRegistry.address,
+                    dedgeExitManager.address,
+                    debtMarkets,
+                    collateralMarkets
+                  );
+                  window.toastProvider.addMessage(`Exiting positions...`, {
+                    secondaryMessage: "Check progress on Etherscan",
+                    actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                    actionText: "Check",
+                    variant: "processing",
+                  });
+                  await tx.wait();
 
-                window.toastProvider.addMessage(`Exited Positions!`, {
-                  variant: "success",
-                });
+                  window.toastProvider.addMessage(`Exited Positions!`, {
+                    variant: "success",
+                  });
+                } catch (e) {
+                  if (tx === null) {
+                    window.toastProvider.addMessage(`Transaction cancelled`, {
+                      variant: "failure",
+                    });
+                  } else {
+                    window.toastProvider.addMessage(
+                      `Failed to exit poisitions...`,
+                      {
+                        secondaryMessage: "Check reason on Etherscan",
+                        actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                        actionText: "Check",
+                        variant: "failure",
+                      }
+                    );
+                  }
+                  setLoading(false);
+                  return;
+                }
 
                 window.analytics.track("Exit Positions Success");
                 setLoading(false);

@@ -43,34 +43,53 @@ function useDACProxy() {
       dedgeCompoundManager,
     } = contracts;
     setLoading(true);
-    const tx = await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
-      dacProxyFactory,
-      dedgeCompoundManager.address,
-      [
-        cEther.address,
-        cDai.address,
-        cRep.address,
-        cZrx.address,
-        cBat.address,
-        cUsdc.address,
-        cWbtc.address,
-      ],
-    );
 
-    window.toastProvider.addMessage("Creating Smart Wallet...", {
-      secondaryMessage: "Check progress on Etherscan",
-      actionHref: `https://etherscan.io/tx/${tx.hash}`,
-      actionText: "Check",
-      variant: "processing",
-    });
+    let tx = null;
+    try {
+      tx = await dedgeHelpers.proxyFactory.buildAndEnterMarkets(
+        dacProxyFactory,
+        dedgeCompoundManager.address,
+        [
+          cEther.address,
+          cDai.address,
+          cRep.address,
+          cZrx.address,
+          cBat.address,
+          cUsdc.address,
+          cWbtc.address,
+        ]
+      );
 
-    await tx.wait();
+      window.toastProvider.addMessage("Creating Smart Wallet...", {
+        secondaryMessage: "Check progress on Etherscan",
+        actionHref: `https://etherscan.io/tx/${tx.hash}`,
+        actionText: "Check",
+        variant: "processing",
+      });
 
-    window.toastProvider.addMessage("Smart Wallet created", {
-      variant: "success",
-    });
+      await tx.wait();
+
+      window.toastProvider.addMessage("Smart Wallet created", {
+        variant: "success",
+      });
+    } catch (e) {
+      if (tx === null) {
+        window.toastProvider.addMessage(`Transaction cancelled`, {
+          variant: "failure",
+        });
+      } else {
+        window.toastProvider.addMessage(`Failed to create wallet...`, {
+          secondaryMessage: "Check reason on Etherscan",
+          actionHref: `https://etherscan.io/tx/${tx.hash}`,
+          actionText: "Check",
+          variant: "failure",
+        });
+      }
+      setLoading(false);
+      return;
+    }
+
     setLoading(false);
-
     fetchProxyAddress();
   };
 
@@ -86,7 +105,7 @@ function useDACProxy() {
     if (proxyAddress) {
       const { abi } = legos.dappsys.dsProxy;
       const proxyContract = new ethers.Contract(proxyAddress, abi, signer);
-      window.analytics.identify(proxyAddress)
+      window.analytics.identify(proxyAddress);
       setProxyContract(proxyContract);
     }
   }, [proxyAddress, signer]);

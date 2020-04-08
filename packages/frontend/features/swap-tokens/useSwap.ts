@@ -49,27 +49,47 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         to: toTokenStr,
         amount: amountToSwap,
       });
-      const tx = await swapDebt(
-        ADDRESS_MAP[fromTokenStr],
-        ADDRESS_MAP[toTokenStr],
-        amount
-      );
-      window.toastProvider.addMessage(`Swapping debt...`, {
-        secondaryMessage: "Check progress on Etherscan",
-        actionHref: `https://etherscan.io/tx/${tx.hash}`,
-        actionText: "Check",
-        variant: "processing",
-      });
-      await tx.wait();
+      let tx = null;
+
+      try {
+        await swapDebt(
+          ADDRESS_MAP[fromTokenStr],
+          ADDRESS_MAP[toTokenStr],
+          amount
+        );
+        window.toastProvider.addMessage(`Swapping debt...`, {
+          secondaryMessage: "Check progress on Etherscan",
+          actionHref: `https://etherscan.io/tx/${tx.hash}`,
+          actionText: "Check",
+          variant: "processing",
+        });
+        await tx.wait();        
+        window.toastProvider.addMessage(`Swap Debt Success!`, {
+          variant: "success",
+        });
+        window.analytics.track("Swap Debt Success", {
+          from: fromTokenStr,
+          to: toTokenStr,
+          amount: amountToSwap,
+        });
+      } catch (e) {
+        if (tx === null) {
+          window.toastProvider.addMessage(`Transaction cancelled`, {
+            variant: "failure",
+          });
+        } else {
+          window.toastProvider.addMessage(`Failed to swap debt...`, {
+            secondaryMessage: "Check reason on Etherscan",
+            actionHref: `https://etherscan.io/tx/${tx.hash}`,
+            actionText: "Check",
+            variant: "failure",
+          });
+        }
+        setLoading(false);
+        return;
+      }
+      
       setLoading(false);
-      window.toastProvider.addMessage(`Swap Debt Success!`, {
-        variant: "success",
-      });
-      window.analytics.track("Swap Debt Success", {
-        from: fromTokenStr,
-        to: toTokenStr,
-        amount: amountToSwap,
-      });
       return;
     }
 
@@ -79,29 +99,47 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       to: toTokenStr,
       amount: amountToSwap,
     });
-    const tx = await swapCollateral(
-      ADDRESS_MAP[fromTokenStr],
-      ADDRESS_MAP[toTokenStr],
-      amount
-    );
-    window.toastProvider.addMessage(`Swapping collateral...`, {
-      secondaryMessage: "Check progress on Etherscan",
-      actionHref: `https://etherscan.io/tx/${tx.hash}`,
-      actionText: "Check",
-      variant: "processing",
-    });
-    await tx.wait();
+    let tx = null;
 
-    window.toastProvider.addMessage(`Swap Collateral Success!`, {
-      variant: "success",
-    });
-    window.analytics.track("Swap Collateral Success", {
-      from: fromTokenStr,
-      to: toTokenStr,
-      amount: amountToSwap,
-    });
-    setLoading(false);
-    return;
+    try {
+      tx = await swapCollateral(
+        ADDRESS_MAP[fromTokenStr],
+        ADDRESS_MAP[toTokenStr],
+        amount
+      );
+      window.toastProvider.addMessage(`Swapping collateral...`, {
+        secondaryMessage: "Check progress on Etherscan",
+        actionHref: `https://etherscan.io/tx/${tx.hash}`,
+        actionText: "Check",
+        variant: "processing",
+      });
+      await tx.wait();
+      setLoading(false);
+
+      window.toastProvider.addMessage(`Swap Collateral Success!`, {
+        variant: "success",
+      });
+      window.analytics.track("Swap Collateral Success", {
+        from: fromTokenStr,
+        to: toTokenStr,
+        amount: amountToSwap,
+      });
+    } catch (e) {
+      if (tx === null) {
+        window.toastProvider.addMessage(`Transaction cancelled`, {
+          variant: "failure",
+        });
+      } else {
+        window.toastProvider.addMessage(`Failed to swap collateral...`, {
+          secondaryMessage: "Check reason on Etherscan",
+          actionHref: `https://etherscan.io/tx/${tx.hash}`,
+          actionText: "Check",
+          variant: "failure",
+        });
+      }
+      setLoading(false);
+      return;
+    }
   };
 
   return { swapFunction, loading };

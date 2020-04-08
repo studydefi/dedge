@@ -90,26 +90,44 @@ const WithdrawCoin = ({ coin, hide }) => {
           setLoading(true);
 
           const { dedgeCompoundManager } = contracts;
-          const tx = await dedgeHelpers.compound.withdrawThroughProxy(
-            proxy,
-            dedgeCompoundManager.address,
-            coin.cTokenEquilaventAddress,
-            ethers.utils.parseUnits(amount, coin.decimals),
-          );
-          window.toastProvider.addMessage(`Withdrawing ${coin.symbol}...`, {
-            secondaryMessage: "Check progress on Etherscan",
-            actionHref: `https://etherscan.io/tx/${tx.hash}`,
-            actionText: "Check",
-            variant: "processing",
-          });
-          await tx.wait();
+          let tx = null;
+          try {
+            tx = await dedgeHelpers.compound.withdrawThroughProxy(
+              proxy,
+              dedgeCompoundManager.address,
+              coin.cTokenEquilaventAddress,
+              ethers.utils.parseUnits(amount, coin.decimals)
+            );
+            window.toastProvider.addMessage(`Withdrawing ${coin.symbol}...`, {
+              secondaryMessage: "Check progress on Etherscan",
+              actionHref: `https://etherscan.io/tx/${tx.hash}`,
+              actionText: "Check",
+              variant: "processing",
+            });
+            await tx.wait();
 
-          window.toastProvider.addMessage(
-            `Successfully withdrew ${coin.symbol}!`,
-            {
-              variant: "success",
-            },
-          );
+            window.toastProvider.addMessage(
+              `Successfully withdrew ${coin.symbol}!`,
+              {
+                variant: "success",
+              }
+            );
+          } catch (e) {
+            if (tx === null) {
+              window.toastProvider.addMessage(`Transaction cancelled`, {
+                variant: "failure",
+              });
+            } else {
+              window.toastProvider.addMessage(`Failed to withdraw...`, {
+                secondaryMessage: "Check reason on Etherscan",
+                actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                actionText: "Check",
+                variant: "failure",
+              });
+            }
+            setLoading(false);
+            return;
+          }
 
           setLoading(false);
           getBalances();

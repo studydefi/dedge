@@ -23,7 +23,7 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
     const allowed = await dedgeHelpers.maker.isUserAllowedVault(
       proxy.address,
       selectedVaultId,
-      makerCdpManager,
+      makerCdpManager
     );
 
     setImportAllowed(Boolean(allowed));
@@ -44,31 +44,47 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
     const makerDsProxyContract = new ethers.Contract(
       userMakerdaoProxyAddress,
       legos.dappsys.dsProxy.abi,
-      signer,
+      signer
     );
 
-    const tx = await dedgeHelpers.maker.dsProxyCdpAllowDacProxy(
-      makerDsProxyContract,
-      proxyAddress,
-      makerCdpManager.address,
-      makerProxyActions.address,
-      selectedVaultId.toString(),
-    );
+    let tx = null;
+    try {
+      tx = await dedgeHelpers.maker.dsProxyCdpAllowDacProxy(
+        makerDsProxyContract,
+        proxyAddress,
+        makerCdpManager.address,
+        makerProxyActions.address,
+        selectedVaultId.toString()
+      );
+      window.toastProvider.addMessage(`Allowing vault #${selectedVaultId}...`, {
+        secondaryMessage: "Check progress on Etherscan",
+        actionHref: `https://etherscan.io/tx/${tx.hash}`,
+        actionText: "Check",
+        variant: "processing",
+      });
+      await tx.wait();
 
-    window.toastProvider.addMessage(`Allowing vault #${selectedVaultId}...`, {
-      secondaryMessage: "Check progress on Etherscan",
-      actionHref: `https://etherscan.io/tx/${tx.hash}`,
-      actionText: "Check",
-      variant: "processing",
-    });
-
-    await tx.wait();
-
-    window.toastProvider.addMessage(
-      `Vault #${selectedVaultId} allowance approved`,
-      { variant: "success" },
-    );
-    window.analytics.track("Allow Vault Success", { selectedVaultId });
+      window.toastProvider.addMessage(
+        `Vault #${selectedVaultId} allowance approved`,
+        { variant: "success" }
+      );
+      window.analytics.track("Allow Vault Success", { selectedVaultId });
+    } catch (e) {
+      if (tx === null) {
+        window.toastProvider.addMessage(`Transaction cancelled`, {
+          variant: "failure",
+        });
+      } else {
+        window.toastProvider.addMessage(`Failed to allow vault...`, {
+          secondaryMessage: "Check reason on Etherscan",
+          actionHref: `https://etherscan.io/tx/${tx.hash}`,
+          actionText: "Check",
+          variant: "failure",
+        });
+      }
+      setLoading(false);
+      return;
+    }
 
     setLoading(false);
     getAllowStatus();

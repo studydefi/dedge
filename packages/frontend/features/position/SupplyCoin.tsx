@@ -136,24 +136,44 @@ const SupplyCoin = ({ coin, hide }) => {
                 signer,
               );
 
-              const tx = await tokenContract.approve(proxyAddress, maxUINT);
-              window.toastProvider.addMessage(`Approving ${coin.symbol}...`, {
-                secondaryMessage: "Check progress on Etherscan",
-                actionHref: `https://etherscan.io/tx/${tx.hash}`,
-                actionText: "Check",
-                variant: "processing",
-              });
-              await tx.wait();
+              let tx = null;
+              try {
+                tx = await tokenContract.approve(proxyAddress, maxUINT);
+                window.toastProvider.addMessage(`Approving ${coin.symbol}...`, {
+                  secondaryMessage: "Check progress on Etherscan",
+                  actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                  actionText: "Check",
+                  variant: "processing",
+                });
+                await tx.wait();
 
-              window.toastProvider.addMessage(
-                `Successfully approved ${coin.symbol}!`,
-                {
-                  variant: "success",
-                },
-              );
+                window.toastProvider.addMessage(
+                  `Successfully approved ${coin.symbol}!`,
+                  {
+                    variant: "success",
+                  }
+                );
+              } catch (e) {
+                if (tx === null) {
+                  window.toastProvider.addMessage(`Transaction cancelled`, {
+                    variant: "failure",
+                  });
+                } else {
+                  window.toastProvider.addMessage(
+                    `Failed to approve ${coin.symbol}...`,
+                    {
+                      secondaryMessage: "Check reason on Etherscan",
+                      actionHref: `https://etherscan.io/tx/${tx.hash}`,
+                      actionText: "Check",
+                      variant: "failure",
+                    }
+                  );
+                }
+                setTransferLoading(false);
+                return;
+              }
 
               setTransferLoading(false);
-
               getCanTransfer();
             }}
           >
