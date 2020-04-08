@@ -34,14 +34,14 @@
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICompoundPriceOracle.sol",
     "exportedSymbols": {
       "ICompoundPriceOracle": [
-        868
+        894
       ]
     },
-    "id": 869,
+    "id": 895,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 860,
+        "id": 886,
         "literals": [
           "solidity",
           "0.5",
@@ -56,9 +56,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 868,
+        "id": 894,
         "linearizedBaseContracts": [
-          868
+          894
         ],
         "name": "ICompoundPriceOracle",
         "nodeType": "ContractDefinition",
@@ -66,22 +66,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 867,
+            "id": 893,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getUnderlyingPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 863,
+              "id": 889,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 862,
+                  "id": 888,
                   "name": "cToken",
                   "nodeType": "VariableDeclaration",
-                  "scope": 867,
+                  "scope": 893,
                   "src": "89:14:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -90,7 +90,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 861,
+                    "id": 887,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "89:7:9",
@@ -107,15 +107,15 @@
               "src": "88:16:9"
             },
             "returnParameters": {
-              "id": 866,
+              "id": 892,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 865,
+                  "id": 891,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 867,
+                  "scope": 893,
                   "src": "128:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -124,7 +124,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 864,
+                    "id": 890,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "128:7:9",
@@ -139,14 +139,14 @@
               ],
               "src": "127:9:9"
             },
-            "scope": 868,
+            "scope": 894,
             "src": "61:76:9",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 869,
+        "scope": 895,
         "src": "25:114:9"
       }
     ],
@@ -156,14 +156,14 @@
     "absolutePath": "/home/kendrick/Development/Ethereum/dedge/packages/smart-contracts/src/interfaces/compound/ICompoundPriceOracle.sol",
     "exportedSymbols": {
       "ICompoundPriceOracle": [
-        868
+        894
       ]
     },
-    "id": 869,
+    "id": 895,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 860,
+        "id": 886,
         "literals": [
           "solidity",
           "0.5",
@@ -178,9 +178,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 868,
+        "id": 894,
         "linearizedBaseContracts": [
-          868
+          894
         ],
         "name": "ICompoundPriceOracle",
         "nodeType": "ContractDefinition",
@@ -188,22 +188,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 867,
+            "id": 893,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getUnderlyingPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 863,
+              "id": 889,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 862,
+                  "id": 888,
                   "name": "cToken",
                   "nodeType": "VariableDeclaration",
-                  "scope": 867,
+                  "scope": 893,
                   "src": "89:14:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -212,7 +212,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 861,
+                    "id": 887,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "89:7:9",
@@ -229,15 +229,15 @@
               "src": "88:16:9"
             },
             "returnParameters": {
-              "id": 866,
+              "id": 892,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 865,
+                  "id": 891,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 867,
+                  "scope": 893,
                   "src": "128:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -246,7 +246,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 864,
+                    "id": 890,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "128:7:9",
@@ -261,14 +261,14 @@
               ],
               "src": "127:9:9"
             },
-            "scope": 868,
+            "scope": 894,
             "src": "61:76:9",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 869,
+        "scope": 895,
         "src": "25:114:9"
       }
     ],
@@ -280,7 +280,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-03T06:25:13.468Z",
+  "updatedAt": "2020-04-08T12:21:13.680Z",
   "devdoc": {
     "methods": {}
   },

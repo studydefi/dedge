@@ -91,6 +91,7 @@ const IDedgeCompoundManager = new ethers.utils.Interface(
 
 const swapOperation = async (
   swapFunctionEncoder: EncoderFunction,
+  swapOperationFunctionEncoder: EncoderFunction,
   dacProxy: ethers.Contract,
   dedgeCompoundManager: Address,
   addressRegistry: Address,
@@ -118,16 +119,15 @@ const swapOperation = async (
     swapOperationStructData,
   ]);
 
-  const swapOperationCalldata = IDedgeCompoundManager.functions.swapOperation.encode(
-    [
-      dedgeCompoundManager,
-      dacProxy.address,
-      addressRegistry,
-      oldCToken,
-      oldTokenUnderlyingDeltaWei.toString(),
-      executeOperationCalldataParams,
-    ]
-  );
+  const swapOperationCalldata = swapOperationFunctionEncoder([
+    dedgeCompoundManager,
+    dacProxy.address,
+    addressRegistry,
+    oldCToken,
+    oldTokenUnderlyingDeltaWei.toString(),
+    newCToken,
+    executeOperationCalldataParams,
+  ]);
 
   return dacProxy.execute(
     dedgeCompoundManager,
@@ -150,6 +150,8 @@ const swapDebt = async (
   return swapOperation(
     (x: any[]): string =>
       IDedgeCompoundManager.functions.swapDebtPostLoan.encode(x),
+    (x: any[]): string =>
+      IDedgeCompoundManager.functions.swapOperation.encode(x),
     dacProxy,
     dedgeCompoundManager,
     addressRegistry,
@@ -174,6 +176,8 @@ const swapCollateral = async (
   return swapOperation(
     (x: any[]): string =>
       IDedgeCompoundManager.functions.swapCollateralPostLoan.encode(x),
+    (x: any[]): string =>
+      IDedgeCompoundManager.functions.swapOperationAndClearCollateralDust.encode(x),
     dacProxy,
     dedgeCompoundManager,
     addressRegistry,

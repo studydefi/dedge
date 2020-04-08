@@ -9,7 +9,11 @@ import "../../interfaces/compound/ICToken.sol";
 
 import "../../interfaces/IERC20.sol";
 
+import "@openzeppelin/contracts/math/SafeMath.sol";
+
 contract CompoundBase {
+    using SafeMath for uint256;
+
     address constant CompoundComptrollerAddress = 0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B;
     address constant CEtherAddress = 0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5;
 
@@ -20,11 +24,30 @@ contract CompoundBase {
         return c;
     }
 
+    function getBorrowBalanceUnderlying(
+        address cToken,
+        address owner
+    )
+        public
+        view
+        returns (uint256)
+    {
+        (
+            uint256 err,
+            uint256 cTokenBalance,
+            uint256 borrowBalance,
+            uint256 exchangeRateMantissa
+        ) = ICToken(cToken).getAccountSnapshot(owner);
+
+        // Source: balanceOfUnderlying from any ctoken
+        return cTokenBalance.mul(exchangeRateMantissa).div(1e18);
+    }
+
     function _transferFromUnderlying(
         address sender,
         address recipient,
         address cToken,
-        uint amount
+        uint256 amount
     ) internal {
         address underlying = ICToken(cToken).underlying();
         require(
@@ -36,23 +59,24 @@ contract CompoundBase {
     function _transferUnderlying(
         address cToken,
         address recipient,
-        uint amount
+        uint256 amount
     ) internal {
         if (cToken == CEtherAddress) {
             recipient.call.value(amount)("");
         } else {
             require(
-                IERC20(ICToken(cToken).underlying()).transfer(recipient, amount),
+                IERC20(ICToken(cToken).underlying()).transfer(
+                    recipient,
+                    amount
+                ),
                 "cmpnd-mgr-transfer-underlying-failed"
             );
         }
     }
 
-    function _transfer(
-        address token,
-        address recipient,
-        uint amount
-    ) internal {
+    function _transfer(address token, address recipient, uint256 amount)
+        internal
+    {
         require(
             IERC20(token).transfer(recipient, amount),
             "cmpnd-mgr-transfer-failed"
@@ -60,20 +84,18 @@ contract CompoundBase {
     }
 
     function enterMarkets(
-        address[] memory cTokens   // Address of the Compound derivation token (e.g. cDAI)
+        address[] memory cTokens // Address of the Compound derivation token (e.g. cDAI)
     ) public {
         // Enter the compound markets for all the specified tokens
-        uint[] memory errors = IComptroller(CompoundComptrollerAddress).enterMarkets(cTokens);
+        uint256[] memory errors = IComptroller(CompoundComptrollerAddress)
+            .enterMarkets(cTokens);
 
-        for (uint i = 0; i < errors.length; i++) {
+        for (uint256 i = 0; i < errors.length; i++) {
             require(errors[i] == 0, "cmpnd-mgr-enter-markets-failed");
         }
     }
 
-    function approveCToken(
-        address cToken,
-        uint amount
-    ) public {
+    function approveCToken(address cToken, uint256 amount) public {
         // Approves CToken contract to call `transferFrom`
         address underlying = ICToken(cToken).underlying();
         require(
@@ -83,19 +105,17 @@ contract CompoundBase {
     }
 
     function approveCTokens(
-        address[] memory cTokens    // Tokens to approve
+        address[] memory cTokens // Tokens to approve
     ) public {
-        for (uint i = 0; i < cTokens.length; i++) {
+        for (uint256 i = 0; i < cTokens.length; i++) {
             // Don't need to approve ICEther
             if (cTokens[i] != CEtherAddress) {
-                approveCToken(cTokens[i], uint(-1));
+                approveCToken(cTokens[i], uint256(-1));
             }
         }
     }
 
-    function enterMarketsAndApproveCTokens(
-        address[] memory cTokens
-    ) public {
+    function enterMarketsAndApproveCTokens(address[] memory cTokens) public {
         enterMarkets(cTokens);
         approveCTokens(cTokens);
     }
@@ -104,7 +124,7 @@ contract CompoundBase {
         ICEther(CEtherAddress).mint.value(msg.value)();
     }
 
-    function supply(address cToken, uint amount) public payable {
+    function supply(address cToken, uint256 amount) public payable {
         if (cToken == CEtherAddress) {
             ICEther(CEtherAddress).mint.value(amount)();
         } else {
@@ -112,30 +132,33 @@ contract CompoundBase {
             approveCToken(cToken, amount);
 
             require(
-              ICToken(cToken).mint(amount) == 0,
-              "cmpnd-mgr-ctoken-supply-failed"
+                ICToken(cToken).mint(amount) == 0,
+                "cmpnd-mgr-ctoken-supply-failed"
             );
         }
     }
 
-    function borrow(address cToken, uint borrowAmount) public {
-        require(ICToken(cToken).borrow(borrowAmount) == 0, "cmpnd-mgr-ctoken-borrow-failed");
+    function borrow(address cToken, uint256 borrowAmount) public {
+        require(
+            ICToken(cToken).borrow(borrowAmount) == 0,
+            "cmpnd-mgr-ctoken-borrow-failed"
+        );
     }
 
     function supplyAndBorrow(
         address supplyCToken,
-        uint supplyAmount,
+        uint256 supplyAmount,
         address borrowCToken,
-        uint borrowAmount
+        uint256 borrowAmount
     ) public payable {
         supply(supplyCToken, supplyAmount);
         borrow(borrowCToken, borrowAmount);
     }
 
-    function supplyETHAndBorrow(
-        address cToken,
-        uint borrowAmount
-    ) public payable {
+    function supplyETHAndBorrow(address cToken, uint256 borrowAmount)
+        public
+        payable
+    {
         // Supply some Ether
         supplyETH();
 
@@ -143,77 +166,97 @@ contract CompoundBase {
         borrow(cToken, borrowAmount);
     }
 
-    function repayBorrow(address cToken, uint amount) public payable {
+    function repayBorrow(address cToken, uint256 amount) public payable {
         if (cToken == CEtherAddress) {
             ICEther(cToken).repayBorrow.value(amount)();
         } else {
             approveCToken(cToken, amount);
-            require(ICToken(cToken).repayBorrow(amount) == 0, "cmpnd-mgr-ctoken-repay-failed");
+            require(
+                ICToken(cToken).repayBorrow(amount) == 0,
+                "cmpnd-mgr-ctoken-repay-failed"
+            );
         }
     }
 
-    function repayBorrowBehalf(address recipient, address cToken, uint amount) public payable {
+    function repayBorrowBehalf(
+        address recipient,
+        address cToken,
+        uint256 amount
+    ) public payable {
         if (cToken == CEtherAddress) {
             ICEther(cToken).repayBorrowBehalf.value(amount)(recipient);
         } else {
             approveCToken(cToken, amount);
-            require(ICToken(cToken).repayBorrowBehalf(recipient, amount) == 0, "cmpnd-mgr-ctoken-repaybehalf-failed");
+            require(
+                ICToken(cToken).repayBorrowBehalf(recipient, amount) == 0,
+                "cmpnd-mgr-ctoken-repaybehalf-failed"
+            );
         }
     }
 
-    function redeem(address cToken, uint redeemTokens) public payable {
-        require(ICToken(cToken).redeem(redeemTokens) == 0, "cmpnd-mgr-ctoken-redeem-failed");
+    function redeem(address cToken, uint256 redeemTokens) public payable {
+        require(
+            ICToken(cToken).redeem(redeemTokens) == 0,
+            "cmpnd-mgr-ctoken-redeem-failed"
+        );
     }
 
-    function redeemUnderlying(address cToken, uint redeemTokens) public payable {
-        require(ICToken(cToken).redeemUnderlying(redeemTokens) == 0, "cmpnd-mgr-ctoken-redeem-underlying-failed");
+    function redeemUnderlying(address cToken, uint256 redeemTokens)
+        public
+        payable
+    {
+        require(
+            ICToken(cToken).redeemUnderlying(redeemTokens) == 0,
+            "cmpnd-mgr-ctoken-redeem-underlying-failed"
+        );
     }
 
     // -- Helper functions so proxy doesn't hold any funds, all funds borrowed
     // or redeemed gets sent to user
     // User needs to `approve(spender, amount)` before through proxy functions work
 
-    function supplyThroughProxy(
-        address cToken,
-        uint amount
-    ) public payable {
+    function supplyThroughProxy(address cToken, uint256 amount) public payable {
         if (cToken != CEtherAddress) {
             _transferFromUnderlying(msg.sender, address(this), cToken, amount);
         }
         supply(cToken, amount);
     }
 
-    function repayBorrowThroughProxy(address cToken, uint amount) public payable {
+    function repayBorrowThroughProxy(address cToken, uint256 amount)
+        public
+        payable
+    {
         if (cToken != CEtherAddress) {
             _transferFromUnderlying(msg.sender, address(this), cToken, amount);
         }
         repayBorrow(cToken, amount);
     }
 
-    function repayBorrowBehalfThroughProxy(address recipient, address cToken, uint amount) public payable {
+    function repayBorrowBehalfThroughProxy(
+        address recipient,
+        address cToken,
+        uint256 amount
+    ) public payable {
         if (cToken != CEtherAddress) {
             _transferFromUnderlying(msg.sender, address(this), cToken, amount);
         }
         repayBorrowBehalf(recipient, cToken, amount);
     }
 
-    function borrowThroughProxy(address cToken, uint amount) public {
+    function borrowThroughProxy(address cToken, uint256 amount) public {
         borrow(cToken, amount);
         _transferUnderlying(cToken, msg.sender, amount);
     }
 
-    function redeemThroughProxy(
-        address cToken,
-        uint amount
-    ) public payable {
+    function redeemThroughProxy(address cToken, uint256 amount) public payable {
         redeem(cToken, amount);
         _transferUnderlying(cToken, msg.sender, amount);
     }
 
-    function redeemUnderlyingThroughProxy(
-        address cToken,
-        uint amount
-    ) public payable {
+    function redeemUnderlyingThroughProxy(address cToken, uint256 amount)
+        public
+        payable
+    {
         redeemUnderlying(cToken, amount);
         _transferUnderlying(cToken, msg.sender, amount);
     }

@@ -52,7 +52,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
       let tx = null;
 
       try {
-        await swapDebt(
+        tx = await swapDebt(
           ADDRESS_MAP[fromTokenStr],
           ADDRESS_MAP[toTokenStr],
           amount
