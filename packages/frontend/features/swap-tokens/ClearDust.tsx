@@ -17,10 +17,11 @@ const ClearDust = () => {
   const { proxyAddress, hasProxy } = DACProxyContainer.useContainer();
   const { COINS, stableCoins, volatileCoins } = CoinsContainer.useContainer();
 
-  const [thingToClear, setThingToClear] = useState("debt");
-  const [fromTokenStr, setFromTokenStr] = useState("dai");
-  const [toTokenStr, setToTokenStr] = useState("eth");
+  const [thingToClear, setThingToClear] = useState("collateral");
+  const [fromTokenStr, setFromTokenStr] = useState("eth");
+  const [toTokenStr, setToTokenStr] = useState("dai");
   const [amountToClear, setAmountToClear] = useState("");
+  const [canSwapAmount, setCanSwapAmount] = useState("0");
 
   const [gettingMax, setGettingMax] = useState(false);
   const [isConfirmDisabled, setIsConfirmDisabled] = useState(true);
@@ -34,14 +35,13 @@ const ClearDust = () => {
 
   const getClearDustInfo = async () => {
     if (!hasProxy) return;
-    if (tokenBalance === null) return
+    if (tokenBalance === null) return;
 
     setGettingMax(true);
     const cTokenAddress = COINS[fromTokenStr].cTokenEquilaventAddress;
-
     const { compoundComptroller, compoundPriceOracle } = contracts;
 
-    const { canSwapAmount } = await useDustCanSwapAmount(
+    const res = await useDustCanSwapAmount(
       thingToClear,
       proxyAddress,
       cTokenAddress,
@@ -51,18 +51,9 @@ const ClearDust = () => {
       compoundPriceOracle
     );
 
-    const amountFloat = parseFloat(amountToClear);
-
-    const disableConfirm =
-      !hasProxy || // not connected or no smart wallet
-      fromTokenStr === toTokenStr || // same token
-      amountFloat > tokenBalance || // can't swap more than what you have
-      amountToClear === "" || // no amount specified
-      amountFloat.toString() === "0" ||
-      isNaN(amountFloat);
-
-    setIsConfirmDisabled(disableConfirm);
-    setAmountToClear(canSwapAmount.toString());
+    setIsConfirmDisabled(false);
+    setCanSwapAmount(res.canSwapAmount);
+    setAmountToClear(res.canSwapAmount);
     setGettingMax(false);
   };
 
@@ -70,14 +61,7 @@ const ClearDust = () => {
     if (hasProxy && tokenBalance !== null) {
       getClearDustInfo();
     }
-  }, [
-    hasProxy,
-    thingToClear,
-    fromTokenStr,
-    toTokenStr,
-    hasProxy,
-    amountToClear,
-  ]);
+  }, [hasProxy, thingToClear, fromTokenStr, toTokenStr]);
 
   return (
     <>
@@ -166,6 +150,26 @@ const ClearDust = () => {
             required={true}
             placeholder="1337"
             value={amountToClear}
+            onChange={(e) => {
+              const amountStr = e.target.value.toString();
+              const amountFloat = parseFloat(amountStr);
+
+              const disableConfirm =
+                !hasProxy || // not connected or no smart wallet
+                fromTokenStr === toTokenStr || // same token
+                amountStr === "" || // no amount specified
+                amountFloat.toString() === "0" ||
+                isNaN(amountFloat);
+
+              if (amountFloat > parseFloat(canSwapAmount)) {
+                setIsConfirmDisabled(disableConfirm);
+                setAmountToClear(canSwapAmount);
+                return;
+              }
+
+              setAmountToClear(amountStr);
+              setIsConfirmDisabled(disableConfirm);
+            }}
           />
         </Field>
         <Text textAlign="right" opacity={!hasProxy ? "0.5" : "1"}>
@@ -180,11 +184,21 @@ const ClearDust = () => {
               <Loader />
             </div>
           ) : (
-            <div
-              style={{
-                paddingBottom: "24px",
-              }}
-            ></div>
+            <Text textAlign="right" opacity={!hasProxy ? "0.5" : "1"}>
+              {gettingMax ? (
+                <div
+                  style={{
+                    float: "right",
+                    paddingTop: "4px",
+                    paddingBottom: "20px",
+                  }}
+                >
+                  <Loader />
+                </div>
+              ) : (
+                <Link onClick={getClearDustInfo}>Set max</Link>
+              )}
+            </Text>
           )}
         </Text>
       </Box>
