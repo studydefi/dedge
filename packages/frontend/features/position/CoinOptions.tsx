@@ -115,19 +115,24 @@ const CoinOptions = ({ symbol }) => {
 
             <br />
 
-            <Flex justifyContent="space-around" textAlign="center" height="280px">
-              {selectedTab === TAB_OPTIONS.Borrow ? (
-                <BorrowCoin coin={coin} />
-              ) : null}
-              {selectedTab === TAB_OPTIONS.Repay ? (
-                <RepayCoin coin={coin} />
-              ) : null}
-              {selectedTab === TAB_OPTIONS.Supply ? (
-                <SupplyCoin coin={coin} />
-              ) : null}
-              {selectedTab === TAB_OPTIONS.Withdraw ? (
-                <WithdrawCoin coin={coin} />
-              ) : null}
+            <Flex
+              justifyContent="space-around"
+              textAlign="center"
+              height="280px"
+            >
+              <BorrowCoin
+                coin={coin}
+                hide={selectedTab !== TAB_OPTIONS.Borrow}
+              />
+              <RepayCoin coin={coin} hide={selectedTab !== TAB_OPTIONS.Repay} />
+              <SupplyCoin
+                coin={coin}
+                hide={selectedTab !== TAB_OPTIONS.Supply}
+              />
+              <WithdrawCoin
+                coin={coin}
+                hide={selectedTab !== TAB_OPTIONS.Withdraw}
+              />
             </Flex>
           </Box>
 

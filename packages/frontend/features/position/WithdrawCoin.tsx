@@ -10,7 +10,7 @@ import ConnectionContainer from "../../containers/Connection";
 
 import { useState, useEffect } from "react";
 
-const WithdrawCoin = ({ coin }) => {
+const WithdrawCoin = ({ coin, hide }) => {
   const { getBalances } = CompoundPositions.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
@@ -22,7 +22,7 @@ const WithdrawCoin = ({ coin }) => {
   // and our `getNewLiquidationPrice` doesn't clobber with one another
   const [getLiquidationCallId, setGetLiquidationCallId] = useState(null);
   const [gettingNewLiquidationPrice, setGettingNewLiquidationPrice] = useState(
-    false
+    false,
   );
   const [newLiquidationPrice, setNewLiquidationPrice] = useState("—");
 
@@ -34,7 +34,7 @@ const WithdrawCoin = ({ coin }) => {
       proxy.address,
       coin.cTokenEquilaventAddress,
       ethers.utils.parseUnits(amount, coin.decimals),
-      dedgeHelpers.compound.CTOKEN_ACTIONS.Withdraw
+      dedgeHelpers.compound.CTOKEN_ACTIONS.Withdraw,
     );
     setNewLiquidationPrice(liquidationPriceUSD.toFixed(2));
     setGettingNewLiquidationPrice(false);
@@ -49,7 +49,7 @@ const WithdrawCoin = ({ coin }) => {
         }
         setGettingNewLiquidationPrice(true);
         setGetLiquidationCallId(
-          setTimeout(() => getNewLiquidationPrice(), 500)
+          setTimeout(() => getNewLiquidationPrice(), 500),
         );
       } catch (e) {}
     }
@@ -65,7 +65,12 @@ const WithdrawCoin = ({ coin }) => {
   }, [amount]);
 
   return (
-    <Flex alignItems="center" justifyContent="center" flexDirection="column">
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      flexDirection="column"
+      display={hide ? "none" : "flex"}
+    >
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
         <Field label={`Amount of ${coin.symbol} to Withdraw`}>
@@ -89,7 +94,7 @@ const WithdrawCoin = ({ coin }) => {
             proxy,
             dedgeCompoundManager.address,
             coin.cTokenEquilaventAddress,
-            ethers.utils.parseUnits(amount, coin.decimals)
+            ethers.utils.parseUnits(amount, coin.decimals),
           );
           window.toastProvider.addMessage(`Withdrawing ${coin.symbol}...`, {
             secondaryMessage: "Check progress on Etherscan",
@@ -103,7 +108,7 @@ const WithdrawCoin = ({ coin }) => {
             `Successfully withdrew ${coin.symbol}!`,
             {
               variant: "success",
-            }
+            },
           );
 
           setLoading(false);

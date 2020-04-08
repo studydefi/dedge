@@ -10,7 +10,7 @@ import ConnectionContainer from "../../containers/Connection";
 
 import { useState, useEffect } from "react";
 
-const BorrowCoin = ({ coin }) => {
+const BorrowCoin = ({ coin, hide }) => {
   const { getBalances } = CompoundPositions.useContainer();
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
@@ -56,7 +56,12 @@ const BorrowCoin = ({ coin }) => {
   }, [amount]);
 
   return (
-    <Flex alignItems="center" justifyContent="center" flexDirection="column">
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      flexDirection="column"
+      display={hide ? "none" : "flex"}
+    >
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
         <Field label={`Amount of ${coin.symbol} to Borrow`}>
