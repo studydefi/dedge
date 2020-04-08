@@ -136,23 +136,6 @@ const RepayCoin = ({ coin, hide }) => {
                 signer,
               );
 
-<<<<<<< HEAD
-              const tx = await tokenContract.approve(proxyAddress, maxUINT);
-              window.toastProvider.addMessage(`Approving ${coin.symbol}...`, {
-                secondaryMessage: "Check progress on Etherscan",
-                actionHref: `https://etherscan.io/tx/${tx.hash}`,
-                actionText: "Check",
-                variant: "processing",
-              });
-              await tx.wait();
-
-              window.toastProvider.addMessage(
-                `Successfully approved ${coin.symbol}!`,
-                {
-                  variant: "success",
-                },
-              );
-=======
               let tx = null;
               try {
                 tx = await tokenContract.approve(proxyAddress, maxUINT);
@@ -186,7 +169,6 @@ const RepayCoin = ({ coin, hide }) => {
                 setTransferLoading(false);
                 return;
               }
->>>>>>> handle logic if tx fails or if user cancels tx
 
               setTransferLoading(false);
               getCanTransfer();
