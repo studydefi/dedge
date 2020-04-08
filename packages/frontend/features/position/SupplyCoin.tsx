@@ -97,7 +97,7 @@ const SupplyCoin = ({ coin }) => {
   }, [amount]);
 
   return (
-    <Box>
+    <Flex alignItems="center" justifyContent="center" flexDirection="column">
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
         <Field required={true} label={`Amount of ${coin.symbol} to Supply`}>
@@ -219,7 +219,7 @@ const SupplyCoin = ({ coin }) => {
           </Text>
         </>
       )}
-    </Box>
+    </Flex>
   );
 };
 

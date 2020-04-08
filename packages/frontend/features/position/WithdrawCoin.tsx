@@ -65,7 +65,7 @@ const WithdrawCoin = ({ coin }) => {
   }, [amount]);
 
   return (
-    <Box>
+    <Flex alignItems="center" justifyContent="center" flexDirection="column">
       {/* <Heading.h5 mb="2">Supply {coin.symbol}</Heading.h5> */}
       <Box mb="1">
         <Field label={`Amount of ${coin.symbol} to Withdraw`}>
@@ -126,7 +126,7 @@ const WithdrawCoin = ({ coin }) => {
         New liqudation price:{" $ "}
         {gettingNewLiquidationPrice ? `...` : newLiquidationPrice.toString()}
       </Text>
-    </Box>
+    </Flex>
   );
 };
 

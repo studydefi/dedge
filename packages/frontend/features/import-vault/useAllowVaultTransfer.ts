@@ -75,7 +75,7 @@ const useAllowVaultTransfer = (selectedVaultId: number) => {
   };
 
   useEffect(() => {
-    if (hasProxy) {
+    if (hasProxy && selectedVaultId !== null) {
       getAllowStatus();
     }
   }, [selectedVaultId]);

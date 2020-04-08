@@ -4,6 +4,7 @@ import {
   Card,
   Box,
   Flex,
+  Pill,
   Text,
   Field,
   Input,
@@ -19,10 +20,18 @@ import BorrowCoin from "./BorrowCoin";
 import WithdrawCoin from "./WithdrawCoin";
 import RepayCoin from "./RepayCoin";
 
+enum TAB_OPTIONS {
+  Borrow,
+  Repay,
+  Supply,
+  Withdraw,
+}
+
 const CoinOptions = ({ symbol }) => {
   const { hasProxy } = DACProxyContainer.useContainer();
   const { COINS } = CoinsContainer.useContainer();
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(TAB_OPTIONS.Borrow);
 
   const coin = COINS[symbol.toLowerCase()];
 
@@ -44,24 +53,81 @@ const CoinOptions = ({ symbol }) => {
           <ModalCloseIcon onClick={closeModal} />
 
           <Box p={4}>
-            <Heading.h3 mb="4">Options for {coin.name}</Heading.h3>
+            <Box m="auto">
+              <Flex px={4} mx={2} borderColor="#E8E8E8" justifyContent="center">
+                <Box width={0.5} textAlign="center">
+                  <Heading.h5 textAlign="center">Debt</Heading.h5>
+                  {selectedTab === TAB_OPTIONS.Borrow ? (
+                    <Pill mt={2} color="primary">
+                      <Button.Text mainColor="#110C62">Borrow</Button.Text>
+                    </Pill>
+                  ) : (
+                    <Button.Text
+                      mainColor="#988CF0"
+                      onClick={() => setSelectedTab(TAB_OPTIONS.Borrow)}
+                    >
+                      Borrow
+                    </Button.Text>
+                  )}
+                  {selectedTab === TAB_OPTIONS.Repay ? (
+                    <Pill mt={2} color="primary">
+                      <Button.Text mainColor="#110C62">Repay</Button.Text>
+                    </Pill>
+                  ) : (
+                    <Button.Text
+                      mainColor="#988CF0"
+                      onClick={() => setSelectedTab(TAB_OPTIONS.Repay)}
+                    >
+                      Repay
+                    </Button.Text>
+                  )}
+                </Box>
 
-            <Heading.h5 mb="4" textAlign="center">
-              Borrow or Repay Debt
-            </Heading.h5>
-            <Flex mb="4" justifyContent="space-around" textAlign="center">
-              <BorrowCoin coin={coin} />
-              <RepayCoin coin={coin} />
-            </Flex>
+                <Box width={0.5} textAlign="center">
+                  <Heading.h5>Collateral</Heading.h5>
+                  {selectedTab === TAB_OPTIONS.Supply ? (
+                    <Pill mt={2} color="primary">
+                      <Button.Text mainColor="#110C62">Supply</Button.Text>
+                    </Pill>
+                  ) : (
+                    <Button.Text
+                      mainColor="#988CF0"
+                      onClick={() => setSelectedTab(TAB_OPTIONS.Supply)}
+                    >
+                      Supply
+                    </Button.Text>
+                  )}
+                  {selectedTab === TAB_OPTIONS.Withdraw ? (
+                    <Pill mt={2} color="primary">
+                      <Button.Text mainColor="#110C62">Withdraw</Button.Text>
+                    </Pill>
+                  ) : (
+                    <Button.Text
+                      mainColor="#988CF0"
+                      onClick={() => setSelectedTab(TAB_OPTIONS.Withdraw)}
+                    >
+                      Withdraw
+                    </Button.Text>
+                  )}
+                </Box>
+              </Flex>
+            </Box>
 
-            <hr />
+            <br />
 
-            <Heading.h5 my="4" textAlign="center">
-              Supply or Withdraw Collateral
-            </Heading.h5>
-            <Flex mb="4" justifyContent="space-around" textAlign="center">
-              <SupplyCoin coin={coin} />
-              <WithdrawCoin coin={coin} />
+            <Flex justifyContent="space-around" textAlign="center" height="280px">
+              {selectedTab === TAB_OPTIONS.Borrow ? (
+                <BorrowCoin coin={coin} />
+              ) : null}
+              {selectedTab === TAB_OPTIONS.Repay ? (
+                <RepayCoin coin={coin} />
+              ) : null}
+              {selectedTab === TAB_OPTIONS.Supply ? (
+                <SupplyCoin coin={coin} />
+              ) : null}
+              {selectedTab === TAB_OPTIONS.Withdraw ? (
+                <WithdrawCoin coin={coin} />
+              ) : null}
             </Flex>
           </Box>
 
