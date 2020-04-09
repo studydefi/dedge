@@ -182,9 +182,8 @@ contract DedgeExitManager is UniswapLiteBase {
             );
         }
 
-        uint256 totalEthAmount;
         for (uint256 i = 0; i < epCalldata.collateralMarket.length; i++) {
-            totalEthAmount += _retrieveCollateral(
+            _retrieveCollateral(
                 CEtherAddress,
                 epCalldata.collateralMarket[i].cToken,
                 epCalldata.collateralMarket[i].amount
@@ -193,7 +192,7 @@ contract DedgeExitManager is UniswapLiteBase {
 
         // Repays (ETH - fees) back to exitAddress
         epCalldata.exitUserAddress.call.value(
-            totalEthAmount.sub(_amount).sub(_fee).sub(_protocolFee)
+            address(this).balance.sub(_amount).sub(_fee).sub(_protocolFee)
         )("");
     }
 

@@ -199,6 +199,7 @@ const SwapOptions = () => {
           label={`Converted to ${toTokenStr.toLocaleUpperCase()} (approx)`}
         >
           <Input
+            readOnly
             required={true}
             placeholder="1337"
             value={amountToReceive === null ? "...." : amountToReceive}
