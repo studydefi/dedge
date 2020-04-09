@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
 import styled from "styled-components";
 
@@ -5,9 +6,11 @@ import Select from "../../components/Select";
 import SwapConfirm from "./SwapConfirm";
 
 import DACProxyContainer from "../../containers/DACProxy";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CoinsContainer from "../../containers/Coins";
+import ConnectionContainer from "../../containers/Connection";
 import useIsAmountAvailable from "./useIsAmountAvailable";
+import useSwapResult from "./useSwapResult"
 
 const Container = styled(Box)`
   margin-right: 16px;
@@ -16,12 +19,16 @@ const Container = styled(Box)`
 `;
 
 const SwapOptions = () => {
+  const { COINS } = CoinsContainer.useContainer();
+  const { signer } = ConnectionContainer.useContainer()
   const { hasProxy } = DACProxyContainer.useContainer();
   const { stableCoins, volatileCoins } = CoinsContainer.useContainer();
 
   const [thingToSwap, setThingToSwap] = useState("debt");
   const [fromTokenStr, setFromTokenStr] = useState("dai");
   const [toTokenStr, setToTokenStr] = useState("eth");
+
+  const [amountToReceive, setAmountToReceive] = useState("")
   const [amountToSwap, setAmountToSwap] = useState("");
 
   const { isAmountAvailable, canSwapAmount } = useIsAmountAvailable(
@@ -41,6 +48,43 @@ const SwapOptions = () => {
     if (!hasProxy) return;
     setAmountToSwap(canSwapAmount.toString());
   };
+
+  const getAmountToReceive = async () => {
+    setAmountToReceive('....')
+    const fromToken = COINS[fromTokenStr];
+    const toToken = COINS[toTokenStr];
+
+    console.log("toToken", toToken)
+    console.log("fromToken", fromToken)
+
+    const amountWei = ethers.utils.parseUnits(amountToSwap, fromToken.decimals)
+
+    console.log("amountWei", amountWei.toString())
+
+    const receivedWei = await useSwapResult(
+      signer,
+      fromToken.address,
+      toToken.address,
+      amountWei
+    )
+    // Minus 0.135% in fees
+    const receivedMinusFees = receivedWei.mul(99865).div(100000)
+    const received = ethers.utils.formatUnits(receivedMinusFees.toString(), toToken.decimals)
+
+    console.log("receivedWei", receivedWei.toString())
+
+    setAmountToReceive(received.toString())
+  }
+
+  useEffect(() => {
+    if (!signer) return
+    if (!hasProxy) return
+    if (parseFloat(amountToSwap) === 0) return
+    if (isNaN(parseFloat(amountToSwap))) return
+
+    getAmountToReceive()
+
+  }, [hasProxy, fromTokenStr, toTokenStr, amountToSwap])
 
   return (
     <Container p="3">
@@ -135,6 +179,19 @@ const SwapOptions = () => {
         <Text textAlign="right" opacity={!hasProxy ? "0.5" : "1"}>
           <Link onClick={setMax}>Set max</Link>
         </Text>
+      </Box>
+
+      <Box mb="3">
+        <Field
+          mb="0"
+          label={`Converted to ${toTokenStr.toLocaleUpperCase()} (approx)`}
+        >
+          <Input
+            required={true}
+            placeholder="1337"
+            value={amountToReceive}
+          />
+        </Field>
       </Box>
 
       <SwapConfirm

@@ -9,6 +9,7 @@ const COINS = {
     symbol: "ETH",
     icon: "Eth",
     stable: false,
+    address: null,
     decimals: 18,
     cTokenEquilaventAddress: legos.compound.cEther.address,
   },
