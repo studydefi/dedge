@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Flex,
@@ -10,25 +9,16 @@ import {
   Card,
 } from "rimble-ui";
 
-// components
 import { ModalBottom, ModalCloseIcon } from "../../components/Modal";
-
-// containers
-import ContractsContainer from "../../containers/Contracts";
-import ConnectionContainer from "../../containers/Connection";
-import DACProxyContainer from "../../containers/DACProxy";
-import CompoundPositions from "../../containers/CompoundPositions";
-
-import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
+import useExitPosition from "./useExitPosition";
 
 const ExitPositionModal = ({ isOpen, closeModal }) => {
-  const { address, signer } = ConnectionContainer.useContainer();
-  const { getBalances } = CompoundPositions.useContainer();
-  const { contracts } = ContractsContainer.useContainer();
-  const { proxy } = DACProxyContainer.useContainer();
+  const { exitPosition, loading } = useExitPosition();
 
-  // hooks
-  const [loading, setLoading] = useState(false);
+  const handleClick = async () => {
+    await exitPosition();
+    closeModal();
+  };
 
   return (
     <Modal isOpen={isOpen}>
@@ -55,72 +45,7 @@ const ExitPositionModal = ({ isOpen, closeModal }) => {
 
         <ModalBottom>
           <Button.Outline onClick={closeModal}>Close</Button.Outline>
-          <Button
-            ml={3}
-            disabled={loading}
-            onClick={async () => {
-              window.analytics.track("Exit Positions Start");
-              setLoading(true);
-
-              const { dedgeAddressRegistry, dedgeExitManager } = contracts;
-
-              const {
-                etherToBorrowWeiBN,
-                debtMarkets,
-                collateralMarkets,
-              } = await dedgeHelpers.exit.getExitPositionParameters(
-                signer,
-                proxy.address,
-              );
-
-              let tx = null;
-              try {
-                tx = await dedgeHelpers.exit.exitPositionToETH(
-                  address,
-                  etherToBorrowWeiBN,
-                  proxy,
-                  dedgeAddressRegistry.address,
-                  dedgeExitManager.address,
-                  debtMarkets,
-                  collateralMarkets,
-                );
-                window.toastProvider.addMessage(`Exiting positions...`, {
-                  secondaryMessage: "Check progress on Etherscan",
-                  actionHref: `https://etherscan.io/tx/${tx.hash}`,
-                  actionText: "Check",
-                  variant: "processing",
-                });
-                await tx.wait();
-
-                window.toastProvider.addMessage(`Exited Positions!`, {
-                  variant: "success",
-                });
-              } catch (e) {
-                if (tx === null) {
-                  window.toastProvider.addMessage(`Transaction cancelled`, {
-                    variant: "failure",
-                  });
-                } else {
-                  window.toastProvider.addMessage(
-                    `Failed to exit poisitions...`,
-                    {
-                      secondaryMessage: "Check reason on Etherscan",
-                      actionHref: `https://etherscan.io/tx/${tx.hash}`,
-                      actionText: "Check",
-                      variant: "failure",
-                    },
-                  );
-                }
-                setLoading(false);
-                return;
-              }
-
-              window.analytics.track("Exit Positions Success");
-              setLoading(false);
-              getBalances();
-              closeModal();
-            }}
-          >
+          <Button ml={3} disabled={loading} onClick={handleClick}>
             {loading ? (
               <Flex alignItems="center">
                 <span>Exiting...</span> <Loader color="white" ml="2" />
