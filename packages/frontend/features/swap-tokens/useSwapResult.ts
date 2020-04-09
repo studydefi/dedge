@@ -7,16 +7,11 @@ const legos = getLegos(networkIds.mainnet);
 
 const useSwapResult = async (
   signer: ethers.Signer,
+  uniswapFactory: ethers.Contract,
   fromToken: null | string, // null means its ETH
   toToken: null | string, // null means its ETH
   amountWei: BigNumber
 ): Promise<BigNumber> => {
-  const uniswapFactory = new ethers.Contract(
-    legos.uniswap.factory.address,
-    legos.uniswap.factory.abi,
-    signer
-  );
-
   if (fromToken === toToken) {
     return amountWei;
   }
@@ -44,8 +39,6 @@ const useSwapResult = async (
   if (toToken === null) {
     return fromInEth;
   }
-
-  console.log("fromInEth", fromInEth);
 
   // Else calculate the output in token worth
   const toExchangeAddress = await uniswapFactory.getExchange(toToken);
