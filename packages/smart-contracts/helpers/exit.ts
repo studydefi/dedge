@@ -80,7 +80,7 @@ const getExitPositionParameters = async (
   const collateralMarketsInTokens: [Address, BigNumber][] = debtCollateralInTokens
     .filter((x: [Address, BigNumber, BigNumber]) => x[2] > new BigNumber(0))
     .map((x: [Address, BigNumber, BigNumber]): [Address, BigNumber] => {
-      return [x[0], x[2].mul(9999).div(10000)]; // Withdraw 99.99%
+      return [x[0], x[2].mul(999999).div(1000000)]; // Withdraw 99.9999% might fail at 100% due to comptroller...
     });
 
   const debtInEth = await Promise.all(
@@ -186,10 +186,9 @@ const exitPositionToETH = async (
 
   const exitPositionsCallbackdata = IDedgeExitManager.functions.exitPositions.encode(
     [
-      // TODO: Change this to 100% after mainnet
-      // Wanna loan 105% dacProxyinstead of 100% due to potential slippages
+      // Wanna loan 107% dacProxyinstead of 100% due to potential slippages
       etherToBorrowWei
-        .mul(105)
+        .mul(107)
         .div(100)
         .toString(),
       dedgeExitManager,
