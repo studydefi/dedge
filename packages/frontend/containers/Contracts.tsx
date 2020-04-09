@@ -12,6 +12,7 @@ import dedgeMakerManager from "../../smart-contracts/artifacts/DedgeMakerManager
 import dedgeExitManager from "../../smart-contracts/artifacts/DedgeExitManager.json";
 
 const CONTRACTS = {
+  uniswapFactory: legos.uniswap.factory,
   makerProxyRegistry: legos.maker.proxyRegistry,
   makerProxyActions: legos.maker.dssProxyActions,
   makerCdpManager: legos.maker.dssCdpManager,

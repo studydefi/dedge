@@ -6,6 +6,7 @@ import compound from "./compound";
 import { getLegos, networkIds } from "money-legos";
 
 import dedgeExitManagerDef from "../artifacts/DedgeExitManager.json";
+import { getCustomGasPrice } from "./common";
 
 const legos = getLegos(networkIds.mainnet);
 
@@ -96,7 +97,7 @@ const getExitPositionParameters = async (
   };
 };
 
-const exitPositionToETH = (
+const exitPositionToETH = async (
   exitToUser: Address,
   etherToBorrowWei: BigNumber,
   dacProxy: ethers.Contract,
@@ -198,10 +199,13 @@ const exitPositionToETH = (
     ]
   );
 
+  const gasPrice = await getCustomGasPrice(dacProxy.provider);
+  const newOverrides = Object.assign({ gasPrice }, overrides);
+
   return dacProxy.execute(
     dedgeExitManager,
     exitPositionsCallbackdata,
-    overrides
+    newOverrides
   );
 };
 
