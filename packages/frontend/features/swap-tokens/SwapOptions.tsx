@@ -72,10 +72,14 @@ const SwapOptions = () => {
       toToken.address,
       amountWei
     );
-    // Minus 0.135% in fees
-    const receivedMinusFees = receivedWei.mul(99865).div(100000);
+    // Minus 0.135% in fees if colalteral, else add 0.135%
+    const receivedFixed =
+      thingToSwap === "debt"
+        ? receivedWei.mul(100135).div(100000)
+        : receivedWei.mul(99865).div(100000);
+
     const received = ethers.utils.formatUnits(
-      receivedMinusFees.toString(),
+      receivedFixed.toString(),
       toToken.decimals
     );
 
