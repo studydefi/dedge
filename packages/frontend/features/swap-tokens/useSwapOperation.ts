@@ -1,6 +1,5 @@
 import ContractsContainer from "../../containers/Contracts";
 import DACProxyContainer from "../../containers/DACProxy";
-import { useEffect } from "react";
 
 import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 import { Address, Wei } from "../../types";

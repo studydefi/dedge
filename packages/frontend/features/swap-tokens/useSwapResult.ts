@@ -16,7 +16,9 @@ const useSwapResult = async (
     return amountWei;
   }
 
+  // Assume the provided amountWei is in ETH
   let fromInEth = amountWei;
+
   // If from isn't ETH, calculate it's worth in ETH
   if (fromToken !== null) {
     const fromExchangeAddress = await uniswapFactory.getExchange(fromToken);
@@ -34,7 +36,6 @@ const useSwapResult = async (
   }
 
   // Calculate it's worth in output tokens
-
   // If the output token is just ETH, return fromInEth
   if (toToken === null) {
     return fromInEth;
