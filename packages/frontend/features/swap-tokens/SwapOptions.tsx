@@ -13,7 +13,7 @@ import ConnectionContainer from "../../containers/Connection";
 import ContractsContainer from "../../containers/Contracts";
 
 import useIsAmountAvailable from "./useIsAmountAvailable";
-import useSwapResult from "./useSwapResult";
+import useGetAmountToReceive from "./useGetAmountToReceive";
 
 const Container = styled(Box)`
   margin-right: 16px;
@@ -55,36 +55,20 @@ const SwapOptions = () => {
     setAmountToSwap(canSwapAmount.toString());
   };
 
-  const getAmountToReceive = async () => {
-    const { uniswapFactory } = contracts;
-
+  const updateResultAmount = async () => {
     setAmountToReceive(null);
 
-    const fromToken = COINS[fromTokenStr];
-    const toToken = COINS[toTokenStr];
-
-    const amountWei = ethers.utils.parseUnits(amountToSwap, fromToken.decimals);
-
-    const receivedWei = await useSwapResult(
+    const received = await useGetAmountToReceive(
       signer,
-      uniswapFactory,
-      fromToken.address,
-      toToken.address,
-      amountWei
-    );
-    // Minus 0.135% in fees if colalteral, else add 0.135%
-    const receivedFixed =
-      thingToSwap === "debt"
-        ? receivedWei.mul(100135).div(100000)
-        : receivedWei.mul(99865).div(100000);
-
-    const received = ethers.utils.formatUnits(
-      receivedFixed.toString(),
-      toToken.decimals
+      contracts.uniswapFactory,
+      thingToSwap,
+      COINS[fromTokenStr],
+      amountToSwap,
+      COINS[toTokenStr]
     );
 
     setAmountToReceive(received.toString());
-  };
+  }
 
   useEffect(() => {
     if (!signer) return;
@@ -95,7 +79,10 @@ const SwapOptions = () => {
     if (receiveAmountAsyncId !== null) {
       clearTimeout(receiveAmountAsyncId);
     }
-    setReceiveAmountAsyncId(setTimeout(getAmountToReceive, 250));
+
+    setReceiveAmountAsyncId(
+      setTimeout(updateResultAmount, 250)
+    );
   }, [hasProxy, fromTokenStr, toTokenStr, amountToSwap]);
 
   return (
