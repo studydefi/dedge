@@ -1,6 +1,12 @@
-import useSwapOperation from "./useSwapOperation";
+import useSwapOperations from "./useSwapOperations";
 import ContractsContainer from "../../containers/Contracts";
 import CoinContainer from "../../containers/Coins";
+
+import {
+  handleTxException,
+  showTxLoadingToast,
+} from "../common/txUtils";
+
 import { ethers } from "ethers";
 import { Wei } from "../../types";
 import { useState } from "react";
@@ -10,7 +16,7 @@ const inWei = (x: string, u = 18): Wei => ethers.utils.parseUnits(x, u);
 const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
   const { COINS } = CoinContainer.useContainer();
   const { contracts } = ContractsContainer.useContainer();
-  const { swapDebt, swapCollateral } = useSwapOperation();
+  const { swapDebt, swapCollateral } = useSwapOperations();
   const [loading, setLoading] = useState(false);
 
   const swapFunction = async () => {
@@ -57,13 +63,11 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
           ADDRESS_MAP[toTokenStr],
           amount
         );
-        window.toastProvider.addMessage(`Swapping debt...`, {
-          secondaryMessage: "Check progress on Etherscan",
-          actionHref: `https://etherscan.io/tx/${tx.hash}`,
-          actionText: "Check",
-          variant: "processing",
-        });
-        await tx.wait();        
+
+        showTxLoadingToast(tx, "swapping debt");
+        await tx.wait();
+        setLoading(false);
+
         window.toastProvider.addMessage(`Swap Debt Success!`, {
           variant: "success",
         });
@@ -73,23 +77,10 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
           amount: amountToSwap,
         });
       } catch (e) {
-        if (tx === null) {
-          window.toastProvider.addMessage(`Transaction cancelled`, {
-            variant: "failure",
-          });
-        } else {
-          window.toastProvider.addMessage(`Failed to swap debt...`, {
-            secondaryMessage: "Check reason on Etherscan",
-            actionHref: `https://etherscan.io/tx/${tx.hash}`,
-            actionText: "Check",
-            variant: "failure",
-          });
-        }
+        handleTxException(tx, "swap debt");
         setLoading(false);
         return;
       }
-      
-      setLoading(false);
       return;
     }
 
@@ -107,36 +98,20 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         ADDRESS_MAP[toTokenStr],
         amount
       );
-      window.toastProvider.addMessage(`Swapping collateral...`, {
-        secondaryMessage: "Check progress on Etherscan",
-        actionHref: `https://etherscan.io/tx/${tx.hash}`,
-        actionText: "Check",
-        variant: "processing",
-      });
+      showTxLoadingToast(tx, "swapping collateral");
       await tx.wait();
-      setLoading(false);
-
+      setLoading(false);      
       window.toastProvider.addMessage(`Swap Collateral Success!`, {
         variant: "success",
       });
+      
       window.analytics.track("Swap Collateral Success", {
         from: fromTokenStr,
         to: toTokenStr,
         amount: amountToSwap,
       });
     } catch (e) {
-      if (tx === null) {
-        window.toastProvider.addMessage(`Transaction cancelled`, {
-          variant: "failure",
-        });
-      } else {
-        window.toastProvider.addMessage(`Failed to swap collateral...`, {
-          secondaryMessage: "Check reason on Etherscan",
-          actionHref: `https://etherscan.io/tx/${tx.hash}`,
-          actionText: "Check",
-          variant: "failure",
-        });
-      }
+      handleTxException(tx, "swap collateral");
       setLoading(false);
       return;
     }

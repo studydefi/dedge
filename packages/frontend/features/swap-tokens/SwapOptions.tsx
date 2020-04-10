@@ -1,19 +1,16 @@
-import { ethers } from "ethers";
-import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
+import { useState } from "react";
 import styled from "styled-components";
+import { Box, Text, Field, Input, Link } from "rimble-ui";
 
 import Select from "../../components/Select";
-import SwapConfirm from "./SwapConfirm";
-
-import { useState, useEffect } from "react";
 
 import DACProxyContainer from "../../containers/DACProxy";
 import CoinsContainer from "../../containers/Coins";
-import ConnectionContainer from "../../containers/Connection";
-import ContractsContainer from "../../containers/Contracts";
 
-import useIsAmountAvailable from "./useIsAmountAvailable";
-import useSwapResult from "./useSwapResult";
+import useMaxAvailable from "./useMaxAvailable";
+import useAllowConfirm from "./useAllowConfirm";
+import PreviewAmount from "./PreviewAmount";
+import SwapConfirm from "./SwapConfirm";
 
 const Container = styled(Box)`
   margin-right: 16px;
@@ -22,81 +19,33 @@ const Container = styled(Box)`
 `;
 
 const SwapOptions = () => {
-  const { COINS } = CoinsContainer.useContainer();
-  const { contracts } = ContractsContainer.useContainer();
-  const { signer } = ConnectionContainer.useContainer();
   const { hasProxy } = DACProxyContainer.useContainer();
   const { stableCoins, volatileCoins } = CoinsContainer.useContainer();
 
   const [thingToSwap, setThingToSwap] = useState("debt");
   const [fromTokenStr, setFromTokenStr] = useState("dai");
   const [toTokenStr, setToTokenStr] = useState("eth");
-
-  const [receiveAmountAsyncId, setReceiveAmountAsyncId] = useState(null);
-
-  const [amountToReceive, setAmountToReceive] = useState("");
   const [amountToSwap, setAmountToSwap] = useState("");
 
-  const { isAmountAvailable, canSwapAmount } = useIsAmountAvailable(
+  const { maxSwapAmount } = useMaxAvailable(
     amountToSwap,
     fromTokenStr,
-    thingToSwap
+    thingToSwap,
   );
 
-  const disableConfirm =
-    !hasProxy || // not connected or no smart wallet
-    fromTokenStr === toTokenStr || // same token
-    !isAmountAvailable || // amount not available
-    amountToSwap === "" || // no amount specified
-    amountToSwap === "0";
+  const { confirmAllowed } = useAllowConfirm(
+    amountToSwap,
+    fromTokenStr,
+    toTokenStr,
+    thingToSwap,
+  );
+
+  const disableConfirm = !confirmAllowed;
 
   const setMax = () => {
     if (!hasProxy) return;
-    setAmountToSwap(canSwapAmount.toString());
+    setAmountToSwap(maxSwapAmount.toString());
   };
-
-  const getAmountToReceive = async () => {
-    const { uniswapFactory } = contracts;
-
-    setAmountToReceive(null);
-
-    const fromToken = COINS[fromTokenStr];
-    const toToken = COINS[toTokenStr];
-
-    const amountWei = ethers.utils.parseUnits(amountToSwap, fromToken.decimals);
-
-    const receivedWei = await useSwapResult(
-      signer,
-      uniswapFactory,
-      fromToken.address,
-      toToken.address,
-      amountWei
-    );
-    // Minus 0.135% in fees if colalteral, else add 0.135%
-    const receivedFixed =
-      thingToSwap === "debt"
-        ? receivedWei.mul(100135).div(100000)
-        : receivedWei.mul(99865).div(100000);
-
-    const received = ethers.utils.formatUnits(
-      receivedFixed.toString(),
-      toToken.decimals
-    );
-
-    setAmountToReceive(received.toString());
-  };
-
-  useEffect(() => {
-    if (!signer) return;
-    if (!hasProxy) return;
-    if (parseFloat(amountToSwap) === 0) return;
-    if (isNaN(parseFloat(amountToSwap))) return;
-
-    if (receiveAmountAsyncId !== null) {
-      clearTimeout(receiveAmountAsyncId);
-    }
-    setReceiveAmountAsyncId(setTimeout(getAmountToReceive, 250));
-  }, [hasProxy, fromTokenStr, toTokenStr, amountToSwap]);
 
   return (
     <Container p="3">
@@ -193,19 +142,12 @@ const SwapOptions = () => {
         </Text>
       </Box>
 
-      <Box mb="3">
-        <Field
-          mb="0"
-          label={`Converted to ${toTokenStr.toLocaleUpperCase()} (approx)`}
-        >
-          <Input
-            readOnly
-            required={true}
-            placeholder="1337"
-            value={amountToReceive === null ? "...." : amountToReceive}
-          />
-        </Field>
-      </Box>
+      <PreviewAmount
+        thingToSwap={thingToSwap}
+        fromTokenStr={fromTokenStr}
+        toTokenStr={toTokenStr}
+        amountToSwap={amountToSwap}
+      />
 
       <SwapConfirm
         thingToSwap={thingToSwap}

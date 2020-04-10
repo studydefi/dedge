@@ -1,9 +1,9 @@
 import CompoundPositions from "../../containers/CompoundPositions";
 
-const useIsAmountAvailable = (
+const useMaxAvailable = (
   amount: string,
   tokenStr: string,
-  thingToSwap: string
+  thingToSwap: string,
 ) => {
   const { compoundPositions } = CompoundPositions.useContainer();
 
@@ -14,14 +14,14 @@ const useIsAmountAvailable = (
     return { isAmountAvailable: false };
   }
 
-  const canSwapAmount =
+  const maxSwapAmount =
     thingToSwap === "debt"
       ? parseFloat(tokenBalance.borrow)
       : parseFloat(tokenBalance.supply);
 
-  const result = parseFloat(amount) <= canSwapAmount;
+  const result = parseFloat(amount) <= maxSwapAmount;
 
-  return { isAmountAvailable: result, canSwapAmount };
+  return { isAmountAvailable: result, maxSwapAmount };
 };
 
-export default useIsAmountAvailable;
+export default useMaxAvailable;
