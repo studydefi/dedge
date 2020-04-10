@@ -1,16 +1,16 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
+import { Box, Text, Field, Input, Link } from "rimble-ui";
 
 import Select from "../../components/Select";
 import SwapConfirm from "./SwapConfirm";
-
 
 import DACProxyContainer from "../../containers/DACProxy";
 import CoinsContainer from "../../containers/Coins";
 
 import useIsAmountAvailable from "./useIsAmountAvailable";
 import PreviewAmount from "./PreviewAmount";
+import useAllowConfirm from "./useAllowConfirm";
 
 const Container = styled(Box)`
   margin-right: 16px;
@@ -27,22 +27,24 @@ const SwapOptions = () => {
   const [toTokenStr, setToTokenStr] = useState("eth");
   const [amountToSwap, setAmountToSwap] = useState("");
 
-  const { isAmountAvailable, canSwapAmount } = useIsAmountAvailable(
+  const { maxSwapAmount } = useIsAmountAvailable(
     amountToSwap,
     fromTokenStr,
     thingToSwap,
   );
 
-  const disableConfirm =
-    !hasProxy || // not connected or no smart wallet
-    fromTokenStr === toTokenStr || // same token
-    !isAmountAvailable || // amount not available
-    amountToSwap === "" || // no amount specified
-    amountToSwap === "0";
+  const { confirmAllowed } = useAllowConfirm(
+    amountToSwap,
+    fromTokenStr,
+    toTokenStr,
+    thingToSwap,
+  );
+
+  const disableConfirm = !confirmAllowed;
 
   const setMax = () => {
     if (!hasProxy) return;
-    setAmountToSwap(canSwapAmount.toString());
+    setAmountToSwap(maxSwapAmount.toString());
   };
 
   return (
