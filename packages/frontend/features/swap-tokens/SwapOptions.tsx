@@ -1,19 +1,16 @@
-import { ethers } from "ethers";
-import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
+import { useState } from "react";
 import styled from "styled-components";
+import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
 
 import Select from "../../components/Select";
 import SwapConfirm from "./SwapConfirm";
 
-import { useState, useEffect } from "react";
 
 import DACProxyContainer from "../../containers/DACProxy";
 import CoinsContainer from "../../containers/Coins";
-import ConnectionContainer from "../../containers/Connection";
-import ContractsContainer from "../../containers/Contracts";
 
 import useIsAmountAvailable from "./useIsAmountAvailable";
-import useGetAmountToReceive from "./useGetAmountToReceive";
+import PreviewAmount from "./PreviewAmount";
 
 const Container = styled(Box)`
   margin-right: 16px;
@@ -22,25 +19,18 @@ const Container = styled(Box)`
 `;
 
 const SwapOptions = () => {
-  const { COINS } = CoinsContainer.useContainer();
-  const { contracts } = ContractsContainer.useContainer();
-  const { signer } = ConnectionContainer.useContainer();
   const { hasProxy } = DACProxyContainer.useContainer();
   const { stableCoins, volatileCoins } = CoinsContainer.useContainer();
 
   const [thingToSwap, setThingToSwap] = useState("debt");
   const [fromTokenStr, setFromTokenStr] = useState("dai");
   const [toTokenStr, setToTokenStr] = useState("eth");
-
-  const [receiveAmountAsyncId, setReceiveAmountAsyncId] = useState(null);
-
-  const [amountToReceive, setAmountToReceive] = useState("");
   const [amountToSwap, setAmountToSwap] = useState("");
 
   const { isAmountAvailable, canSwapAmount } = useIsAmountAvailable(
     amountToSwap,
     fromTokenStr,
-    thingToSwap
+    thingToSwap,
   );
 
   const disableConfirm =
@@ -54,36 +44,6 @@ const SwapOptions = () => {
     if (!hasProxy) return;
     setAmountToSwap(canSwapAmount.toString());
   };
-
-  const updateResultAmount = async () => {
-    setAmountToReceive(null);
-
-    const received = await useGetAmountToReceive(
-      signer,
-      contracts.uniswapFactory,
-      thingToSwap,
-      COINS[fromTokenStr],
-      amountToSwap,
-      COINS[toTokenStr]
-    );
-
-    setAmountToReceive(received.toString());
-  }
-
-  useEffect(() => {
-    if (!signer) return;
-    if (!hasProxy) return;
-    if (parseFloat(amountToSwap) === 0) return;
-    if (isNaN(parseFloat(amountToSwap))) return;
-
-    if (receiveAmountAsyncId !== null) {
-      clearTimeout(receiveAmountAsyncId);
-    }
-
-    setReceiveAmountAsyncId(
-      setTimeout(updateResultAmount, 250)
-    );
-  }, [hasProxy, fromTokenStr, toTokenStr, amountToSwap]);
 
   return (
     <Container p="3">
@@ -180,19 +140,12 @@ const SwapOptions = () => {
         </Text>
       </Box>
 
-      <Box mb="3">
-        <Field
-          mb="0"
-          label={`Converted to ${toTokenStr.toLocaleUpperCase()} (approx)`}
-        >
-          <Input
-            readOnly
-            required={true}
-            placeholder="1337"
-            value={amountToReceive === null ? "...." : amountToReceive}
-          />
-        </Field>
-      </Box>
+      <PreviewAmount
+        thingToSwap={thingToSwap}
+        fromTokenStr={fromTokenStr}
+        toTokenStr={toTokenStr}
+        amountToSwap={amountToSwap}
+      />
 
       <SwapConfirm
         thingToSwap={thingToSwap}
