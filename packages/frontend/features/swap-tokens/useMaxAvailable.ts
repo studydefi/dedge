@@ -1,6 +1,6 @@
 import CompoundPositions from "../../containers/CompoundPositions";
 
-const useIsAmountAvailable = (
+const useMaxAvailable = (
   amount: string,
   tokenStr: string,
   thingToSwap: string,
@@ -24,4 +24,4 @@ const useIsAmountAvailable = (
   return { isAmountAvailable: result, maxSwapAmount };
 };
 
-export default useIsAmountAvailable;
+export default useMaxAvailable;

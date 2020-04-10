@@ -4,7 +4,7 @@ import DACProxyContainer from "../../containers/DACProxy";
 import { dedgeHelpers } from "../../../smart-contracts/dist/helpers";
 import { Address, Wei } from "../../types";
 
-const useSwapOperation = () => {
+const useSwapOperations = () => {
   const { contracts } = ContractsContainer.useContainer();
   const { proxy } = DACProxyContainer.useContainer();
 
@@ -45,4 +45,4 @@ const useSwapOperation = () => {
   return { swapDebt, swapCollateral };
 };
 
-export default useSwapOperation;
+export default useSwapOperations;

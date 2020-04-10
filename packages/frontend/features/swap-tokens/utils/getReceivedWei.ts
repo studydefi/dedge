@@ -5,12 +5,12 @@ import { BigNumber } from "ethers/utils/bignumber";
 
 const legos = getLegos(networkIds.mainnet);
 
-const useSwapResult = async (
+const getReceivedWei = async (
   signer: ethers.Signer,
   uniswapFactory: ethers.Contract,
   fromToken: null | string, // null means its ETH
   toToken: null | string, // null means its ETH
-  amountWei: BigNumber
+  amountWei: BigNumber,
 ): Promise<BigNumber> => {
   if (fromToken === toToken) {
     return amountWei;
@@ -26,12 +26,12 @@ const useSwapResult = async (
     const fromExchange = new ethers.Contract(
       fromExchangeAddress,
       legos.uniswap.exchange.abi,
-      signer
+      signer,
     );
 
     // From token to ETH
     fromInEth = await fromExchange.getTokenToEthInputPrice(
-      amountWei.toString()
+      amountWei.toString(),
     );
   }
 
@@ -47,10 +47,10 @@ const useSwapResult = async (
   const toExchange = new ethers.Contract(
     toExchangeAddress,
     legos.uniswap.exchange.abi,
-    signer
+    signer,
   );
 
   return toExchange.getEthToTokenInputPrice(fromInEth.toString());
 };
 
-export default useSwapResult;
+export default getReceivedWei;

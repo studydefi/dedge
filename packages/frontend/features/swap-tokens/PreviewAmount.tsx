@@ -6,7 +6,7 @@ import ConnectionContainer from "../../containers/Connection";
 import DACProxyContainer from "../../containers/DACProxy";
 import ContractsContainer from "../../containers/Contracts";
 
-import useGetAmountToReceive from "./useGetAmountToReceive";
+import getPreviewAmount from "./utils/getPreviewAmount";
 
 const PreviewAmount = ({
   thingToSwap,
@@ -25,7 +25,7 @@ const PreviewAmount = ({
   const updateResultAmount = async () => {
     setAmountToReceive(null);
 
-    const received = await useGetAmountToReceive(
+    const received = await getPreviewAmount(
       signer,
       contracts.uniswapFactory,
       thingToSwap,

@@ -1,4 +1,4 @@
-import useSwapOperation from "./useSwapOperation";
+import useSwapOperations from "./useSwapOperations";
 import ContractsContainer from "../../containers/Contracts";
 import CoinContainer from "../../containers/Coins";
 
@@ -16,7 +16,7 @@ const inWei = (x: string, u = 18): Wei => ethers.utils.parseUnits(x, u);
 const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
   const { COINS } = CoinContainer.useContainer();
   const { contracts } = ContractsContainer.useContainer();
-  const { swapDebt, swapCollateral } = useSwapOperation();
+  const { swapDebt, swapCollateral } = useSwapOperations();
   const [loading, setLoading] = useState(false);
 
   const swapFunction = async () => {

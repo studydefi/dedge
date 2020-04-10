@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 
-import useSwapResult from "./useSwapResult";
+import getReceivedWei from "./getReceivedWei";
 
-const useGetAmountToReceive = async (
+const getPreviewAmount = async (
   signer: ethers.Signer,
   uniswapFactory: ethers.Contract,
   thingToSwap: string,
@@ -12,7 +12,7 @@ const useGetAmountToReceive = async (
 ) => {
   const amountWei = ethers.utils.parseUnits(amountToSwap, fromToken.decimals);
 
-  const receivedWei = await useSwapResult(
+  const receivedWei = await getReceivedWei(
     signer,
     uniswapFactory,
     fromToken.address,
@@ -34,4 +34,4 @@ const useGetAmountToReceive = async (
   return received;
 };
 
-export default useGetAmountToReceive;
+export default getPreviewAmount;

@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { Box, Text, Field, Input, Link } from "rimble-ui";
 
 import Select from "../../components/Select";
-import SwapConfirm from "./SwapConfirm";
 
 import DACProxyContainer from "../../containers/DACProxy";
 import CoinsContainer from "../../containers/Coins";
 
-import useIsAmountAvailable from "./useIsAmountAvailable";
-import PreviewAmount from "./PreviewAmount";
+import useMaxAvailable from "./useMaxAvailable";
 import useAllowConfirm from "./useAllowConfirm";
+import PreviewAmount from "./PreviewAmount";
+import SwapConfirm from "./SwapConfirm";
 
 const Container = styled(Box)`
   margin-right: 16px;
@@ -27,7 +27,7 @@ const SwapOptions = () => {
   const [toTokenStr, setToTokenStr] = useState("eth");
   const [amountToSwap, setAmountToSwap] = useState("");
 
-  const { maxSwapAmount } = useIsAmountAvailable(
+  const { maxSwapAmount } = useMaxAvailable(
     amountToSwap,
     fromTokenStr,
     thingToSwap,

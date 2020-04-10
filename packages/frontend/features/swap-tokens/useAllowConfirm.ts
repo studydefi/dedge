@@ -1,5 +1,5 @@
 import DACProxyContainer from "../../containers/DACProxy";
-import useIsAmountAvailable from "./useIsAmountAvailable";
+import useMaxAvailable from "./useMaxAvailable";
 
 const useAllowConfirm = (
   amountToSwap,
@@ -9,7 +9,7 @@ const useAllowConfirm = (
 ) => {
   const { hasProxy } = DACProxyContainer.useContainer();
 
-  const { isAmountAvailable } = useIsAmountAvailable(
+  const { isAmountAvailable } = useMaxAvailable(
     amountToSwap,
     fromTokenStr,
     thingToSwap,
