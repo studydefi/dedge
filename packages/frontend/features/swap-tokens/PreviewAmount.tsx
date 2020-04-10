@@ -15,8 +15,6 @@ const PreviewAmount = ({
     amountToSwap,
   );
 
-  console.log(loading, amountToReceive);
-
   return (
     <Box mb="3">
       {amountToReceive !== "" && (
