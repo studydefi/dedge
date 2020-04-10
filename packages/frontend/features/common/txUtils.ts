@@ -1,4 +1,4 @@
-export const useToastShowLoading = (tx, action: string) => {
+export const showTxLoadingToast = (tx, action: string) => {
   window.toastProvider.addMessage(`${action.charAt(0).toUpperCase() + action.substring(1)}...`, {
     secondaryMessage: "Check progress on Etherscan",
     actionHref: `https://etherscan.io/tx/${tx.hash}`,
@@ -7,7 +7,7 @@ export const useToastShowLoading = (tx, action: string) => {
   });
 };
 
-export const useToastHandleException = (tx, action: string) => {
+export const handleTxException = (tx, action: string) => {
   if (tx === null) {
     window.toastProvider.addMessage(`Transaction cancelled`, {
       variant: "failure",

@@ -3,9 +3,9 @@ import ContractsContainer from "../../containers/Contracts";
 import CoinContainer from "../../containers/Coins";
 
 import {
-  useToastHandleException,
-  useToastShowLoading,
-} from "../common/useToast";
+  handleTxException,
+  showTxLoadingToast,
+} from "../common/txUtils";
 
 import { ethers } from "ethers";
 import { Wei } from "../../types";
@@ -64,7 +64,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
           amount
         );
 
-        useToastShowLoading(tx, "swapping debt");
+        showTxLoadingToast(tx, "swapping debt");
         await tx.wait();
         setLoading(false);
 
@@ -77,7 +77,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
           amount: amountToSwap,
         });
       } catch (e) {
-        useToastHandleException(tx, "swap debt");
+        handleTxException(tx, "swap debt");
         setLoading(false);
         return;
       }
@@ -98,7 +98,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         ADDRESS_MAP[toTokenStr],
         amount
       );
-      useToastShowLoading(tx, "swapping collateral");
+      showTxLoadingToast(tx, "swapping collateral");
       await tx.wait();
       setLoading(false);      
       window.toastProvider.addMessage(`Swap Collateral Success!`, {
@@ -111,7 +111,7 @@ const useSwap = (thingToSwap, fromTokenStr, toTokenStr, amountToSwap) => {
         amount: amountToSwap,
       });
     } catch (e) {
-      useToastHandleException(tx, "swap collateral");
+      handleTxException(tx, "swap collateral");
       setLoading(false);
       return;
     }

@@ -5,9 +5,9 @@ import useGetExitParams from "./useGetExitParams";
 import useExitPositionToEth from "./useExitPositionToEth";
 
 import {
-  useToastHandleException,
-  useToastShowLoading
-} from '../common/useToast'
+  handleTxException,
+  showTxLoadingToast
+} from '../common/txUtils'
 
 const useExitPosition = () => {
   const [loading, setLoading] = useState(false);
@@ -32,14 +32,14 @@ const useExitPosition = () => {
         debtMarkets,
         collateralMarkets,
       );
-      useToastShowLoading(tx, 'exiting positions');
+      showTxLoadingToast(tx, 'exiting positions');
       await tx.wait();
 
       window.toastProvider.addMessage(`Exited Positions!`, {
         variant: "success",
       });
     } catch (e) {
-      useToastHandleException(tx, 'exit positions');
+      handleTxException(tx, 'exit positions');
       setLoading(false);
       return;
     }
