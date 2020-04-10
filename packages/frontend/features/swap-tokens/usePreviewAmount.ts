@@ -41,8 +41,10 @@ const usePreviewAmount = (
   useEffect(() => {
     if (!signer) return;
     if (!hasProxy) return;
-    if (parseFloat(amountToSwap) === 0) return;
-    if (isNaN(parseFloat(amountToSwap))) return;
+    if (parseFloat(amountToSwap) === 0 || isNaN(parseFloat(amountToSwap))) {
+      setAmountToReceive("");
+      return;
+    }
 
     if (timeoutId !== null) {
       clearTimeout(timeoutId);

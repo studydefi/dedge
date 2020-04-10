@@ -1,4 +1,4 @@
-import { Box, Text, Field, Input, Link, Tooltip } from "rimble-ui";
+import { Box, Text } from "rimble-ui";
 
 import usePreviewAmount from "./usePreviewAmount";
 
@@ -15,19 +15,22 @@ const PreviewAmount = ({
     amountToSwap,
   );
 
+  console.log(loading, amountToReceive);
+
   return (
     <Box mb="3">
-      <Field
-        mb="0"
-        label={`Converted to ${toTokenStr.toLocaleUpperCase()} (approx)`}
-      >
-        <Input
-          readOnly
-          required={true}
-          placeholder="1337"
-          value={loading ? "..." : amountToReceive}
-        />
-      </Field>
+      {amountToReceive !== "" && (
+        <Text fontWeight="bold">
+          Approx. target amount:
+          {loading ? (
+            "..."
+          ) : (
+            <Text>{`${parseFloat(amountToReceive).toFixed(
+              4,
+            )} ${toTokenStr.toUpperCase()}`}</Text>
+          )}
+        </Text>
+      )}
     </Box>
   );
 };
