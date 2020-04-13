@@ -28,6 +28,7 @@
   "scripts": {
     "compile": "truffle compile",
     "test": "mocha",
-    "build:helpers": "tsc"
+    "build:helpers": "tsc",
+    "prepare": "npm run build:helpers"
   }
 }
