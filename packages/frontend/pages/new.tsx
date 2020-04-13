@@ -46,6 +46,24 @@ const Content = styled.div`
   flex: 1;
 `;
 
+const PositionStatus = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2rem;
+  background: #0a0d10;
+`;
+
+const Status = ({ label, percent = false, value }) => {
+  const valText = percent ? `${value}%` : `$${value}`;
+  return (
+    <div style={{ color: `white`, width: `120px` }}>
+      <div style={{  fontSize: "2rem", textAlign: `right` }}>{valText}</div>
+      <div style={{ color: `var(--highlight)`, textAlign: `right`, fontSize: `12px` }}>{label}</div>
+    </div>
+  );
+};
+
 const Home = () => {
   return (
     <Container>
@@ -59,7 +77,13 @@ const Home = () => {
         <NavItem>Info</NavItem>
       </NavBar>
       <Content>
-        <h1>Hello</h1>
+        <PositionStatus>
+          <Status label="Supply Balance" value="123.00" />
+          <Status label="Borrow Balance" value="123.00" />
+          <Status label="Borrow Percent" value="123" percent />
+          <Status label="ETH Price" value="123.00" />
+          <Status label="Liquidation Price" value="123.00" />
+        </PositionStatus>
 
         <table style={{ width: `100%` }}>
           <tr>

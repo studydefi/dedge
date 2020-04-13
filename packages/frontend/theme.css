@@ -3,3 +3,7 @@
   --dark-bg: #141A1F;
   --highlight: #fe921f;
 }
+
+html {
+  background: var(--dark-bg);
+}
