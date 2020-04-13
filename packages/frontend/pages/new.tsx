@@ -24,16 +24,11 @@ const Logo = styled.div`
   color: var(--highlight);
   text-transform: uppercase;
   letter-spacing: 4px;
-  margin-right: -4px;
+  margin-right: -6px;
+  text-shadow: 0px 0px 12px rgba(254, 146, 31, 0.4);
 
   margin-top: 1rem;
   margin-bottom: 2rem;
-`;
-
-const Separator = styled.hr`
-  border: 1px solid #666;
-  margin-top: 4rem;
-  margin-bottom: 4rem;
 `;
 
 const NavItem = styled.div`
@@ -61,9 +56,28 @@ const Home = () => {
         <NavItem>Swap Tokens</NavItem>
         <NavItem>Import Positions</NavItem>
         <NavItem>Exit Positions</NavItem>
+        <NavItem>Info</NavItem>
       </NavBar>
       <Content>
         <h1>Hello</h1>
+
+        <table style={{ width: `100%` }}>
+          <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Age</th>
+          </tr>
+          <tr>
+            <td>Jill</td>
+            <td>Smith</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td>Eve</td>
+            <td>Jackson</td>
+            <td>94</td>
+          </tr>
+        </table>
       </Content>
     </Container>
   );
