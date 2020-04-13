@@ -59,7 +59,7 @@ const Status = ({ label, percent = false, value }) => {
   return (
     <div style={{ color: `white`, width: `120px` }}>
       <div style={{  fontSize: "2rem", textAlign: `right` }}>{valText}</div>
-      <div style={{ color: `var(--highlight)`, textAlign: `right`, fontSize: `12px` }}>{label}</div>
+      <div style={{ textTransform: `uppercase`,color: `var(--highlight)`, textAlign: `right`, fontSize: `12px` }}>{label}</div>
     </div>
   );
 };
@@ -71,6 +71,7 @@ const Home = () => {
         <Logo>Dedge</Logo>
 
         <NavItem active>Dashboard</NavItem>
+        <NavItem>Automate</NavItem>
         <NavItem>Swap Tokens</NavItem>
         <NavItem>Import Positions</NavItem>
         <NavItem>Exit Positions</NavItem>
