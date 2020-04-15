@@ -1,7 +1,7 @@
 import Router from "next/router";
 import styled from "styled-components";
 import { useState } from "react";
-import { pages } from "./PAGES";
+import { pages } from "../../pages/PAGES";
 
 const Container = styled.div`
   color: white;
@@ -103,8 +103,8 @@ const Appbar = ({ activePage }) => {
         {pages.map((page) => (
           <MenuItem
             key={page.id}
-            active={`/${page.id}` === activePage}
-            onClick={() => Router.push(`/${page.id}`)}
+            active={page.path === activePage}
+            onClick={() => Router.push(page.path)}
           >
             {page.label}
           </MenuItem>

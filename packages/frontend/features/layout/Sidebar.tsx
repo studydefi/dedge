@@ -1,7 +1,7 @@
 import Router from "next/router";
 import styled from "styled-components";
 import useScreenSize from "./useScreenSize";
-import { pages } from "./PAGES";
+import { pages } from "../../pages/PAGES";
 
 const Container = styled.div`
   background: var(--bg);
@@ -48,8 +48,8 @@ const Sidebar = ({ activePage }) => {
       {pages.map((page) => (
         <NavItem
           key={page.id}
-          active={activePage === `/${page.id}`}
-          onClick={() => Router.push(`/${page.id}`)}
+          active={activePage === page.path}
+          onClick={() => Router.push(page.path)}
         >
           {page.label}
         </NavItem>

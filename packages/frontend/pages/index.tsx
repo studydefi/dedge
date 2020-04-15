@@ -1,10 +1,13 @@
-export async function getServerSideProps(ctx) {
-  if (!ctx.res.headersSent) {
-    if (typeof ctx.res.writeHead === "function")
-      ctx.res.writeHead(302, { location: "/dashboard" });
-  }
-  ctx.res.end();
-}
+const Dashboard = () => {
+  return <>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+  </>
+};
 
-function Page() {}
-export default Page;
+export default Dashboard;
