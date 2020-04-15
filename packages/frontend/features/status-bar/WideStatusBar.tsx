@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -13,7 +12,6 @@ const Content = styled.div`
   max-width: 1200px;
   height: 100%;
   margin: auto;
-  // border: 1px solid red;
   padding: 12px;
   display: flex;
   justify-content: space-around;
@@ -26,7 +24,6 @@ const StatusItem = styled.div`
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  // border: 1px solid yellow;
   flex: 1;
 `;
 const Value = styled.div`

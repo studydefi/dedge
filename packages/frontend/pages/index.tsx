@@ -1,5 +1,8 @@
 export async function getServerSideProps(ctx) {
-  ctx.res.writeHead(302, { location: "/dashboard" });
+  if (!ctx.res.headersSent) {
+    if (typeof ctx.res.writeHead === "function")
+      ctx.res.writeHead(302, { location: "/dashboard" });
+  }
   ctx.res.end();
 }
 
