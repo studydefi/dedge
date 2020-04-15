@@ -55,7 +55,7 @@ const Menu = styled.div`
 `;
 
 const Overlay = styled.div`
-  pointer-events: none;
+  pointer-events: ${(p) => (p.show ? `unset` : `none`)};
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
@@ -97,7 +97,7 @@ const Appbar = ({ activePage }) => {
         <LogoText>Dedge</LogoText>
         <MenuButton onClick={openMenu}>☰</MenuButton>
       </Container>
-      <Overlay show={isOpen} />
+      <Overlay show={isOpen} onClick={closeMenu} />
       <Menu isOpen={isOpen}>
         <CloseButton onClick={closeMenu}>✕</CloseButton>
         {pages.map((page) => (
