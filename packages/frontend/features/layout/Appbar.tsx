@@ -104,7 +104,10 @@ const Appbar = ({ activePage }) => {
           <MenuItem
             key={page.id}
             active={page.path === activePage}
-            onClick={() => Router.push(page.path)}
+            onClick={() => {
+              closeMenu()
+              Router.push(page.path)
+            }}
           >
             {page.label}
           </MenuItem>
