@@ -67,6 +67,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
             <meta name="twitter:card" content="summary_large_image" />
             <meta property="og:url" content="https://dedge.exchange" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
             <link
               href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400&display=swap"
               rel="stylesheet"
