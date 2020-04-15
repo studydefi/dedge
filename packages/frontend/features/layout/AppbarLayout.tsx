@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Appbar from "./Appbar";
+import StatusBar from "../status-bar/StatusBar";
 
 const Container = styled.div`
   width: 100%;
@@ -9,13 +10,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const StatusBar = styled.div`
-  background: black;
-  color: #fab127;
-`;
-
 const Content = styled.div`
-  background red;
   overflow: auto;
   flex: 1;
 `;
@@ -24,7 +19,7 @@ const AppbarLayout = ({ children, activePage }) => {
   return (
     <Container>
       <Appbar activePage={activePage} />
-      <StatusBar>status bar</StatusBar>
+      <StatusBar />
       <Content>{children}</Content>
     </Container>
   );
