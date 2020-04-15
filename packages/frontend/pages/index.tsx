@@ -3,5 +3,5 @@ export async function getServerSideProps(ctx) {
   ctx.res.end();
 }
 
-function Page({ data }) {}
+function Page() {}
 export default Page;

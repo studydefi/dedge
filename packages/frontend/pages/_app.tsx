@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 import { BaseStyles, theme, ToastMessage } from "rimble-ui";
 import { ThemeProvider, withTheme } from "styled-components";
+import { useRouter } from "next/router";
 
 import Connection from "../containers/Connection";
 import Contracts from "../containers/Contracts";
@@ -11,6 +12,7 @@ import VaultsContainer from "../containers/Vaults";
 import Head from "next/head";
 
 import "../theme.css";
+import Layout from "../features/layout/Layout";
 
 const customTheme = {
   ...theme,
@@ -32,6 +34,8 @@ const WithProviders = ({ children }) => (
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  console.log(router.pathname);
   return (
     <ThemeProvider theme={customTheme}>
       <BaseStyles>
@@ -67,7 +71,10 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
             <meta name="twitter:card" content="summary_large_image" />
             <meta property="og:url" content="https://dedge.exchange" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
 
             <link
               href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400&display=swap"
@@ -82,7 +89,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               }}
             />
           </Head>
-          <Component {...pageProps} />
+          <Layout activePage={router.pathname}>
+            <Component {...pageProps} />
+          </Layout>
         </WithProviders>
       </BaseStyles>
     </ThemeProvider>

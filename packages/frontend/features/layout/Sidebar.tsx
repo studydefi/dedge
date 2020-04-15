@@ -48,7 +48,7 @@ const Sidebar = ({ activePage }) => {
       {pages.map((page) => (
         <NavItem
           key={page.id}
-          active={activePage === page.id}
+          active={activePage === `/${page.id}`}
           onClick={() => Router.push(`/${page.id}`)}
         >
           {page.label}

@@ -1,9 +1,13 @@
-import Layout from "../features/layout/Layout";
-
 const Dashboard = () => {
-  return <Layout activePage="dashboard">
+  return <>
     <h1>I am the Dashboard!!!</h1>
-  </Layout>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+    <h1>I am the Dashboard!!!</h1>
+  </>
 };
 
 export default Dashboard;

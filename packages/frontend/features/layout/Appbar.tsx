@@ -103,7 +103,7 @@ const Appbar = ({ activePage }) => {
         {pages.map((page) => (
           <MenuItem
             key={page.id}
-            active={page.id === activePage}
+            active={`/${page.id}` === activePage}
             onClick={() => Router.push(`/${page.id}`)}
           >
             {page.label}

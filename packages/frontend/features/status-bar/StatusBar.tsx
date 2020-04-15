@@ -1,30 +1,23 @@
-import styled from "styled-components";
 import useScreenSize from "../layout/useScreenSize";
-
-const Container = styled.div`
-  width: 100%;
-  height: ${(p) => (p.small ? `72px` : `120px`)};
-  color: white;
-  background: black;
-`;
-
-const Content = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  height: 100%;
-  margin: auto;
-  padding: 12px;
-`;
+import MobileStatusBar from "./MobileStatusBar";
+import WideStatusBar from "./WideStatusBar";
 
 const StatusBar = () => {
-  const { isMobile } = useScreenSize();
-  return (
-    <Container small={isMobile}>
-      <Content>
-        <h1>Status Here</h1>
-      </Content>
-    </Container>
-  );
+  const { isMobile, isTablet } = useScreenSize();
+
+  const statusData = {
+    supplyBalance: 14242.13,
+    borrowBalance: 5242.12,
+    borrowPercent: 0.52, // 52%
+    liquidationPrice: 123.32,
+    ethPrice: 152.08,
+    lastUpdated: new Date(1586928677168),
+  };
+
+  if (isMobile || isTablet) {
+    return <MobileStatusBar statusData={statusData} />;
+  }
+  return <WideStatusBar statusData={statusData} />;
 };
 
 export default StatusBar;
