@@ -1,7 +1,7 @@
 import Router from "next/router";
 import styled from "styled-components";
 import { useState } from "react";
-import { pages } from "../../pages/PAGES";
+import { pages } from "../../PAGES";
 
 const Container = styled.div`
   color: white;

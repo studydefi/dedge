@@ -1,7 +1,7 @@
 import Router from "next/router";
 import styled from "styled-components";
 import useScreenSize from "./useScreenSize";
-import { pages } from "../../pages/PAGES";
+import { pages } from "../../PAGES";
 
 const Container = styled.div`
   background: var(--bg);
