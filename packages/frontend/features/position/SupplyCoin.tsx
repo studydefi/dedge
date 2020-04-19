@@ -237,7 +237,7 @@ const SupplyCoin = ({ coin, hide }) => {
           <br />
 
           <Text>
-            New liqudation price:{" $ "}
+            New liquidation price:{" $ "}
             {gettingNewLiquidationPrice
               ? `...`
               : newLiquidationPrice.toString()}
