@@ -24,7 +24,7 @@ const buildAndEnterMarkets = async (
   return dacProxyFactory["buildAndEnterMarkets(address,bytes)"](
     dedgeCompoundManager,
     enterMarketsCallbackData,
-    Object.assign({ gasPrice }, overrides)
+    Object.assign({ gasLimit: 2500000, gasPrice }, overrides)
   );
 };
 
@@ -45,7 +45,7 @@ const buildAndEnterMarketsOwner = async (
     owner,
     dedgeCompoundManager,
     enterMarketsCallbackData,
-    Object.assign({ gasPrice }, overrides)
+    Object.assign({ gasLimit: 2500000, gasPrice }, overrides)
   );
 };
 
