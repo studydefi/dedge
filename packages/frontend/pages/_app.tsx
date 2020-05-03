@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 import { BaseStyles, theme, ToastMessage } from "rimble-ui";
 import { ThemeProvider, withTheme } from "styled-components";
+import { useRouter } from "next/router";
 
 import Connection from "../containers/Connection";
 import Contracts from "../containers/Contracts";
@@ -9,6 +10,9 @@ import BorrowBalances from "../containers/CompoundPositions";
 import CoinsContainer from "../containers/Coins";
 import VaultsContainer from "../containers/Vaults";
 import Head from "next/head";
+
+import "../theme.css";
+import Layout from "../features/layout/Layout";
 
 const customTheme = {
   ...theme,
@@ -30,6 +34,8 @@ const WithProviders = ({ children }) => (
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  console.log(router.pathname);
   return (
     <ThemeProvider theme={customTheme}>
       <BaseStyles>
@@ -65,6 +71,15 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
             <meta name="twitter:card" content="summary_large_image" />
             <meta property="og:url" content="https://dedge.exchange" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+
+            <link
+              href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400&display=swap"
+              rel="stylesheet"
+            ></link>
             <script
               dangerouslySetInnerHTML={{
                 __html: `!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";
@@ -74,7 +89,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               }}
             />
           </Head>
-          <Component {...pageProps} />
+          <Layout activePage={router.pathname}>
+            <Component {...pageProps} />
+          </Layout>
         </WithProviders>
       </BaseStyles>
     </ThemeProvider>

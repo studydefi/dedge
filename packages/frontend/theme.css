@@ -1,0 +1,9 @@
+:root {
+  --bg: #1c232a;
+  --dark-bg: #141A1F;
+  --highlight: #fe921f;
+}
+
+html {
+  background: var(--dark-bg);
+}
